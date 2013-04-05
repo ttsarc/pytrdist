@@ -1,0 +1,6 @@
+*.pyc
+*.pyo
+local-settings.py
+*.swp
+*.back
+
