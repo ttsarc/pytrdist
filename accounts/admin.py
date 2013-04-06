@@ -126,10 +126,11 @@ class MyUserAdmin(UserAdmin):
             )}
         ),
     )
-    list_display = ('username', 'email', 'is_staff')
+
+    list_display = ('email', 'username', 'customer_company','is_active','is_superuser')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('username', 'email')
-    ordering = ('username',)
+    ordering = ('id',)
     readonly_fields = ('last_login', 'date_joined')
     form = MyUserChangeForm
     add_form = MyUserCreationForm

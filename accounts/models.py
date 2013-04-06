@@ -113,6 +113,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return "/users/%s/" % urlquote(self.username)
 
+    def myuserprofile(self):
+        return self.myuserprofile
+
     def get_full_name(self):
         return self.email
 

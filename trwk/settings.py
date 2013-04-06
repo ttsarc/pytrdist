@@ -21,6 +21,10 @@ DATABASES = {
     }
 }
 
+import os
+SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
@@ -50,7 +54,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = '/var/www/tr-wk.jp/media/'
+MEDIA_ROOT =  os.path.join(SITE_ROOT, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -61,7 +65,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = '/var/www/tr-wk.jp/static/'
+STATIC_ROOT =  os.path.join(SITE_ROOT, 'static')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -111,6 +115,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(SITE_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -125,8 +130,10 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     #'django.contrib.admindocs',
     'accounts',
-    'documents'
+    'documents',
+    'registration',
 )
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -160,6 +167,53 @@ LOGGING = {
 AUTH_USER_MODEL = 'accounts.MyUser'
 AUTH_PROFILE_MODULE = 'accounts.MyUserProfile'
 
+ACCOUNT_ACTIVATION_DAYS = 2
+EMAIL_HOST = 'localhost'
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+LOGIN_REDIRECT_URL = '/'
+
+BAD_EMAIL_DOMAIN = [
+    'biz.ezweb.ne.jp',
+    'c.vodafone.ne.jp',
+    'd.vodafone.ne.jp',
+    'di.pdx.ne.jp',
+    'disney.ne.jp',
+    'disney.ne.jp',
+    'dj.pdx.ne.jp',
+    'dk.pdx.ne.jp',
+    'dwmail.jp',
+    'ezweb.ne.jp',
+    'h.vodafone.ne.jp',
+    'ido.ne.jp',
+    'jp-c.ne.jp',
+    'jp-d.ne.jp',
+    'jp-h.ne.jp',
+    'jp-k.ne.jp',
+    'jp-n.ne.jp',
+    'jp-q.ne.jp',
+    'jp-r.ne.jp',
+    'jp-s.ne.jp',
+    'jp-t.ne.jp',
+    'k.vodafone.ne.jp',
+    'n.vodafone.ne.jp',
+    'pdx.ne.jp',
+    'q.vodafone.ne.jp',
+    'r.vodafone.ne.jp',
+    's.vodafone.ne.jp',
+    'sky.tkc.ne.jp',
+    'sky.tkk.ne.jp',
+    'sky.tu-ka.ne.jp',
+    'softbank.ne.jp',
+    't.vodafone.ne.jp',
+    'vertuclub.ne.jp',
+    'vodafone.ne.jp',
+    'willcom.com',
+    'wm.pdx.ne.jp',
+    'docomo.ne.jp',
+    'yahoo.co.jp',
+    #'gmail.com',
+    'hotmail.com',
+]
 try:
     from local_settings import *
 except ImportError:
