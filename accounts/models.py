@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.core.mail import send_mail
+from django.core.validators import validate_slug
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
@@ -12,23 +13,23 @@ class CompanyManager(models.Manager):
     pass
 
 class Company(models.Model):
-    name =             models.CharField('企業名', max_length=100, blank=True )
-    kana =             models.CharField('企業名（フリガナ）', max_length=100, blank=True )
-    business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES, blank=True )
-    tel =              models.CharField('電話番号', max_length=16, blank=True )
-    fax =              models.CharField('FAX', max_length=16, blank=True )
-    post_number =      models.CharField('郵便番号', max_length=8, blank=True )
-    prefecture =       models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES, blank=True )
-    address=           models.CharField('住所', max_length=200, blank=True )
-    site_url =         models.URLField('ホームページURL', blank=True )
-    email =            models.EmailField('代表メールアドレス', blank=True )
-    representative =   models.CharField('代表者名', max_length=100, blank=True )
-    foundation_date =  models.CharField('設立', max_length=30, blank=True )
-    account_closing =  models.CharField('決算月', max_length=30, blank=True )
-    employee_number =  models.CharField('従業員数', max_length=30, blank=True )
-    capital =          models.CharField('資本金', max_length=30, blank=True )
-    yearly_sales =     models.CharField('年商', max_length=30, blank=True )
-    listing =          models.CharField('上場有無', max_length=30, blank=True )
+    name =             models.CharField('企業名', max_length=100)
+    kana =             models.CharField('企業名（フリガナ）', max_length=100)
+    business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES, blank=True, null=True)
+    tel =              models.CharField('電話番号', max_length=16)
+    fax =              models.CharField('FAX', max_length=16)
+    post_number =      models.CharField('郵便番号', max_length=8)
+    prefecture =       models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES)
+    address=           models.CharField('住所', max_length=200)
+    site_url =         models.URLField('ホームページURL')
+    email =            models.EmailField('代表メールアドレス')
+    representative =   models.CharField('代表者名', max_length=100, blank=True)
+    foundation_date =  models.CharField('設立', max_length=30)
+    account_closing =  models.CharField('決算月', max_length=30, blank=True)
+    employee_number =  models.CharField('従業員数', max_length=30)
+    capital =          models.CharField('資本金', max_length=30)
+    yearly_sales =     models.CharField('年商', max_length=30, blank=True)
+    listing =          models.CharField('上場有無', max_length=30, blank=True)
 
     add_date =         models.DateTimeField('登録日', auto_now_add=True)
     update_date =      models.DateTimeField('更新日', auto_now=True)
@@ -66,14 +67,13 @@ class MyUserManager(BaseUserManager):
         """
         user = self.create_user(email,
             password=password,
+            username = username,
         )
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
-        user.username = username
         user.save(using=self._db)
         return user
-
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
@@ -82,15 +82,13 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         unique=True,
         db_index=True,
     )
-    username =         models.CharField('ユーザー名', max_length=30, blank=True )
-    first_name =       models.CharField('名', max_length=30, blank=True)
-    last_name =        models.CharField('姓', max_length=30, blank=True)
+    username =         models.CharField('ユーザー名', max_length=30, blank=True, help_text="システム内のファイル名等で使われます（オプション）",validators=[validate_slug])
     is_active =        models.BooleanField('有効', default=True)
     is_admin =         models.BooleanField('管理者', default=False)
     is_staff =         models.BooleanField('スタッフ', default=False)
     customer_company = models.ForeignKey(Company, verbose_name='顧客企業', blank=True, null=True, on_delete=models.SET_NULL)
-    date_joined = models.DateTimeField('登録日', default=timezone.now)
-    update_date =      models.DateTimeField('更新日', auto_now=True)
+    date_joined = models.DateTimeField('登録日', default=timezone.now, editable=False)
+    update_date =      models.DateTimeField('更新日', auto_now=True, editable=False)
 
     objects = MyUserManager()
 
@@ -105,8 +103,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def __unicode__(self):
         if self.username:
             return self.username
-        elif self.first_name:
-            return self.first_name + self.last_name
         else:
             return self.email
 
@@ -118,15 +114,10 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return "/users/%s/" % urlquote(self.username)
 
     def get_full_name(self):
-        """
-        Returns the first_name plus the last_name, with a space in between.
-        """
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
+        return self.email
 
     def get_short_name(self):
-        "Returns the short name for the user."
-        return self.first_name
+        return self.email
 
     def email_user(self, subject, message, from_email=None):
         """
@@ -166,34 +157,34 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
                 raise SiteProfileNotAvailable
         return self._profile_cache
 
-
 class MyUserProfileManager(models.Manager):
     pass
 
 class MyUserProfile(models.Model):
     myuser =           models.OneToOneField(MyUser)
-    first_name_kana =  models.CharField('姓（ふりがな）', max_length=100, blank=True)
-    last_name_kana =   models.CharField('名（ふりがな）', max_length=100, blank=True )
-    company_name =     models.CharField('会社名', max_length=100, blank=True)
-    tel =              models.CharField('電話番号', max_length=16, blank=True)
+    first_name =       models.CharField('名', max_length=30)
+    last_name =        models.CharField('姓', max_length=30)
+    last_name_kana =   models.CharField('名（ふりがな）', max_length=100)
+    first_name_kana =  models.CharField('姓（ふりがな）', max_length=100)
+    company_name =     models.CharField('会社名', max_length=100)
+    tel =              models.CharField('電話番号', max_length=16)
     fax =              models.CharField('FAX', max_length=16, blank=True)
-    post_number =      models.CharField('郵便番号', max_length=8, blank=True)
-    prefecture =       models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES, blank=True)
-    address =          models.CharField('住所', max_length=255, blank=True)
+    post_number =      models.CharField('郵便番号', max_length=8)
+    prefecture =       models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES)
+    address =          models.CharField('住所', max_length=255)
     site_url =         models.URLField( 'ホームページURL', blank=True)
-    department =       models.CharField('部署名', max_length=100, blank=True)
-    position =         models.CharField('役職名', max_length=100, blank=True)
-    position_class =   models.SmallIntegerField('役職区分', choices=POSITION_CLASS_CHOICES, blank=True)
-    business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES, blank=True)
-    job_content =      models.SmallIntegerField('職務内容', choices=JOB_CONTENT_CHOICES, blank=True)
-    firm_size =        models.SmallIntegerField('従業員規模', choices=FIRM_SIZE_CHOICES, blank=True)
-    yearly_sales =     models.SmallIntegerField('年商', choices=YEARLY_SALES_CHOICES, blank=True)
-    discretion  =      models.SmallIntegerField('あなたはサービス導入の意思決定に、どのような立場で関わっていますか？', choices=DISCRETION_CHOICES, blank=True)
-
+    department =       models.CharField('部署名', max_length=100)
+    position =         models.CharField('役職名', max_length=100)
+    position_class =   models.SmallIntegerField('役職区分', choices=POSITION_CLASS_CHOICES)
+    business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES)
+    job_content =      models.SmallIntegerField('職務内容', choices=JOB_CONTENT_CHOICES)
+    firm_size =        models.SmallIntegerField('従業員規模', choices=FIRM_SIZE_CHOICES)
+    yearly_sales =     models.SmallIntegerField('年商', choices=YEARLY_SALES_CHOICES)
+    discretion  =      models.SmallIntegerField('あなたはサービス導入の意思決定に、どのような立場で関わっていますか？', choices=DISCRETION_CHOICES)
     update_date =      models.DateTimeField('更新日', auto_now=True)
 
     def __unicode__(self):
-        return self.myuser
+        return self.myuser.email
 
     objects = MyUserProfileManager()
     class Meta:
