@@ -196,7 +196,8 @@ class RegistrationProfile(models.Model):
     
     user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
     activation_key = models.CharField(_('activation key'), max_length=40)
-    
+    add_date =         models.DateTimeField('登録日', auto_now_add=True)
+    update_date =      models.DateTimeField('更新日', auto_now=True)
     objects = RegistrationManager()
     
     class Meta:

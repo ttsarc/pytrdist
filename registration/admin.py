@@ -9,7 +9,7 @@ from registration.models import RegistrationProfile, ChangeEmailProfile
 
 class RegistrationAdmin(admin.ModelAdmin):
     actions = ['activate_users', 'resend_activation_email']
-    list_display = ('user', 'activation_key_expired')
+    list_display = ('user', 'activation_key_expired','add_date','update_date')
     raw_id_fields = ['user']
     search_fields = ('user__username', 'user__first_name', 'user__last_name')
 

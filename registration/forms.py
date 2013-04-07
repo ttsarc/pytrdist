@@ -24,7 +24,7 @@ attrs_dict = {'class': 'required'}
 class ChangeEmailForm(forms.Form):
     new_email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,maxlength=75)),label=_("新しいメールアドレス"))
     bad_domains = settings.BAD_EMAIL_DOMAIN
-    def clean_email(self):
+    def clean_new_email(self):
         """
         Validate that the username is alphanumeric and is not already
         in use.
@@ -38,7 +38,7 @@ class ChangeEmailForm(forms.Form):
 
         if existing :
             if existing[0].is_active:
-                raise forms.ValidationError("このメールアドレスはすでに登録済みです。パスワードを忘れた場合は再発行してください")
+                raise forms.ValidationError("このメールアドレスはすでに登録済みです。")
             elif existing[0].is_active == False :
                 raise forms.ValidationError("このメールアドレスはすでに登録されていますが、まだ確認ができていません。")
 
