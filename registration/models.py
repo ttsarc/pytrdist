@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import datetime
 import hashlib
 import random
@@ -23,6 +24,7 @@ except ImportError:
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
+from django.core.mail import send_mail
 
 class RegistrationManager(models.Manager):
     """
@@ -281,4 +283,87 @@ class RegistrationProfile(models.Model):
                                    ctx_dict)
         
         self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+
+
+class ChangeEmailProfileManager(models.Manager):
+    def change_email(self, activation_key, user):
+        if SHA1_RE.search(activation_key):
+            try:
+                profile = self.get(activation_key=activation_key)
+            except self.model.DoesNotExist:
+                return False
+            if not profile.activation_key_expired() and user.pk == profile.user.pk:
+                user = profile.user
+                user.email = profile.new_email
+                user.save()
+                profile.activation_key = self.model.ACTIVATED
+                profile.save()
+                return user
+        return False
+
+    def create_profile(self, user, new_email):
+        """
+        Create a ``RegistrationProfile`` for a given
+        ``User``, and return the ``RegistrationProfile``.
+        
+        The activation key for the ``RegistrationProfile`` will be a
+        SHA1 hash, generated from a combination of the ``User``'s
+        username and a random salt.
+        
+        """
+        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+        email = user.email
+        if isinstance(email, unicode):
+            email = email.encode('utf-8')
+        activation_key = hashlib.sha1(salt+email).hexdigest()
+        return self.create(user=user,
+                           activation_key=activation_key,
+                           new_email=new_email,
+                           old_email=email)
+
+class ChangeEmailProfile(models.Model):
+    user = models.ForeignKey(User, verbose_name='ユーザー',on_delete=models.SET_NULL, null=True)
+    activation_key = models.CharField(_('activation key'), max_length=40)
+    new_email = models.EmailField(
+        verbose_name='新メールアドレス',
+        max_length=255,
+        db_index=True,
+    )
+    old_email = models.EmailField(
+        verbose_name='旧メールアドレス',
+        max_length=255,
+    )
+    add_date =         models.DateTimeField('登録日', auto_now_add=True)
+    update_date =      models.DateTimeField('更新日', auto_now=True)
+    objects = ChangeEmailProfileManager()
     
+    ACTIVATED = u"ALREADY_ACTIVATED"
+    
+    def __unicode__(self):
+        return self.user.email
+
+    class Meta:
+        verbose_name = 'メールアドレス変更'
+        verbose_name_plural = 'メールアドレス変更'
+
+    def send_activation_email(self, site):
+        ctx_dict = {'activation_key': self.activation_key,
+                    'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+                    'site': site}
+        subject = render_to_string('registration/change_email_subject.txt',
+                                   ctx_dict)
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        
+        message = render_to_string('registration/change_email.txt',
+                                   ctx_dict)
+        
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL,
+        [self.new_email], fail_silently=False)
+
+    def activation_key_expired(self):
+
+        expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
+        return self.activation_key == self.ACTIVATED or \
+               (self.user.date_joined + expiration_date <= datetime_now())
+    activation_key_expired.boolean = True

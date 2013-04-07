@@ -4,7 +4,7 @@ from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 
-from registration.models import RegistrationProfile
+from registration.models import RegistrationProfile, ChangeEmailProfile
 
 
 class RegistrationAdmin(admin.ModelAdmin):
@@ -45,3 +45,7 @@ class RegistrationAdmin(admin.ModelAdmin):
 
 
 admin.site.register(RegistrationProfile, RegistrationAdmin)
+
+class ChangeEmailProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'new_email','old_email','activation_key_expired','add_date','update_date')
+admin.site.register(ChangeEmailProfile, ChangeEmailProfileAdmin)

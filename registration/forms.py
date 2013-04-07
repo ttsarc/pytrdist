@@ -21,7 +21,29 @@ from django.utils.translation import ugettext_lazy as _
 # lands in trunk, this will no longer be necessary.
 attrs_dict = {'class': 'required'}
 
+class ChangeEmailForm(forms.Form):
+    new_email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,maxlength=75)),label=_("新しいメールアドレス"))
+    bad_domains = settings.BAD_EMAIL_DOMAIN
+    def clean_email(self):
+        """
+        Validate that the username is alphanumeric and is not already
+        in use.
+        
+        """
+        email_domain = self.cleaned_data['new_email'].split('@')[1]
+        if email_domain in self.bad_domains:
+            raise forms.ValidationError('無料メールアドレスなどは使用できません。別のメールアドレスをご利用下さい。')
+        
+        existing = User.objects.filter(email__iexact=self.cleaned_data['new_email'])
 
+        if existing :
+            if existing[0].is_active:
+                raise forms.ValidationError("このメールアドレスはすでに登録済みです。パスワードを忘れた場合は再発行してください")
+            elif existing[0].is_active == False :
+                raise forms.ValidationError("このメールアドレスはすでに登録されていますが、まだ確認ができていません。")
+
+        return self.cleaned_data['new_email']
+        
 class RegistrationForm(forms.Form):
     """
     Form for registering a new user account.

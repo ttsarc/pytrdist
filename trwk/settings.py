@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'accounts',
     'documents',
     'registration',
+    #'password_reset',
 )
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 

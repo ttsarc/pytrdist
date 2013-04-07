@@ -9,12 +9,18 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from registration.backends import get_backend
-from registration.models import RegistrationProfile
+from registration.models import RegistrationProfile, ChangeEmailProfile
 
 from accounts.forms import MyUserProfileForm
 
 from django.contrib import messages
 
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
+
+from registration.forms import ChangeEmailForm
+from django.contrib.sites.models import RequestSite
+from django.contrib.sites.models import Site
 
 def activate(request, backend,
              template_name='registration/activate.html',
@@ -117,7 +123,6 @@ def activate(request, backend,
     return render_to_response(template_name,
                               kwargs,
                               context_instance=context)
-
 
 def register(request, backend, success_url=None, form_class=None,
              disallowed_url='registration_disallowed',
@@ -228,4 +233,58 @@ def register(request, backend, success_url=None, form_class=None,
 
     return render_to_response(template_name,
                               {'form': form},
+                              context_instance=context)
+
+@csrf_protect
+@login_required
+def change_email(request, backend, success_url=None, form_class=None,
+             disallowed_url='change_email_disallowed',
+             template_name='registration/change_email_form.html',
+             extra_context=None):
+
+    if Site._meta.installed:
+        site = Site.objects.get_current()
+    else:
+        site = RequestSite(request)
+
+    if request.method == 'POST':
+        form = ChangeEmailForm(data=request.POST)
+        if form.is_valid():
+            try:
+                create = ChangeEmailProfile.objects.create_profile(request.user, form.cleaned_data['new_email'] )
+                create.send_activation_email(site)
+            except:
+                messages.add_message(request, messages.ERROR, '送信に失敗しました')
+            else:
+                return redirect('registration_change_email_send')
+    else:
+        form = ChangeEmailForm()
+    context = RequestContext(request)
+    if extra_context is None:
+        extra_context = {}
+    for key, value in extra_context.items():
+        context[key] = callable(value) and value() or value
+
+    return render_to_response(template_name,
+                              {'form': form},
+                              context_instance=context)
+
+@login_required
+def change_email_done(request, activation_key,
+                      template_name='registration/change_email_done.html',
+                      extra_context=None):
+    
+    result = ChangeEmailProfile.objects.change_email(activation_key, request.user)
+    
+    if result:
+        return redirect('registration_change_email_complete')
+    
+    context = RequestContext(request)
+    if extra_context is None:
+        extra_context = {}
+    for key, value in extra_context.items():
+        context[key] = callable(value) and value() or value
+
+    return render_to_response(template_name,
+                              {'result': result},
                               context_instance=context)
