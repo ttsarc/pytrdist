@@ -201,8 +201,8 @@ class RegistrationProfile(models.Model):
     objects = RegistrationManager()
     
     class Meta:
-        verbose_name = _('registration profile')
-        verbose_name_plural = _('registration profiles')
+        verbose_name = '新規登録ステータス'
+        verbose_name_plural = '新規登録ステータス'
     
     def __unicode__(self):
         return u"Registration information for %s" % self.user
@@ -344,8 +344,8 @@ class ChangeEmailProfile(models.Model):
         return self.user.email
 
     class Meta:
-        verbose_name = 'メールアドレス変更'
-        verbose_name_plural = 'メールアドレス変更'
+        verbose_name = 'メールアドレス変更ステータス'
+        verbose_name_plural = 'メールアドレス変更ステータス'
 
     def send_activation_email(self, site):
         ctx_dict = {'activation_key': self.activation_key,
