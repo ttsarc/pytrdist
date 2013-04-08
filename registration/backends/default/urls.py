@@ -46,7 +46,10 @@ urlpatterns = patterns('',
                        url(r'^register/complete/$',
                            TemplateView.as_view(template_name='registration/registration_complete.html'),
                            name='registration_complete'),
-
+                       url(r'^register/closed/$',
+                           TemplateView.as_view(template_name='registration/registration_closed.html'),
+                           name='registration_disallowed'),
+                       #change_email
                        url(r'^change_email/send/$',
                            TemplateView.as_view(template_name='registration/change_email_send.html'),
                            name='registration_change_email_send'),
@@ -60,10 +63,6 @@ urlpatterns = patterns('',
                            change_email,
                            {'backend': 'registration.backends.default.DefaultBackend'},
                            name='registration_change_email'),
-
-
-                       url(r'^register/closed/$',
-                           TemplateView.as_view(template_name='registration/registration_closed.html'),
-                           name='registration_disallowed'),
+                       #auth
                        (r'', include('registration.auth_urls')),
                        )

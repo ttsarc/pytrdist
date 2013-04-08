@@ -17,6 +17,7 @@ from django.contrib import messages
 
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 
 from registration.forms import ChangeEmailForm
 from django.contrib.sites.models import RequestSite
@@ -82,7 +83,11 @@ def activate(request, backend,
     registration/activate.html or ``template_name`` keyword argument.
     
     """
-    is_activatable, user = RegistrationProfile.objects.is_activatable(**kwargs)
+    try:
+        is_activatable, user = RegistrationProfile.objects.is_activatable(**kwargs)
+        print(user)
+    except:
+        is_activatable, user = False, None
 
     if extra_context is None:
         extra_context = {}
@@ -91,9 +96,8 @@ def activate(request, backend,
         context[key] = callable(value) and value() or value
 
     if is_activatable == False:
-        return render_to_response(template_name,
-                              kwargs,
-                              context_instance=context)
+        messages.add_message(request, messages.ERROR, 'すでにプロフィールを登録済みです')
+        return redirect('trwk_home')
 
     if request.method == 'POST':
         form = MyUserProfileForm(request.POST)
@@ -108,6 +112,10 @@ def activate(request, backend,
             else:
                 backend = get_backend(backend)
                 account = backend.activate(request, **kwargs)
+                #自動ログイン
+                #http://stackoverflow.com/questions/2787650/manually-logging-in-a-user-without-password
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                login(request, user)
                 if account:
                     if success_url is None:
                         to, args, kwargs = backend.post_activation_redirect(request, account)

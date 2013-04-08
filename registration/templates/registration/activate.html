@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load i18n %}
 
 {% block content %}
 
@@ -10,13 +9,14 @@
 <table>
 {{ form }}
 </table>
-  <input type="submit" value="{% trans 'Log in' %}" />
+  <div class="">利用規約テキスト</div>
+  <input type="submit" value="登録する" />
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
 {% else %}
 
-<p>{% trans "Account activation failed" %}</p>
+<p>認証に失敗しました</p>
 
 {% endif %}
 

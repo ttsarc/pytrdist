@@ -14,6 +14,13 @@
 </head>
 <body>
 {% block header %}{% endblock %}
+{% if user.is_authenticated %}
+    ログイン中:{{ user.email }} 
+    <a href="{% url 'mypage_home' %}">マイページ</a>
+    <a href="{% url 'auth_logout' %}">ログアウト</a>
+{% else %}
+    <a href="{% url 'auth_login' %}">ログイン</a>
+{% endif%}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}

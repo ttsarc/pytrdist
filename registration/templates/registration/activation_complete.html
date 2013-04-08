@@ -1,17 +1,15 @@
 {% extends "base.html" %}
-{% load i18n %}
 
 {% block content %}
 
-{% if account %}
+{% if user.is_authenticated %}
 
-<p>{% trans "Account successfully activated" %}</p>
+<p>ユーザー登録が完了しました。</p>
 
-<p><a href="{% url auth_login %}">{% trans "Log in" %}</a></p>
+<p><a href="{% url "auth_login" %}">ログイン</a></p>
 
 {% else %}
-
-<p>{% trans "Account activation failed" %}</p>
+<p>アカウント登録に失敗しました。</p>
 
 {% endif %}
 

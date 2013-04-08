@@ -7,18 +7,20 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
     PermissionsMixin, BaseUserManager, AbstractBaseUser
 )
-from  accounts.choices import *
+from accounts.choices import *
+from django.core.validators import RegexValidator,MinLengthValidator, validate_slug
+from accounts.validators import TelFaxValidaor, PostNumberValidaor
 
 class CompanyManager(models.Manager):
     pass
 
 class Company(models.Model):
-    name =             models.CharField('企業名', max_length=100)
-    kana =             models.CharField('企業名（フリガナ）', max_length=100)
+    name =             models.CharField('掲載企業名', max_length=100)
+    kana =             models.CharField('掲載企業名（フリガナ）', max_length=100)
     business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES, blank=True, null=True)
-    tel =              models.CharField('電話番号', max_length=16)
-    fax =              models.CharField('FAX', max_length=16)
-    post_number =      models.CharField('郵便番号', max_length=8)
+    tel =              models.CharField('電話番号', max_length=16,validators=[TelFaxValidaor], help_text='例：03-3343-5746')
+    fax =              models.CharField('FAX', max_length=16, validators=[TelFaxValidaor], help_text='例：03-5326-0360')
+    post_number =      models.CharField('郵便番号', max_length=8, validators=[PostNumberValidaor], help_text="例：1630648")
     prefecture =       models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES)
     address=           models.CharField('住所', max_length=200)
     site_url =         models.URLField('ホームページURL')
@@ -37,8 +39,8 @@ class Company(models.Model):
     objects = CompanyManager()
 
     class Meta:
-        verbose_name = "顧客企業"
-        verbose_name_plural = "顧客企業"
+        verbose_name = "掲載企業"
+        verbose_name_plural = "掲載企業"
 
     def __unicode__(self):
         return self.name
@@ -82,12 +84,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         unique=True,
         db_index=True,
     )
-    username =         models.CharField('ユーザー名', max_length=30, blank=True, help_text="システム内のファイル名等で使われます（オプション）",validators=[validate_slug])
+    username =         models.CharField('ユーザー名', max_length=30, blank=True, help_text="システム内のファイル名等で使われます。半角英数字で入力してください（オプション）",validators=[validate_slug])
     is_active =        models.BooleanField('有効', default=True)
     is_admin =         models.BooleanField('管理者', default=False)
     is_staff =         models.BooleanField('スタッフ', default=False)
-    customer_company = models.ForeignKey(Company, verbose_name='顧客企業', blank=True, null=True, on_delete=models.SET_NULL)
-    date_joined = models.DateTimeField('登録日', default=timezone.now, editable=False)
+    customer_company = models.ForeignKey(Company, verbose_name='掲載企業', blank=True, null=True, on_delete=models.SET_NULL, help_text="ここで企業が選択されていると、その名義で資料掲載などが出来るようになります。ミスのないように注意してください。")
+    date_joined =      models.DateTimeField('登録日', default=timezone.now, editable=False)
     update_date =      models.DateTimeField('更新日', auto_now=True, editable=False)
 
     objects = MyUserManager()
@@ -164,20 +166,20 @@ class MyUserProfileManager(models.Manager):
     pass
 
 class MyUserProfile(models.Model):
-    myuser =           models.OneToOneField(MyUser)
-    first_name =       models.CharField('名', max_length=30)
+    myuser =           models.OneToOneField(MyUser, verbose_name="ユーザー")
     last_name =        models.CharField('姓', max_length=30)
-    last_name_kana =   models.CharField('名（ふりがな）', max_length=100)
-    first_name_kana =  models.CharField('姓（ふりがな）', max_length=100)
+    first_name =       models.CharField('名', max_length=30)
+    last_name_kana =   models.CharField('姓（ふりがな）', max_length=100)
+    first_name_kana =  models.CharField('名（ふりがな）', max_length=100)
     company_name =     models.CharField('会社名', max_length=100)
-    tel =              models.CharField('電話番号', max_length=16)
-    fax =              models.CharField('FAX', max_length=16, blank=True)
-    post_number =      models.CharField('郵便番号', max_length=8)
+    tel =              models.CharField('電話番号', max_length=16,validators=[TelFaxValidaor], help_text='例：03-3343-5746')
+    fax =              models.CharField('FAX', max_length=16, blank=True, validators=[TelFaxValidaor], help_text='例：03-5326-0360')
+    post_number =      models.CharField('郵便番号', max_length=8, validators=[PostNumberValidaor], help_text="例：1630648")
     prefecture =       models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES)
     address =          models.CharField('住所', max_length=255)
     site_url =         models.URLField( 'ホームページURL', blank=True)
     department =       models.CharField('部署名', max_length=100)
-    position =         models.CharField('役職名', max_length=100)
+    position =         models.CharField('役職名', max_length=100, blank=True)
     position_class =   models.SmallIntegerField('役職区分', choices=POSITION_CLASS_CHOICES)
     business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES)
     job_content =      models.SmallIntegerField('職務内容', choices=JOB_CONTENT_CHOICES)

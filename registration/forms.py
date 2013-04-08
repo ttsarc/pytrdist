@@ -13,7 +13,7 @@ else:
     User = get_user_model()
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-
+from django.core.validators import RegexValidator,MinLengthValidator
 
 # I put this on all required fields, because it's easier to pick up
 # on them with CSS or JavaScript if they have a class of "required"
@@ -28,12 +28,11 @@ class ChangeEmailForm(forms.Form):
         """
         Validate that the username is alphanumeric and is not already
         in use.
-        
         """
         email_domain = self.cleaned_data['new_email'].split('@')[1]
         if email_domain in self.bad_domains:
             raise forms.ValidationError('無料メールアドレスなどは使用できません。別のメールアドレスをご利用下さい。')
-        
+
         existing = User.objects.filter(email__iexact=self.cleaned_data['new_email'])
 
         if existing :
@@ -43,7 +42,7 @@ class ChangeEmailForm(forms.Form):
                 raise forms.ValidationError("このメールアドレスはすでに登録されていますが、まだ確認ができていません。")
 
         return self.cleaned_data['new_email']
-        
+
 class RegistrationForm(forms.Form):
     """
     Form for registering a new user account.
@@ -58,8 +57,8 @@ class RegistrationForm(forms.Form):
     
     """
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,maxlength=75)),label=_("E-mail"))
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),label=_("Password"))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),label=_("Password (again)"))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),label=_("Password"), validators=[MinLengthValidator(6)])
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),label=_("Password (again)"),validators=[MinLengthValidator(6)] )
 
     bad_domains = settings.BAD_EMAIL_DOMAIN
 

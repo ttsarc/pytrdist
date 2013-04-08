@@ -60,13 +60,6 @@ class MyUserCreationForm(forms.ModelForm):
 
 
 class MyUserChangeForm(forms.ModelForm):
-    username = forms.RegexField(
-        label=_("Username"), max_length=30, regex=r"^[\w.@+-]+$",
-        help_text=_("Required. 30 characters or fewer. Letters, digits and "
-                      "@/./+/-/_ only."),
-        error_messages={
-            'invalid': _("This value may contain only letters, numbers and "
-                         "@/./+/-/_ characters.")})
     password = ReadOnlyPasswordHashField(label=_("Password"),
         help_text=_("Raw passwords are not stored, so there is no way to see "
                     "this user's password, but you can change the password "
@@ -88,7 +81,7 @@ class MyUserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 class MyUserProfileAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ('myuser',)
 
 admin.site.register(MyUserProfile, MyUserProfileAdmin)
 

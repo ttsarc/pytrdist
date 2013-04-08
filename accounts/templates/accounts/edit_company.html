@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+{% block content %}
+<h1>企業情報の編集</h1>
+<form action="" method="post">{% csrf_token %}
+<table>
+{{ form }}
+</table>
+<p>
+<input type="submit" value="保存する">
+</p>
+</form>
+{% endblock %}
