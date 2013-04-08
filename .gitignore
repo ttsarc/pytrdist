@@ -1,7 +1,8 @@
 *.pyc
 *.pyo
 *~
-local-settings.py
+*/local-settings.py
+trwk/local_settings.py
 *.swp
 *.back
 *.zip
