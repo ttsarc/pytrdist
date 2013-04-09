@@ -18,6 +18,9 @@
     ログイン中:{{ user.email }} 
     <a href="{% url 'mypage_home' %}">マイページ</a>
     <a href="{% url 'auth_logout' %}">ログアウト</a>
+    {% if user.customer_company %}
+        <p>掲載企業：{{ user.customer_company }}（<a href="{% url 'mypage_edit_company'%}">編集</a>）</p>
+    {% endif%}
 {% else %}
     <a href="{% url 'auth_login' %}">ログイン</a>
 {% endif%}

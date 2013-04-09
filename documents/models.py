@@ -17,24 +17,28 @@ class DocumentManager(models.Manager):
 class Document(models.Model):
     title =       models.CharField('タイトル', max_length=40, blank=True)
 
+    user =        models.ForeignKey(MyUser, verbose_name='作成ユーザー', null=True, on_delete=models.SET_NULL)
+    company =     models.ForeignKey(Company, verbose_name='掲載企業')
     def get_pdf_uplod_path(self, filename):
-        finename = escape_filename(filename)
-        root_path = 'document/pdf'
-        user_path = root_path + "/" + str(self.company.pk) + '/' + time.strftime('%Y/%m')
-        return user_path + "/" + filename
+        filename = normalize_filename(filename)
+        root_path = os.path.join('document', 'pdf')
+        user_path = os.path.join(root_path, str(self.company.pk), time.strftime('%Y/%m'))
+        print(os.path.join(user_path, filename))
+        return os.path.join(user_path, filename)
 
     pdf_file = ContentTypeRestrictedFileField(
         verbose_name='資料(PDF)',
         upload_to=get_pdf_uplod_path,
+        #upload_to='document/pdf',
         content_types=['application/pdf'],
         max_upload_size=5242880
     )
 
     def get_thumb_uplod_path(self, filename):
         filename = normalize_filename(filename)
-        root_path = 'document/thumb'
-        user_path = root_path + "/" + str(self.company.pk) + '/' + time.strftime('%Y/%m')
-        return user_path + "/" + filename
+        root_path = os.path.join('document', 'thumb')
+        user_path = os.path.join(root_path, str(self.company.pk), time.strftime('%Y/%m'))
+        return os.path.join(user_path, filename)
 
     thumb_file = ImageWithThumbsField(
         verbose_name = 'サムネイル画像',
@@ -49,9 +53,7 @@ class Document(models.Model):
     catch =       models.TextField('資料概要（キャッチコピー）', max_length=150)
     detail =      models.TextField('資料詳細説明文', max_length=500, blank=True)
     results =     models.TextField('導入実績', max_length=500, blank=True)
-    user =        models.ForeignKey(MyUser, verbose_name='作成ユーザー')
-    company =     models.ForeignKey(Company, verbose_name='作成企業')
-
+    status =      models.SmallIntegerField('公開状態', choices=STATUS_CHOICE, default=0)
     add_date =         models.DateTimeField('登録日', auto_now_add=True)
     update_date =      models.DateTimeField('更新日', auto_now=True)
 

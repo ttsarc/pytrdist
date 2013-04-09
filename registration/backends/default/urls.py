@@ -64,5 +64,5 @@ urlpatterns = patterns('',
                            {'backend': 'registration.backends.default.DefaultBackend'},
                            name='registration_change_email'),
                        #auth
-                       (r'', include('registration.auth_urls')),
+                       #(r'', include('registration.auth_urls')),
                        )

@@ -1,0 +1,13 @@
+{% extends 'base.html'%}
+{% block content %}
+<h1>資料の編集</h1>
+{% if documents %}
+    <ul>
+    {% for doc in documents %}
+        <li><a href="{% url 'document_edit' document_id=doc.pk %}">{{doc.title}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    資料がありません
+{% endif %}
+{% endblock %}

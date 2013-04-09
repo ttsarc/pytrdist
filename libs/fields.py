@@ -28,10 +28,9 @@ class ContentTypeRestrictedFileField(FileField):
     def __init__(self, *args, **kwargs):
         self.content_types = kwargs.pop("content_types")
         self.max_upload_size = kwargs.pop("max_upload_size")
-
         super(ContentTypeRestrictedFileField, self).__init__(*args, **kwargs)
 
-    def clean(self, *args, **kwargs):        
+    def clean(self, *args, **kwargs):
         data = super(ContentTypeRestrictedFileField, self).clean(*args, **kwargs)
         
         file = data.file
