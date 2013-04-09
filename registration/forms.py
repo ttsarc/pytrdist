@@ -24,6 +24,8 @@ attrs_dict = {'class': 'required'}
 class ChangeEmailForm(forms.Form):
     new_email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,maxlength=75)),label=_("新しいメールアドレス"))
     bad_domains = settings.BAD_EMAIL_DOMAIN
+    error_css_class = 'error'
+    required_css_class = 'required'
     def clean_new_email(self):
         """
         Validate that the username is alphanumeric and is not already

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="post" action=".">{% csrf_token %}
+<p>現在のメールアドレス：{{ user.email }}</p>
+  {{ form.as_p }}
+
+  <input type="submit" value="確認メールを送信" />
+</form>
+{% endblock %}
