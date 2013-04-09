@@ -20,28 +20,12 @@ class DownloadForm(forms.Form):
     stage = forms.ChoiceField(label='今回ダウンロードされる資料について現在のご状況をお聞かせ下さい',choices=STAGE_CHOICE, widget=RadioSelect)
     confirmation = forms.BooleanField(label="規約に同意する")
 
-
 class MyUserShowForm(forms.ModelForm):
     class Meta:
         model = MyUser
         fields = ('email',)
 
-class ShowSelectedRenderer(object):
-    """
-    An object used by RadioSelect to enable customization of radio widgets.
-    """
-
-    def __init__(self, name, value, attrs=None, choices=None):
-        self.name, self.value, self.attrs = name, value, attrs
-        self.choices = choices
-    def render(self):
-        if self.choices:
-            return self.choices[self.value]
-        else:
-            return self.value
-
 class MyUserProfileShowForm(forms.ModelForm):
-    #prefecture = RadioSelect(renderer=ShowSelectedRenderer)
     class Meta:
         model = MyUserProfile
         fields = (
