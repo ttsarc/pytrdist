@@ -4,7 +4,7 @@ from django.db import models
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.conf import settings
-from accounts.models import Company, MyUser, MyUserProfile
+from accounts.models import Company
 from documents.choices import *
 from trwk.libs.fields import ImageWithThumbsField, ContentTypeRestrictedFileField
 from trwk.libs.file_utils import normalize_filename
@@ -16,8 +16,7 @@ class DocumentManager(models.Manager):
 
 class Document(models.Model):
     title =       models.CharField('タイトル', max_length=40)
-
-    user =        models.ForeignKey(MyUser, verbose_name='作成ユーザー', null=True, on_delete=models.SET_NULL)
+    user =        models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作成ユーザー', null=True, on_delete=models.SET_NULL)
     company =     models.ForeignKey(Company, verbose_name='掲載企業')
     def get_pdf_uplod_path(self, filename):
         filename = normalize_filename(filename)
