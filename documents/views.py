@@ -4,7 +4,7 @@ Views which edit user accounts
 
 """
 from django import forms
-from django.shortcuts import redirect, render_to_response, get_object_or_404
+from django.shortcuts import redirect, render_to_response, get_object_or_404, get_list_or_404
 from django.template import RequestContext
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,7 @@ from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
 from django.views.decorators.csrf import csrf_protect
 
-from documents.forms import DocumentForm
+from documents.forms import DocumentForm, DownloadForm, MyUserShowForm, MyUserProfileShowForm
 from documents.models import Document
 
 def _check_customer(user):
@@ -55,7 +55,7 @@ def edit(request, document_id):
     document = get_object_or_404(Document, pk=document_id)
     user = request.user
     company = user.customer_company
-    if user.customer_company.pk == document_id:
+    if user.customer_company.pk != document.company.pk:
         messages.add_message(request, messages.ERROR, 'この資料を編集する権限はありません')
         return redirect('mypage_home' )
 
@@ -87,6 +87,49 @@ def edit_index(request):
         'documents/edit_index.html',
         {
             'documents' : documents,
+        },
+        context_instance=RequestContext(request)
+    )
+
+def index(request):
+    documents = get_list_or_404(Document, status=1)
+    return render_to_response(
+        'documents/index.html',
+        {
+            'documents' : documents,
+        },
+        context_instance=RequestContext(request)
+    )
+
+def detail(request, document_id):
+    document = get_object_or_404(Document, pk=document_id, status=1)
+    return render_to_response(
+        'documents/detail.html',
+        {
+            'document' : document,
+        },
+        context_instance=RequestContext(request)
+    )
+
+@login_required
+def download(request, document_id):
+    document = get_object_or_404(Document, pk=document_id, status=1)
+    user = request.user
+    user_form = MyUserShowForm(instance=user)
+    user_profile_form = MyUserProfileShowForm(instance=user.myuserprofile)
+    if request.method == 'POST':
+        form = DownloadForm(request.POST)
+        if form.is_valid():
+            pass
+    else:
+        form = DownloadForm()
+    return render_to_response(
+        'documents/download.html',
+        {
+            'document' : document,
+            'form' : form,
+            'user_form' : user_form,
+            'user_profile_form' : user_profile_form,
         },
         context_instance=RequestContext(request)
     )

@@ -7,6 +7,10 @@
     <li><a href="{% url "registration_change_email"%}">メールアドレスの変更</a></li>
 </ul>
 {% if user.customer_company %}
-<a href="{% url "mypage_edit_company"%}">企業情報の編集</a>
+<ul>
+    <li><a href="{% url "mypage_edit_company"%}">企業情報の編集</a></li>
+    <li><a href="{% url "document_add"%}">掲載資料の新規作成</a></li>
+    <li><a href="{% url "document_edit_index"%}">掲載資料の編集</a></li>
+</ul>
 {% endif%}
 {% endblock %}

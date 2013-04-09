@@ -6,8 +6,8 @@ from django.utils import timezone
 from django.conf import settings
 from accounts.models import Company, MyUser, MyUserProfile
 from documents.choices import *
-from libs.fields import ImageWithThumbsField, ContentTypeRestrictedFileField
-from libs.file_utils import normalize_filename
+from trwk.libs.fields import ImageWithThumbsField, ContentTypeRestrictedFileField
+from trwk.libs.file_utils import normalize_filename
 
 # Create your models here.
 
@@ -15,7 +15,7 @@ class DocumentManager(models.Manager):
     pass
 
 class Document(models.Model):
-    title =       models.CharField('タイトル', max_length=40, blank=True)
+    title =       models.CharField('タイトル', max_length=40)
 
     user =        models.ForeignKey(MyUser, verbose_name='作成ユーザー', null=True, on_delete=models.SET_NULL)
     company =     models.ForeignKey(Company, verbose_name='掲載企業')
@@ -54,8 +54,8 @@ class Document(models.Model):
     detail =      models.TextField('資料詳細説明文', max_length=500, blank=True)
     results =     models.TextField('導入実績', max_length=500, blank=True)
     status =      models.SmallIntegerField('公開状態', choices=STATUS_CHOICE, default=0)
-    add_date =         models.DateTimeField('登録日', auto_now_add=True)
-    update_date =      models.DateTimeField('更新日', auto_now=True)
+    add_date =    models.DateTimeField('登録日', auto_now_add=True)
+    update_date = models.DateTimeField('更新日', auto_now=True)
 
     objects = DocumentManager()
 
@@ -65,4 +65,4 @@ class Document(models.Model):
     class Meta:
         verbose_name = "資料"
         verbose_name_plural = "資料"
-
+        ordering = ['-update_date']

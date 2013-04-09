@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<h1>資料</h1>
+{% for doc in documents %}
+<div>
+	<h2><a href="{% url 'document_detail' document_id=doc.id %}">{{ doc.title }}</a></h2>
+	<div>{{ doc.catch }}</div>
+	<div><a href="{% url 'document_download' document_id=doc.id %}">ダウンロード</a></div>
+</div>
+{% endfor %}
+{% endblock %}

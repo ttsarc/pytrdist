@@ -1,0 +1,30 @@
+{% extends 'base.html'%}
+{% block title %}{{ document.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ document.title }}</h1>
+
+<table>
+{% for field in user_form %}
+	<tr>
+		<th>{{ field.label }}</th><td>{{ field.value }}</td>
+	</tr>
+{% endfor %}
+
+{{ user_profile_form.get_prefecture_display }}
+{% for field in user_profile_form %}
+	<tr>
+		<th>
+		{{ field.label }}</th><td>{{ field.value }}</td>
+	</tr>
+{% endfor %}
+</table>
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+<table>
+{{ form }}
+</table>
+<p>
+<input type="submit" value="資料をダウンロード">
+</p>
+</form>
+{% endblock %}

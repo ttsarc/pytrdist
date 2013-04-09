@@ -7,7 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from django.db.models import ImageField
 from django.db.models.fields.files import ImageFieldFile
-from PIL import Image
+#from PIL import Image
+import Image
 from django.core.files.base import ContentFile
 
 #http://nemesisdesign.net/blog/coding/django-filefield-content-type-size-validation/
