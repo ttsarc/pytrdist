@@ -12,6 +12,6 @@ urlpatterns = patterns('',
                        url(r'^edit/$', edit_index, name='document_edit_index'),
                        url(r'^detail/(?P<document_id>\d+)/$', detail, name='document_detail'),
                        url(r'^download/(?P<document_id>\d+)/$', download, name='document_download'),
-                       url(r'^download/link/(?P<download_sign>[a-zA-Z0-9_\-:]+)/$', send, name='document_download_link'),
+                       url(r'^download/link/(?P<id_sign>[a-zA-Z0-9_\-:]+)/$', send, name='document_download_link'),
                        url(r'^$', index, name='document_index'),
 )

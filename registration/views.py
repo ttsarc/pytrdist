@@ -12,7 +12,7 @@ from registration.backends import get_backend
 from registration.models import RegistrationProfile, ChangeEmailProfile
 
 from accounts.forms import MyUserProfileForm
-
+from accounts.models import MyUser
 from django.contrib import messages
 
 from django.views.decorators.csrf import csrf_protect
@@ -224,12 +224,21 @@ def register(request, backend, success_url=None, form_class=None,
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
-            new_user = backend.register(request, **form.cleaned_data)
-            if success_url is None:
-                to, args, kwargs = backend.post_registration_redirect(request, new_user)
-                return redirect(to, *args, **kwargs)
+            try:
+                new_user = backend.register(request, **form.cleaned_data)
+            except:
+                #確認メール再送
+                email = form.cleaned_data['email']
+                user = MyUser.objects.get(email=email)
+                profile = RegistrationProfile.objects.filter(user=user.id).order_by('-id')[0]
+                profile.send_activation_email(site = Site.objects.get_current())
+                messages.add_message(request, messages.WARNING, 'すでに送信済みのメールアドレスです。確認メールを再送しましたのでご確認ください')
             else:
-                return redirect(success_url)
+                if success_url is None:
+                    to, args, kwargs = backend.post_registration_redirect(request, new_user)
+                    return redirect(to, *args, **kwargs)
+                else:
+                    return redirect(success_url)
     else:
         form = form_class()
     

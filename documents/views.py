@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render_to_response, get_object_or_404, ge
 from django.http import Http404
 from django.core import signing
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -18,6 +19,7 @@ from django.http import HttpResponse
 from documents.forms import DocumentForm, DownloadForm, MyUserShowForm, MyUserProfileShowForm
 from documents.models import Document, DocumentDownloadLog
 from trwk.libs.request_utils import *
+from trwk.api.email_utility import email_company_staff
 def _check_customer(user):
     if not user.is_customer:
         messages.add_message(request, messages.ERROR, '掲載企業の担当者として登録されていません')
@@ -115,7 +117,6 @@ def detail(request, document_id):
 
 def _add_download_log(document, form, user, company ,request):
     p = user.myuserprofile
-    print(form.fields['stage'].choices)
     log = DocumentDownloadLog(
             # Document
             document_id =     document.id,
@@ -151,11 +152,25 @@ def _add_download_log(document, form, user, company ,request):
             ua =              get_request_ua(request),
     )
     log.save()
+    return log
+
+def _notify_company_staff(log, request):
+    content = render_to_string(
+        'email/notify_download.txt',
+        {'log' : log},
+        context_instance=RequestContext(request)
+    )
+    subject = render_to_string(
+        'email/notify_download_subject.txt',
+        {'log' : log},
+        context_instance=RequestContext(request)
+    )
+    email_company_staff(log.company.id ,subject = subject, content = content)
 
 @login_required
-def send(request, download_sign):
+def send(request, id_sign):
     try:
-        data = signing.loads(download_sign)
+        data = signing.loads(id_sign)
         document_id = data['id']
     except signing.BadSignature:
         raise Http404
@@ -166,10 +181,6 @@ def send(request, download_sign):
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     response['Content-Length'] = file.tell()
     return response
-
-def create_id_sign(id):
-    sign = signing.dumps({'id': id })
-    return sign
 
 @login_required
 def download(request, document_id):
@@ -188,13 +199,12 @@ def download(request, document_id):
     if request.method == 'POST':
         form = DownloadForm(request.POST)
         if form.is_valid():
-            _add_download_log(document, form, user, company, request)
+            log = _add_download_log(document, form, user, company, request)
+            _notify_company_staff(log, request)
             messages.add_message(request, messages.SUCCESS, '資料のダウンロードありがとうございました。')
-            download_sign = create_id_sign(document.id)
             return render_to_response(
                 'documents/download_complete.html',
                 {
-                    'download_sign': download_sign,
                     'document': document,
                 },
                 context_instance=RequestContext(request)

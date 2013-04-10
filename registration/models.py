@@ -283,7 +283,7 @@ class RegistrationProfile(models.Model):
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
         
-        self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        self.user.email_user(subject, message, settings.SERVER_EMAIL)
 
 
 class ChangeEmailProfileManager(models.Manager):
@@ -359,7 +359,7 @@ class ChangeEmailProfile(models.Model):
         message = render_to_string('registration/change_email.txt',
                                    ctx_dict)
         
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL,
+        send_mail(subject, message, settings.SERVER_EMAIL,
         [self.new_email], fail_silently=False)
 
     def activation_key_expired(self):

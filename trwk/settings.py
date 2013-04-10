@@ -7,7 +7,7 @@ ADMINS = (
      ('example', 'trwk@example.com'),
 )
 
-SYSTEM_NOREPLY_EMAIL = 'noreply@example.com'
+SERVER_EMAIL = 'noreply@example.com'
 
 MANAGERS = ADMINS
 
@@ -182,7 +182,7 @@ AUTH_PROFILE_MODULE = 'accounts.MyUserProfile'
 
 ACCOUNT_ACTIVATION_DAYS = 2
 EMAIL_HOST = 'localhost'
-DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
 LOGIN_REDIRECT_URL = '/'
 
 BAD_EMAIL_DOMAIN = [

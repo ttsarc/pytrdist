@@ -1,0 +1,11 @@
+{% block header %}
+このメールはとれわか（http://tr-wk.jp/）のシステムよりお送りしております。
+{% endblock%}
+
+{% block content %}
+本文
+{% endblock%}
+
+{% block footer %}
+http://tr-wk.jp
+{% endblock%}

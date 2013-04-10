@@ -2,6 +2,7 @@
 import os, time
 from django.db import models
 from django.core.mail import send_mail
+from django.core import signing
 from django.utils import timezone
 from django.conf import settings
 from accounts.models import Company
@@ -57,6 +58,12 @@ class Document(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def id_sign(self):
+        sign = signing.dumps(
+            {'id' : self.id}
+        )
+        return sign
 
     class Meta:
         verbose_name = "資料"

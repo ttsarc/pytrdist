@@ -36,7 +36,7 @@ def mypage_home(request):
 @csrf_protect
 def mypage_edit_profile(request):
     user_pk = request.user.pk
-    current_profile = MyUserProfile.objects.get(pk=user_pk)
+    current_profile = MyUserProfile.objects.get(myuser=user_pk)
     if request.method == 'POST':
         form = MyUserProfileEditForm(request.POST, instance=current_profile)
         if form.is_valid():

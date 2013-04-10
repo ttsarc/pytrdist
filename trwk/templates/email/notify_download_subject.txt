@@ -1,0 +1,7 @@
+{% extends 'email/base_subject.txt'%}
+
+{% block content %}
+
+ダウンロードのお知らせ
+
+{% endblock %}

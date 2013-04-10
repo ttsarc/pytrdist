@@ -14,6 +14,7 @@ else:
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator,MinLengthValidator
+from django.contrib import messages
 
 # I put this on all required fields, because it's easier to pick up
 # on them with CSS or JavaScript if they have a class of "required"
@@ -80,7 +81,8 @@ class RegistrationForm(forms.Form):
             if existing[0].is_active:
                 raise forms.ValidationError("このメールアドレスはすでに登録済みです。パスワードを忘れた場合は再発行してください")
             elif existing[0].is_active == False :
-                raise forms.ValidationError("このメールアドレスはすでに登録されていますが、まだ確認ができていません。")
+                pass
+                #raise forms.ValidationError("このメールアドレスはすでに登録されていますが、まだ確認ができていません。")
 
         return self.cleaned_data['email']
 
