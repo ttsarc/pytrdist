@@ -4,4 +4,5 @@
 {% block content %}
 <h1>{{ document.title }}</h1>
 <div>{{ document.catch }}</div>
+<div><a href="{% url 'document_download' document_id=document.id %}">ダウンロード</a></div>
 {% endblock %}

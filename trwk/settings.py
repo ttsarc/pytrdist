@@ -7,6 +7,8 @@ ADMINS = (
      ('example', 'trwk@example.com'),
 )
 
+SYSTEM_NOREPLY_EMAIL = 'noreply@example.com'
+
 MANAGERS = ADMINS
 
 DATABASES = {

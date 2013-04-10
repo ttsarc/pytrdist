@@ -183,7 +183,7 @@ class MyUserProfile(models.Model):
     position_class =   models.SmallIntegerField('役職区分', choices=POSITION_CLASS_CHOICES)
     business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES)
     job_content =      models.SmallIntegerField('職務内容', choices=JOB_CONTENT_CHOICES)
-    firm_size =        models.SmallIntegerField('従業員規模', choices=FIRM_SIZE_CHOICES)
+    firm_size =        models.SmallIntegerField('従業員数', choices=FIRM_SIZE_CHOICES)
     yearly_sales =     models.SmallIntegerField('年商', choices=YEARLY_SALES_CHOICES)
     discretion  =      models.SmallIntegerField('あなたはサービス導入の意思決定に、どのような立場で関わっていますか？', choices=DISCRETION_CHOICES)
     update_date =      models.DateTimeField('更新日', auto_now=True)

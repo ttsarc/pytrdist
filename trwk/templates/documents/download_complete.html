@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% block title %}ダウンロード完了 | {{ document.title }}{% endblock %}
+
+{% block content %}
+<h1>ダウンロードありがとうございます</h1>
+
+<p>ダウンロードしたファイル</p>
+<h2>{{ document.title }}</h2>
+
+<script>
+$(function(){
+	location.href='{% url 'document_download_link' download_sign=download_sign %}';
+});
+</script>
+<a href="{% url 'document_detail' document_id=document.id %}">資料の詳細</a>
+<p>ダウンロードが始まらない場合はこちら</p>
+<a href="{% url 'document_download_link' download_sign=download_sign %}" target="_blank">ダウンロード</a>
+{% endblock %}
