@@ -1,0 +1,20 @@
+{% extends 'base_mypage.html'%}
+{% block content %}
+<h1>リード情報の確認</h1>
+<table>
+{% for lead in leads %}
+    <tr>
+        <td>{{ lead.download_date }}</td>
+        <td>{{ lead.stage }}</td>
+        <td>{{ lead.company_name }}</td>
+        <td>{{ lead.document_title }}</td>
+        <td>{{ lead.discretion }}</td>
+        <td>{{ lead.business_type }}</td>
+        <td>{{ lead.position }}</td>
+        <td>{{ lead.job_content }}</td>
+        <td>{{ lead.firm_size }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+{% endblock %}

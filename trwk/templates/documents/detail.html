@@ -2,6 +2,15 @@
 {% block title %}{{ document.title }}{% endblock %}
 
 {% block content %}
+{%if preview == True %}
+    <div>プレビュー中です</div>
+    {%if document.status != 1 %}
+        <div>現在この資料は公開されていません。掲載企業の担当者様のみご確認頂けます。</div>
+    {% endif %}
+    {% if request.user.is_superuser %}
+        <div>スーパーユーザー権限で閲覧中です</div>
+    {% endif%}
+{% endif %}
 <h1>{{ document.title }}</h1>
 <div>{{ document.catch }}</div>
 <div><a href="{% url 'document_download' document_id=document.id %}">ダウンロード</a></div>

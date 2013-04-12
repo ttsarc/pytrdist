@@ -3,6 +3,7 @@
 Views which edit user accounts
 
 """
+import csv
 from django import forms
 from django.shortcuts import redirect, render_to_response, get_object_or_404, get_list_or_404
 from django.http import Http404
@@ -24,7 +25,7 @@ def _check_customer(user):
     if not user.is_customer:
         messages.add_message(request, messages.ERROR, '掲載企業の担当者として登録されていません')
         return redirect('mypage_home')
-    return None
+    return True
 
 @login_required
 @csrf_protect
@@ -84,8 +85,7 @@ def edit(request, document_id):
 @csrf_protect
 def edit_index(request):
     _check_customer(request.user)
-    user = request.user
-    company = user.customer_company
+    company = request.user.customer_company
     documents = Document.objects.all().filter(company__exact=company)
     return render_to_response(
         'documents/edit_index.html',
@@ -114,6 +114,24 @@ def detail(request, document_id):
         },
         context_instance=RequestContext(request)
     )
+
+@login_required
+def preview(request, document_id):
+    _check_customer(request.user)
+    company = request.user.customer_company
+    if request.user.is_superuser:
+        document = get_object_or_404(Document, pk=document_id)
+    else:
+        document = get_object_or_404(Document, pk=document_id, company=company)
+    return render_to_response(
+        'documents/detail.html',
+        {
+            'document' : document,
+            'preview' : True,
+        },
+        context_instance=RequestContext(request)
+    )
+
 
 def _add_download_log(document, form, user, company ,request):
     p = user.myuserprofile
@@ -251,3 +269,48 @@ def download_complete(request, id_sign):
                     context_instance=RequestContext(request)
                 )
 
+@login_required
+def download_log_list(request, page=0):
+    _check_customer(request.user)
+    user = request.user
+    company = user.customer_company
+    try:
+        leads = DocumentDownloadLog.objects.filter(
+            company=company,
+        ).order_by('-download_date')
+    except:
+        messages.add_message(request, messages.ERROR, 'まだリード情報はありません')
+        return redirect('mypage_home' )
+    return render_to_response(
+        'documents/download_leads_list.html',
+        {
+            'leads' : leads,
+        },
+        context_instance=RequestContext(request)
+    )
+
+@login_required
+def download_log_csv(request, page=0):
+    _check_customer(request.user)
+    user = request.user
+    company = user.customer_company
+    try:
+        leads = DocumentDownloadLog.objects.filter(
+            company=company,
+        ).order_by('-download_date').all()
+    except:
+        messages.add_message(request, messages.ERROR, 'まだリード情報はありません')
+        return redirect('mypage_home' )
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+
+    from see import see
+    writer = csv.writer(response)
+    for line in leads:
+        #print(see( [line.get(key) for key in line._meta.get_all_field_names() if key not in ['document_id', 'company', 'user_id', 'ip', 'ua']] ))
+        #writer.writerow(
+        #    [getattr(line, key).encode('shift-jis') for key in line._meta.get_all_field_names() if key not in ['document_id', 'company', 'user_id', 'ip', 'ua']]
+        #)
+        break
+    return response

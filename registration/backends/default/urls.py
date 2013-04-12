@@ -25,7 +25,7 @@ from django.views.generic import TemplateView
 
 from registration.views import activate
 from registration.views import register
-from registration.views import change_email,change_email_done
+#from registration.views import change_email,change_email_done
 
 urlpatterns = patterns('',
                        url(r'^activate/complete/$',
@@ -50,19 +50,19 @@ urlpatterns = patterns('',
                            TemplateView.as_view(template_name='registration/registration_closed.html'),
                            name='registration_disallowed'),
                        #change_email
-                       url(r'^change_email/send/$',
-                           TemplateView.as_view(template_name='registration/change_email_send.html'),
-                           name='registration_change_email_send'),
-                       url(r'^change_email/complete/$',
-                           TemplateView.as_view(template_name='registration/change_email_complete.html'),
-                           name='registration_change_email_complete'),
-                       url(r'^change_email/(?P<activation_key>\w+)/$$',
-                           change_email_done,
-                           name='registration_change_email_done'),
-                       url(r'^change_email/$',
-                           change_email,
-                           {'backend': 'registration.backends.default.DefaultBackend'},
-                           name='registration_change_email'),
+                       #url(r'^change_email/send/$',
+                       #    TemplateView.as_view(template_name='registration/change_email_send.html'),
+                       #    name='registration_change_email_send'),
+                       #url(r'^change_email/complete/$',
+                       #    TemplateView.as_view(template_name='registration/change_email_complete.html'),
+                       #    name='registration_change_email_complete'),
+                       #url(r'^change_email/(?P<activation_key>\w+)/$$',
+                       #    change_email_done,
+                       #    name='registration_change_email_done'),
+                       #url(r'^change_email/$',
+                       #    change_email,
+                       #    {'backend': 'registration.backends.default.DefaultBackend'},
+                       #    name='registration_change_email'),
                        #auth
                        #(r'', include('registration.auth_urls')),
                        )

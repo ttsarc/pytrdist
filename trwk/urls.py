@@ -15,11 +15,12 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    url(r'^$',              TemplateView.as_view(template_name='base.html'), name='trwk_home'),
-    url(r'^admin/',         include(admin.site.urls)),
-    url(r'^accounts/',      include('registration.backends.default.urls')),
-    url(r'^accounts/',      include('accounts.urls')),
-    url(r'^documents/',     include('documents.urls')),
+    url(r'^$',          TemplateView.as_view(template_name='base.html'), name='home'),
+    url(r'^admin/',     include(admin.site.urls)),
+    url(r'^accounts/',  include('registration.backends.default.urls')),
+    url(r'^accounts/',  include('accounts.urls')),
+    url(r'^mypage/',    include('mypage.urls')),
+    url(r'^documents/', include('documents.urls')),
 )
 
 if settings.DEBUG:
