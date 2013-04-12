@@ -12,19 +12,23 @@
 {% endfor %}
 
 {% for field in user_profile_form %}
-	<tr>
-		<th>{{ field.label }}</th><td>
-		{% if field.field.choices %}
-			{% for key,val in field.field.choices %}
-				{% if key == field.value %}
-				{{ val }}
-				{% endif %}
-			{% endfor %}
-		{% else %}
-			{{ field.value }}
-		{% endif%}
-		</td>
-	</tr>
+    <tr>
+        <th>{{ field.label }}</th><td>
+        {% if field.field.choices %}
+            {% for key,val in field.field.choices %}
+                {% if key|slugify == field.value|slugify %}
+                {{ val }}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% if field.value == True %}
+            はい
+            {% else %}
+            {{ field.value }}
+            {% endif %}
+        {% endif%}
+        </td>
+    </tr>
 {% endfor %}
 </table>
 <a href="{% url 'mypage_edit_profile'%}?next={{request.path}}">登録情報の変更はこちら</a>
@@ -33,7 +37,7 @@
 {{ form }}
 </table>
 <p>
-<input type="submit" value="資料をダウンロード">
+<input type="submit" value="送信内容の確認">
 </p>
 </form>
 {% endblock %}

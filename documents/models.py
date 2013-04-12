@@ -70,6 +70,40 @@ class Document(models.Model):
         verbose_name_plural = "資料"
         ordering = ['-update_date']
 
+
+class DocumentDownloadUserManager(models.Manager):
+    pass
+
+class DocumentDownloadUser(models.Model):
+    document =    models.ForeignKey(Document, verbose_name='資料')
+    user =        models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='DLしたユーザー', db_index=True)
+    update_date = models.DateTimeField('最新ダウンロード日', auto_now=True)
+    add_date =    models.DateTimeField('初回ダウンロード日', auto_now_add=True)
+    objects = DocumentDownloadUserManager()
+    def __unicode__(self):
+        return self.document.title
+    class Meta:
+        verbose_name = "ダウンロードユーザー"
+        verbose_name_plural = "ダウンロードユーザー"
+        ordering = ['-update_date']
+        unique_together = ("document", "user")
+
+class DocumentDownloadCountManager(models.Manager):
+    pass
+
+class DocumentDownloadCount(models.Model):
+    document = models.ForeignKey(Document, verbose_name='資料', unique=True)
+    count =    models.IntegerField(verbose_name='ダウンロード数', default=0)
+    update_date = models.DateTimeField('更新日', auto_now=True)
+    objects = DocumentDownloadCountManager()
+    def __unicode__(self):
+        return self.document.title
+    class Meta:
+        verbose_name = "ダウンロード数"
+        verbose_name_plural = "ダウンロード数"
+        ordering = ['-count']
+
+
 class DocumentDownloadLogManager(models.Manager):
     pass
 

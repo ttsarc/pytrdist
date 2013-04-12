@@ -4,13 +4,16 @@
 
 {% if is_activatable %}
 <p>メールアドレスが確認できました。</p>
-<p>下記の情報を登録して下さい。</p>
+<p>下記の情報を入力して下さい。</p>
 <form action="" method="post">{% csrf_token %}
 <table>
+<tr>
+    <th>メールアドレス</th><td>{{ temp_user.email }}</td>
+</tr>
 {{ form }}
 </table>
   <div class="">利用規約テキスト</div>
-  <input type="submit" value="登録する" />
+  <input type="submit" value="確認する" />
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
 

@@ -102,31 +102,36 @@ def activate(request, backend,
     if request.method == 'POST':
         form = MyUserProfileForm(request.POST)
         if form.is_valid():
-            try:
-                form_valid = form.save(commit=False)
-                form_valid.myuser_id = user.pk
-                form_valid.save()
-            except:
-                messages.add_message(request, messages.ERROR, 'すでにプロフィールを登録済みです')
+            if request.POST.get('complete') == '1':
+                try:
+                    form_valid = form.save(commit=False)
+                    form_valid.myuser_id = user.pk
+                    form_valid.save()
+                except:
+                    messages.add_message(request, messages.ERROR, 'すでにプロフィールを登録済みです')
 
+                else:
+                    backend = get_backend(backend)
+                    account = backend.activate(request, **kwargs)
+                    #自動ログイン
+                    #http://stackoverflow.com/questions/2787650/manually-logging-in-a-user-without-password
+                    user.backend = 'django.contrib.auth.backends.ModelBackend'
+                    login(request, user)
+                    if account:
+                        if success_url is None:
+                            to, args, kwargs = backend.post_activation_redirect(request, account)
+                            return redirect(to, *args, **kwargs)
+                        else:
+                            return redirect(success_url)
+            #修正するをクリックした時
+            elif request.POST.get('complete') == '0':
+                pass
             else:
-                backend = get_backend(backend)
-                account = backend.activate(request, **kwargs)
-                #自動ログイン
-                #http://stackoverflow.com/questions/2787650/manually-logging-in-a-user-without-password
-                user.backend = 'django.contrib.auth.backends.ModelBackend'
-                login(request, user)
-                if account:
-                    if success_url is None:
-                        to, args, kwargs = backend.post_activation_redirect(request, account)
-                        return redirect(to, *args, **kwargs)
-                    else:
-                        return redirect(success_url)
-
-
+                template_name = "registration/activate_preview.html"
     else:
         form = MyUserProfileForm()
     kwargs['form'] = form
+    kwargs['temp_user'] = user
     kwargs['is_activatable'] = is_activatable
     return render_to_response(template_name,
                               kwargs,

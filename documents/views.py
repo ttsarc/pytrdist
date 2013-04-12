@@ -17,7 +17,7 @@ from django.contrib.sites.models import Site
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
 from documents.forms import DocumentForm, DownloadForm, MyUserShowForm, MyUserProfileShowForm
-from documents.models import Document, DocumentDownloadLog
+from documents.models import Document, DocumentDownloadLog, DocumentDownloadCount, DocumentDownloadUser
 from trwk.libs.request_utils import *
 from trwk.api.email_utility import email_company_staff
 def _check_customer(user):
@@ -167,6 +167,18 @@ def _notify_company_staff(log, request):
     )
     email_company_staff(log.company.id ,subject = subject, content = content)
 
+def _add_download_count(document):
+    count_obj, created= DocumentDownloadCount.objects.get_or_create(document=document)
+    if created:
+        count_obj.count = 1
+    else:
+        new_count = count_obj.count + 1
+        count_obj.count = new_count
+    count_obj.save()
+
+def _add_download_user(document, user):
+    dl_user_obj, created= DocumentDownloadUser.objects.get_or_create(document=document, user=user)
+
 @login_required
 def send(request, id_sign):
     try:
@@ -186,6 +198,7 @@ def send(request, id_sign):
 def download(request, document_id):
     document = get_object_or_404(Document, pk=document_id, status=1)
     user = request.user
+    template_name = 'documents/download.html'
     if not user.myuserprofile:
         messages.add_message(request, messages.ERROR, 'ユーザー情報の設定が完了していません。お手数ですが管理者に御問合せください')
         return redirect('trwk_home' )
@@ -199,21 +212,20 @@ def download(request, document_id):
     if request.method == 'POST':
         form = DownloadForm(request.POST)
         if form.is_valid():
-            log = _add_download_log(document, form, user, company, request)
-            _notify_company_staff(log, request)
-            messages.add_message(request, messages.SUCCESS, '資料のダウンロードありがとうございました。')
-            return render_to_response(
-                'documents/download_complete.html',
-                {
-                    'document': document,
-                },
-                context_instance=RequestContext(request)
-            )
+            if request.POST.get('complete') == '1':
+                log = _add_download_log(document, form, user, company, request)
+                _notify_company_staff(log, request)
+                _add_download_count(document)
+                _add_download_user(document, user)
+                messages.add_message(request, messages.SUCCESS, '資料のダウンロードありがとうございました。')
+                return redirect('document_download_complete', id_sign=document.id_sign() )
+            elif not request.POST.get('complete'):
+                template_name = 'documents/download_preview.html'
     else:
         form = DownloadForm()
 
     return render_to_response(
-        'documents/download.html',
+        template_name,
         {
             'document' : document,
             'form' : form,
@@ -222,4 +234,20 @@ def download(request, document_id):
         },
         context_instance=RequestContext(request)
     )
+
+@login_required
+def download_complete(request, id_sign):
+    try:
+        data = signing.loads(id_sign)
+        document_id = data['id']
+    except signing.BadSignature:
+        raise Http404
+    document = get_object_or_404(Document, pk=document_id, status=1)
+    return render_to_response(
+                'documents/download_complete.html',
+                    {
+                        'document': document,
+                    },
+                    context_instance=RequestContext(request)
+                )
 

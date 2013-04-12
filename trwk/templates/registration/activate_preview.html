@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if is_activatable %}
+<p>入力内容を確認し、間違いがなかったら送信してください</p>
+<form action="" method="post" id="preview-form">{% csrf_token %}
+{% for field in form %}{{ field.as_hidden }}{% endfor %}
+<table>
+<tr>
+    <th>メールアドレス</th><td>{{ temp_user.email }}</td>
+</tr>
+{% for field in form %}
+    <tr>
+        <th>{{ field.label }}</th><td>
+        {% if field.field.choices %}
+            {% for key,val in field.field.choices %}
+                {% if key|slugify == field.value %}
+                {{ val }}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% if field.value == True %}
+            はい
+            {% else %}
+            {{ field.value }}
+            {% endif %}
+        {% endif%}
+        </td>
+    </tr>
+{% endfor %}
+</table> 
+  <input type="hidden" name="complete" value="1" />
+  <input type="submit" value="修正する" id="back-submit" />
+  <input type="submit" value="登録する" />
+  <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+<script>
+    $('#back-submit').click(function(){
+        $('input[name=complete]').val(0);
+        return true;
+    });
+</script>
+{% else %}
+
+<p>認証に失敗しました</p>
+
+{% endif %}
+
+{% endblock %}
