@@ -14,7 +14,7 @@
 </form>
 </div>
 
-<a href="{% url 'document_leads_csv'%}?{{ request.GET.urlencode }}">この条件でCSVダウンロード</a>
+<a href="{% url 'document_leads_csv'%}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">この条件でCSVダウンロード</a>
 <table>
 {% if not leads %}
 該当するログはありません
@@ -34,15 +34,28 @@
 {% endfor %}
 </table>
 
+<div class="pagination">
+    <span class="step-links">
+        {% if leads.has_previous %}
+            <a href="{% url 'document_leads_paging' page=leads.previous_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">&laquo前のページ</a>
+        {% endif %}
+
+        <span class="current">
+            {{ leads.number }} / {{ leads.paginator.num_pages }}ページ
+        </span>
+
+        {% if leads.has_next %}
+            <a href="{% url 'document_leads_paging' page=leads.next_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">次のページ&raquo</a>
+        {% endif %}
+    </span>
+</div>
+
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 <script>
 $(function(){
-    $('#id_start_date,#id_end_date').datepicker({
+    $('#id_start_date, #id_end_date').datepicker({
         firstDay: 1,
-        //showButtonPanel: true,
-        //changeYear: true,
-        //changeMonth: true,
         minDate: new Date(2013, 4-1, 1),
         maxDate: 0
     });

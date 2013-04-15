@@ -177,6 +177,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.request',
 )
+DOCUMENTS_PER_PAGE = 20
+SEMINAR_PER_PAGE = 20
+LOGS_PER_PAGE = 10
+
 AUTH_USER_MODEL = 'accounts.MyUser'
 AUTH_PROFILE_MODULE = 'accounts.MyUserProfile'
 

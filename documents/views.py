@@ -8,6 +8,7 @@ from django import forms
 from django.shortcuts import redirect, render_to_response, get_object_or_404, get_list_or_404
 from django.http import Http404
 from django.core import signing
+from django.core.paginator import Paginator
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.contrib import messages
@@ -15,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
+from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
 from django.utils.timezone import utc, make_naive, get_default_timezone
@@ -326,7 +328,7 @@ def _export_csv(leads):
     return response
 
 @login_required
-def download_log(request, page=0, type='list'):
+def download_log(request, page=1, type='list'):
     _check_customer(request.user)
     user = request.user
     company = user.customer_company
@@ -351,15 +353,16 @@ def download_log(request, page=0, type='list'):
         messages.add_message(request, messages.ERROR, 'まだリード情報はありません')
         return redirect('mypage_home' )
     if type == 'list':
+        paginator = Paginator(leads, settings.LOGS_PER_PAGE)
+        leads_pages = paginator.page(page)
         return render_to_response(
             'documents/download_leads_list.html',
             {
-                'leads' : leads,
+                'leads' : leads_pages,
                 'form'  : form,
             },
             context_instance=RequestContext(request)
         )
     elif type == "csv":
         return _export_csv(leads)
-
 

@@ -7,12 +7,17 @@
     <li><a href="{% url "registration_change_email"%}">メールアドレスの変更</a></li>
 </ul>
 {% if user.customer_company %}
+<h3>掲載企業メニュー</h3>
 <ul>
     <li><a href="{% url "mypage_edit_company"%}">企業情報の編集</a></li>
-    <li><a href="{% url "document_add"%}">掲載資料の新規作成</a></li>
-    <li><a href="{% url "document_edit_index"%}">掲載資料の編集</a></li>
-    <li><a href="{% url "document_leads_index"%}">リード情報の確認</a></li>
-    <li><a href="{% url "document_leads_csv"%}">CSVダウンロード</a></li>
+    <li><h4>資料</h4>
+        <ul>
+            <li><a href="{% url "document_add"%}">新規追加</a></li>
+            <li><a href="{% url "document_edit_index"%}">編集</a></li>
+            <li><a href="{% url "document_leads_index"%}">リード情報</a></li>
+        </ul>
+    </li>
+    <li><h4>セミナー</h4></li>
 </ul>
 {% endif%}
 {% endblock %}

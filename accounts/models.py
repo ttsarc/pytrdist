@@ -88,7 +88,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_active =        models.BooleanField('有効', default=True)
     is_admin =         models.BooleanField('管理者', default=False)
     is_staff =         models.BooleanField('スタッフ', default=False)
-    customer_company = models.ForeignKey(Company, verbose_name='掲載企業', blank=True, null=True, on_delete=models.SET_NULL, help_text="ここで企業が選択されていると、その名義で資料掲載などが出来るようになります。ミスのないように注意してください。")
+    customer_company = models.ForeignKey(Company, verbose_name='掲載企業', blank=True, null=True, on_delete=models.SET_NULL, help_text="ここで企業が選択されていると、その企業の担当者となります。ミスのないように注意してください。")
     date_joined =      models.DateTimeField('登録日', default=timezone.now, editable=False)
     update_date =      models.DateTimeField('更新日', auto_now=True, editable=False)
 
