@@ -6,7 +6,7 @@ except ImportError:
     from django.conf.urls.defaults import *
 from django.views.generic import TemplateView
 from accounts.views import mypage_edit_profile, mypage_edit_company, mypage_home
-from documents.views import add, edit, edit_index, download_log_list, download_log_csv
+from documents.views import add, edit, edit_index, download_log
 from django.contrib.auth import views as auth_views
 from registration.views import change_email,change_email_done
 urlpatterns = patterns('',
@@ -19,9 +19,9 @@ urlpatterns = patterns('',
                        url(r'^documents/add/$', add, name='document_add'),
                        url(r'^documents/edit/(?P<document_id>\d+)/$', edit, name='document_edit'),
                        url(r'^documents/edit/$', edit_index, name='document_edit_index'),
-                       url(r'^documents/leads/$', download_log_list, name='document_leads_index'),
-                       url(r'^documents/leads/(?P<page>\d+)//$', download_log_list, name='document_leads_paging'),
-                       url(r'^documents/leads/csv/$', download_log_csv, name='document_leads_csv'),
+                       url(r'^documents/leads/$', download_log, name='document_leads_index'),
+                       url(r'^documents/leads/(?P<page>\d+)//$', download_log, name='document_leads_paging'),
+                       url(r'^documents/leads/csv/$', download_log, {'type':'csv'}, name='document_leads_csv'),
                        #url(r'^login/$',
                        #    auth_views.login,
                        #    {'template_name': 'registration/login.html'},

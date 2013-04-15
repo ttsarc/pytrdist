@@ -3,7 +3,7 @@
 Views which edit user accounts
 
 """
-import csv
+import csv, datetime
 from django import forms
 from django.shortcuts import redirect, render_to_response, get_object_or_404, get_list_or_404
 from django.http import Http404
@@ -17,7 +17,9 @@ from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
-from documents.forms import DocumentForm, DownloadForm, MyUserShowForm, MyUserProfileShowForm
+from django.utils.timezone import utc, make_naive, get_default_timezone
+from django.utils import timezone
+from documents.forms import DocumentForm, DownloadForm, MyUserShowForm, MyUserProfileShowForm, LeadSearchForm
 from documents.models import Document, DocumentDownloadLog, DocumentDownloadCount, DocumentDownloadUser
 from trwk.libs.request_utils import *
 from trwk.api.email_utility import email_company_staff
@@ -269,48 +271,95 @@ def download_complete(request, id_sign):
                     context_instance=RequestContext(request)
                 )
 
+def _export_csv(leads):
+    filename = 'trwk-doc-' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S') + '.csv'
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="'+ filename +'"'
+
+    csv_fields = {
+        1  : ('ダウンロード日', 'download_date'),
+        2  : ('資料タイトル',   'document_title'),
+        3  : ('会社名',         'company_name'),
+        4  : ('姓',             'last_name'),
+        5  : ('名',             'first_name'),
+        6  : ('姓（ふりがな）', 'last_name_kana'),
+        7  : ('名（ふりがな）', 'first_name_kana'),
+        8  : ('電話番号',       'tel'),
+        9  : ('FAX',            'fax'),
+        10 : ('郵便番号',       'post_number'),
+        11 : ('都道府県',       'prefecture'),
+        12 : ('住所',           'address'),
+        13 : ('ホームページURL','site_url'),
+        14 : ('部署名',         'department'),
+        15 : ('役職名',         'position'),
+        16 : ('役職区分',       'position_class'),
+        17 : ('業種',           'business_type'),
+        18 : ('職務内容',       'job_content'),
+        19 : ('従業員規模',     'firm_size'),
+        20 : ('年商',           'yearly_sales'),
+        21 : ('立場',           'discretion'),
+        22 : ('状況',           'stage'),
+    }
+    writer = csv.writer(response)
+    head = []
+    first = True
+    csv_encode = 'cp932'
+    for line in leads:
+        items = []
+        for key, field in sorted(csv_fields.items()):
+            label = field[0]
+            name = field[1]
+            if first:
+                head.append(label.encode( csv_encode ))
+            val = getattr(line, name)
+            if isinstance(val, unicode):
+                items.append(val.encode( csv_encode ))
+            elif isinstance(val, long):
+                items.append(str(val))
+            elif isinstance(val, datetime.datetime):
+                #ローカルタイムに変換してる
+                items.append(make_naive(val, get_default_timezone()).strftime('%Y-%m-%d %H:%M:%S') )
+        if first:
+            writer.writerow(head)
+            first = False
+        writer.writerow(items)
+    return response
+
 @login_required
-def download_log_list(request, page=0):
+def download_log(request, page=0, type='list'):
     _check_customer(request.user)
     user = request.user
     company = user.customer_company
+    leads = DocumentDownloadLog.objects
+    if 'search' in request.GET:
+        form = LeadSearchForm(request.GET)
+        if form.is_valid():
+            if form.cleaned_data['start_date']:
+                start = datetime.datetime.strptime( str(form.cleaned_data['start_date']),'%Y-%m-%d').replace(tzinfo=timezone.utc)
+                leads = leads.filter(download_date__gte=start)
+            if form.cleaned_data['end_date']:
+                #時刻まで条件に入っているっぽく、前日までしかとれないので+1日
+                end =   datetime.datetime.strptime( str(form.cleaned_data['end_date']),'%Y-%m-%d').replace(tzinfo=timezone.utc) + datetime.timedelta(days=1)
+                leads = leads.filter(download_date__lte=end)
+    else:
+        form = LeadSearchForm()
     try:
-        leads = DocumentDownloadLog.objects.filter(
+        leads = leads.filter(
             company=company,
         ).order_by('-download_date')
     except:
         messages.add_message(request, messages.ERROR, 'まだリード情報はありません')
         return redirect('mypage_home' )
-    return render_to_response(
-        'documents/download_leads_list.html',
-        {
-            'leads' : leads,
-        },
-        context_instance=RequestContext(request)
-    )
+    if type == 'list':
+        return render_to_response(
+            'documents/download_leads_list.html',
+            {
+                'leads' : leads,
+                'form'  : form,
+            },
+            context_instance=RequestContext(request)
+        )
+    elif type == "csv":
+        return _export_csv(leads)
 
-@login_required
-def download_log_csv(request, page=0):
-    _check_customer(request.user)
-    user = request.user
-    company = user.customer_company
-    try:
-        leads = DocumentDownloadLog.objects.filter(
-            company=company,
-        ).order_by('-download_date').all()
-    except:
-        messages.add_message(request, messages.ERROR, 'まだリード情報はありません')
-        return redirect('mypage_home' )
 
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
-
-    from see import see
-    writer = csv.writer(response)
-    for line in leads:
-        #print(see( [line.get(key) for key in line._meta.get_all_field_names() if key not in ['document_id', 'company', 'user_id', 'ip', 'ua']] ))
-        #writer.writerow(
-        #    [getattr(line, key).encode('shift-jis') for key in line._meta.get_all_field_names() if key not in ['document_id', 'company', 'user_id', 'ip', 'ua']]
-        #)
-        break
-    return response
