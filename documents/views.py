@@ -21,7 +21,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
 from django.utils.timezone import utc, make_naive, get_default_timezone
 from django.utils import timezone
-from documents.forms import DocumentForm, DownloadForm, MyUserShowForm, MyUserProfileShowForm, LeadSearchForm
+from accounts.forms import MyUserShowForm, MyUserProfileShowForm
+from documents.forms import DocumentForm, DownloadForm, LeadSearchForm
 from documents.models import Document, DocumentDownloadLog, DocumentDownloadCount, DocumentDownloadUser
 from trwk.libs.request_utils import *
 from trwk.api.email_utility import email_company_staff

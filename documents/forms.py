@@ -5,7 +5,6 @@ from django import forms
 from django.forms.widgets import RadioSelect, CheckboxSelectMultiple, SubWidget
 from documents.models import Document
 from documents.choices import STAGE_CHOICE
-from accounts.models import MyUser, MyUserProfile
 from django.utils.encoding import force_text, python_2_unicode_compatible
 
 class DocumentForm(forms.ModelForm):
@@ -21,35 +20,6 @@ class DownloadForm(forms.Form):
     stage = forms.ChoiceField(label='今回ダウンロードされる資料について現在のご状況をお聞かせ下さい',choices=STAGE_CHOICE, widget=RadioSelect)
     confirmation = forms.BooleanField(label="規約に同意する")
 
-class MyUserShowForm(forms.ModelForm):
-    class Meta:
-        model = MyUser
-        fields = ('email',)
-
-class MyUserProfileShowForm(forms.ModelForm):
-    class Meta:
-        model = MyUserProfile
-        fields = (
-            'last_name',
-            'first_name',
-            'last_name_kana',
-            'first_name_kana',
-            'company_name',
-            'tel',
-            'fax',
-            'post_number',
-            'prefecture',
-            'address',
-            'site_url',
-            'department',
-            'position',
-            'position_class',
-            'business_type',
-            'job_content',
-            'firm_size',
-            'yearly_sales',
-            'discretion',
-        )
 
 class LeadSearchForm(forms.Form):
     date_format = ['%Y/%m/%d', '%Y-%m-%d',]
