@@ -13,7 +13,7 @@
     {% block head_footer %}{% endblock%}
 </head>
 <body>
-{% block header %}{% endblock %}
+{% block header %}
 {% if user.is_authenticated %}
     ログイン中:{{ user.email }} 
     <a href="{% url 'mypage_home' %}">マイページ</a>
@@ -24,6 +24,16 @@
 {% else %}
     <a href="{% url 'auth_login' %}">ログイン</a>
 {% endif%}
+
+<ul>
+    <li><a href="{% url 'home'%}">HOME</a></li>
+    <li><a href="{% url 'document_index'%}">資料一覧</a></li>
+    <li><a href="{% url 'contact'%}">お問い合わせ</a></li>
+    <li><a href="{% url 'admin:index' %}">管理画面</a></li>
+</ul>
+{% endblock header %}
+
+
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}

@@ -8,6 +8,7 @@ ADMINS = (
 )
 
 SERVER_EMAIL = 'noreply@example.com'
+CONTACT_EMAIL = 'contact@example.com'
 
 MANAGERS = ADMINS
 
@@ -135,6 +136,7 @@ INSTALLED_APPS = (
     'documents',
     'registration',
     'mypage',
+    'contact',
 )
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 

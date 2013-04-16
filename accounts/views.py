@@ -18,6 +18,7 @@ from accounts.forms import MyUserProfileEditForm, CompanyEditform
 from accounts.models import MyUserProfile, Company
 from trwk.libs.request_utils import set_next_url
 
+@login_required
 def mypage_home(request):
     return render_to_response(
         'accounts/mypage.html',

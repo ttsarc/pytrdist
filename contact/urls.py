@@ -4,7 +4,7 @@ try:
 except ImportError:
     from django.conf.urls.defaults import *
 from django.views.generic import TemplateView
-from contact import contact
+from contact.views import general
 urlpatterns = patterns('',
-                       url(r'^$', contact, name='contact'),
+                       url(r'^$', general, name='contact'),
 )

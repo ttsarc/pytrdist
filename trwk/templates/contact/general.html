@@ -1,0 +1,13 @@
+{% extends 'base.html'%}
+{% block content %}
+<h1>お問い合わせ</h1>
+<form action="" method="post">{% csrf_token %}
+<table>
+{{ form }}
+</table>
+<p>
+<input type="submit" value="送信内容の確認">
+</p>
+</form>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'email/base.txt'%}
+{% block content %}
+{{data.company_name}}
+{{data.last_name}} {{data.first_name}}様
+
+この度はお問い合わせありがとうございます。
+下記内容で承りました。
+
+後ほど担当者より折り返しご連絡させていただきます。
+
+
+お問い合わせ種別: {{data.type}}
+会社名: {{data.company_name}}
+部署名: {{data.department}}
+姓: {{data.last_name}}
+名: {{data.first_name}}
+電話番号: {{data.tel}}
+FAX: {{data.fax}}
+メールアドレス: {{data.email}}
+ホームページURL: {{data.site_url}}
+
+お問い合わせ内容:
+{{data.message}}
+
+
+{% endblock%}
