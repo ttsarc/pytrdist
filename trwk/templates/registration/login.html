@@ -1,14 +1,11 @@
 {% extends "base.html" %}
-{% load i18n %}
-
 {% block content %}
 <form method="post" action=".">{% csrf_token %}
   {{ form.as_p }}
-
-  <input type="submit" value="{% trans 'Log in' %}" />
+  <input type="submit" value="ログイン" />
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
-<p>{% trans "Forgot password" %}? <a href="{% url "auth_password_reset" %}">{% trans "Reset it" %}</a>!</p>
-<p>{% trans "Not member" %}? <a href="{% url "registration_register" %}">{% trans "Register" %}</a>!</p>
+<p>パスワードを忘れた方 <a href="{% url "auth_password_reset" %}">パスワードの再設定</a></p>
+<p>会員登録がまだの方 <a href="{% url "registration_register" %}{% if next %}?next={{ next }}{% endif %}">新規登録</a></p>
 {% endblock %}

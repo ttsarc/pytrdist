@@ -1,7 +1,7 @@
 {% extends 'base_mypage.html'%}
 {% block content %}
 <h1>企業情報の編集</h1>
-<form action="" method="post">{% csrf_token %}
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 <table>
 {{ form }}
 </table>

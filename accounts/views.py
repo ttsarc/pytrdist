@@ -4,26 +4,19 @@ Views which edit user accounts
 
 """
 from django import forms
-from django.shortcuts import redirect
-from django.shortcuts import render_to_response
+from django.shortcuts import redirect, render_to_response
 from django.template import RequestContext
-
-from registration.backends import get_backend
-from registration.models import RegistrationProfile, ChangeEmailProfile
-
-
 from django.contrib import messages
-
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-
+from django.contrib.sites.models import RequestSite, Site
 from registration.forms import ChangeEmailForm
-from django.contrib.sites.models import RequestSite
-from django.contrib.sites.models import Site
-
+from registration.backends import get_backend
+from registration.models import RegistrationProfile, ChangeEmailProfile
 from accounts.forms import MyUserProfileEditForm, CompanyEditform
 from accounts.models import MyUserProfile, Company
+from trwk.libs.request_utils import set_next_url
 
 def mypage_home(request):
     return render_to_response(
@@ -42,10 +35,10 @@ def mypage_edit_profile(request):
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.SUCCESS, 'ユーザー情報の変更に成功しました')
-            return redirect('mypage_home')
+            #return redirect('mypage_home')
     else:
         form = MyUserProfileEditForm(instance=current_profile)
-
+    set_next_url(request)
     return render_to_response(
         'accounts/edit_profile.html',
         {
@@ -62,10 +55,10 @@ def mypage_edit_company(request):
         return redirect('mypage_home')
     current_company = Company.objects.get(pk=company.pk)
     if request.method == 'POST':
-        form = CompanyEditform(request.POST, instance=current_company)
+        form = CompanyEditform(request.POST, request.FILES, instance=current_company)
         if form.is_valid():
             form.save()
-            messages.add_message(request, messages.SUCCESS, '掲載企業情報の変更に成功しました')
+            messages.add_message(request, messages.SUCCESS, '掲載企業情報を保存しました')
             return redirect('mypage_home')
     else:
         form = CompanyEditform(instance=current_company)

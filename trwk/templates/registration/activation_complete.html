@@ -2,15 +2,15 @@
 
 {% block content %}
 
-{% if user.is_authenticated %}
-
 <p>ユーザー登録が完了しました。</p>
-
-<p><a href="{% url "auth_login" %}">ログイン</a></p>
-
-{% else %}
-<p>アカウント登録に失敗しました。</p>
-
+{% if request.session.next %}
+<!--{{ request.session.next }}-->
+<p>ご利用中のページへ転送します。</p>
+<script>
+$(function(){
+    setTimeout( function (){ location.href='{{ request.session.next }}';} , 3000);
+});
+</script>
 {% endif %}
 
 {% endblock %}

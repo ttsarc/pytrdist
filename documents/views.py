@@ -6,24 +6,22 @@ Views which edit user accounts
 import csv, datetime
 from django import forms
 from django.shortcuts import redirect, render_to_response, get_object_or_404, get_list_or_404
-from django.http import Http404
+from django.http import Http404,HttpResponse
 from django.core import signing
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-from django.contrib.sites.models import RequestSite
-from django.contrib.sites.models import Site
+from django.contrib.sites.models import RequestSite, Site
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
-from django.http import HttpResponse
 from django.utils.timezone import utc, make_naive, get_default_timezone
 from django.utils import timezone
 from accounts.forms import MyUserShowForm, MyUserProfileShowForm
 from documents.forms import DocumentForm, DownloadForm, LeadSearchForm
-from documents.models import Document, DocumentDownloadLog, DocumentDownloadCount, DocumentDownloadUser
+from documents.models import Document, DocumentDownloadLog, DocumentDownloadCount, DocumentDownloadUser, DocumentDownloadUser
 from trwk.libs.request_utils import *
 from trwk.api.email_utility import email_company_staff
 def _check_customer(user):
@@ -100,12 +98,21 @@ def edit_index(request):
         context_instance=RequestContext(request)
     )
 
-def index(request):
+def index(request, page=1):
     documents = get_list_or_404(Document, status=1)
+    paginator = Paginator(documents, settings.DOCUMENTS_PER_PAGE)
+    try:
+        paged_documents = paginator.page(page)
+    except PageNotAnInteger:
+        raise Http404
+    except EmptyPage:
+        raise Http404
+
     return render_to_response(
         'documents/index.html',
         {
-            'documents' : documents,
+            'documents' : paged_documents,
+            'count': paginator.count,
         },
         context_instance=RequestContext(request)
     )
@@ -188,7 +195,7 @@ def _notify_company_staff(log, request):
         {'log' : log},
         context_instance=RequestContext(request)
     )
-    email_company_staff(log.company.id ,subject = subject, content = content)
+    email_company_staff(log.company.id, subject = subject, content = content)
 
 def _add_download_count(document):
     count_obj, created= DocumentDownloadCount.objects.get_or_create(document=document)
@@ -200,16 +207,19 @@ def _add_download_count(document):
     count_obj.save()
 
 def _add_download_user(document, user):
-    dl_user_obj, created= DocumentDownloadUser.objects.get_or_create(document=document, user=user)
+    dl_user_obj, created = DocumentDownloadUser.objects.get_or_create(document=document, user=user)
+    if not created:
+        dl_user_obj.save()
 
 @login_required
-def send(request, id_sign):
+def download_link(request, id_sign):
     try:
         data = signing.loads(id_sign)
         document_id = data['id']
     except signing.BadSignature:
         raise Http404
     document = get_object_or_404(Document, pk=document_id, status=1)
+    _add_download_user(document, request.user)
     file = document.pdf_file
     filename = file.name.split('/')[-1]
     response = HttpResponse(file, content_type='application/pdf')
@@ -239,8 +249,7 @@ def download(request, document_id):
                 log = _add_download_log(document, form, user, company, request)
                 _notify_company_staff(log, request)
                 _add_download_count(document)
-                _add_download_user(document, user)
-                messages.add_message(request, messages.SUCCESS, '資料のダウンロードありがとうございました。')
+                #messages.add_message(request, messages.SUCCESS, '資料のダウンロードありがとうございました。')
                 return redirect('document_download_complete', id_sign=document.id_sign() )
             elif not request.POST.get('complete'):
                 template_name = 'documents/download_preview.html'
@@ -366,4 +375,21 @@ def download_log(request, page=1, type='list'):
         )
     elif type == "csv":
         return _export_csv(leads)
+
+@login_required
+def my_download_history(request):
+    """自分がダウンロードした書式の一覧
+    """
+    try:
+        histories = DocumentDownloadUser.objects.filter(user=request.user).order_by('-update_date')
+    except DocumentDownloadUser.DoesNotExist:
+        histories = None
+
+    return render_to_response(
+        'documents/my_download_history.html',
+        {
+            'histories' : histories,
+        },
+        context_instance=RequestContext(request)
+    )
 

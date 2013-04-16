@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+from django.utils.http import urlquote
 def get_request_addr_or_ip(request):
     ip = request.META.get('REMOTE_HOST')
     if not ip:
@@ -12,3 +13,9 @@ def get_request_ua(request):
     if ua:
         return ua[0:255]
     return 'none'
+
+def set_next_url(request):
+    if 'next' in request.GET and request.GET['next'][0] == '/' and request.GET['next'][1] != '/':
+        request.session['next'] = urlquote(request.GET['next'])
+    #return request
+

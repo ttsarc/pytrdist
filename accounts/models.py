@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
+import os
 from django.db import models
 from django.core.mail import send_mail
 from django.core.validators import validate_slug
+from django.core.validators import RegexValidator,MinLengthValidator, validate_slug
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
     PermissionsMixin, BaseUserManager, AbstractBaseUser
 )
 from accounts.choices import *
-from django.core.validators import RegexValidator,MinLengthValidator, validate_slug
 from accounts.validators import TelFaxValidaor, PostNumberValidaor
+from trwk.libs.fields import ImageWithThumbsField
+from trwk.libs.file_utils import normalize_filename
 
 class CompanyManager(models.Manager):
     pass
@@ -32,6 +35,19 @@ class Company(models.Model):
     capital =          models.CharField('資本金', max_length=30)
     yearly_sales =     models.CharField('年商', max_length=30, blank=True)
     listing =          models.CharField('上場有無', max_length=30, blank=True)
+
+    def get_logo_uplod_path(self, filename):
+        filename = normalize_filename(filename)
+        root_path = os.path.join('company', 'logo')
+        user_path = os.path.join(root_path, str(self.pk))
+        return os.path.join(user_path, filename)
+
+    logo_file = ImageWithThumbsField(
+        verbose_name = '企業ロゴ',
+        sizes = ((160,160),),
+        upload_to = get_logo_uplod_path,
+        blank = True
+    )
 
     add_date =         models.DateTimeField('登録日', auto_now_add=True)
     update_date =      models.DateTimeField('更新日', auto_now=True)

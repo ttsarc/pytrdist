@@ -167,6 +167,14 @@ LOGGING = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
@@ -177,8 +185,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.request',
 )
-DOCUMENTS_PER_PAGE = 20
-SEMINAR_PER_PAGE = 20
+DOCUMENTS_PER_PAGE = 5
+SEMINAR_PER_PAGE = 5
 LOGS_PER_PAGE = 10
 
 AUTH_USER_MODEL = 'accounts.MyUser'
@@ -231,6 +239,10 @@ BAD_EMAIL_DOMAIN = [
     #'gmail.com',
     'hotmail.com',
 ]
+
+from django import template
+template.add_to_builtins('django.contrib.humanize.templatetags.humanize')
+
 try:
     from local_settings import *
 except ImportError:

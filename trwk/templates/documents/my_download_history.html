@@ -1,0 +1,15 @@
+{% extends 'base_mypage.html'%}
+{% block content %}
+<h1>資料ダウンロード履歴</h1>
+{% if histories %}
+    <ul>
+    {% for history in histories %}
+        <li>
+            {{history.update_date}}　<a href="{% url 'document_detail' document_id=history.document.id %}">{{history.document.title}}</a>　(<a href="{% url 'document_download_link' id_sign=history.document.id_sign %}">再ダウンロード</a>)
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    まだダウンロード履歴はありません
+{% endif %}
+{% endblock %}

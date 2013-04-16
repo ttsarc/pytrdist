@@ -23,14 +23,17 @@ except ImportError:
     from django.conf.urls.defaults import *
 from django.views.generic import TemplateView
 
-from registration.views import activate
-from registration.views import register
+from registration.views import activate, register, activate_complete
 #from registration.views import change_email,change_email_done
 
 urlpatterns = patterns('',
+                       #url(r'^activate/complete/$',
+                       #    TemplateView.as_view(template_name='registration/activation_complete.html'),
+                       #    name='registration_activation_complete'),
                        url(r'^activate/complete/$',
-                           TemplateView.as_view(template_name='registration/activation_complete.html'),
+                           activate_complete,
                            name='registration_activation_complete'),
+
                        # Activation keys get matched by \w+ instead of the more specific
                        # [a-fA-F0-9]{40} because a bad activation key should still get to the view;
                        # that way it can return a sensible "invalid key" message instead of a

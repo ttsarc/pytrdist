@@ -1,6 +1,10 @@
 {% extends 'base_mypage.html'%}
 {% block content %}
+<p><a href="{{ request.session.next }}">&laquo;ご利用中のページへ戻る</a></p>
 <h1>登録情報の編集</h1>
+{% if request.session.next %}
+{% endif %}
+
 <form action="" method="post">{% csrf_token %}
 <table>
 {{ form }}
@@ -9,4 +13,9 @@
 <input type="submit" value="保存する">
 </p>
 </form>
+{% if request.session.next %}
+<p><a href="{{ request.session.next }}">&laquo;ご利用中のページへ戻る</a></p>
+{% endif %}
+
+
 {% endblock %}

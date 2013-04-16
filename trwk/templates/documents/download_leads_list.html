@@ -5,7 +5,7 @@
 {% block content %}
 <h1>リード情報の確認</h1>
 <div>
-<form method='get' action=''>
+<form method='get' action='{% url 'document_leads_index'%}'>
 <input type="hidden" value="1" name="search">
 {{form.start_date}} ～ {{form.end_date}}
 {{form.start_date.errors}}

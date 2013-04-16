@@ -5,6 +5,7 @@
     <li><a href="{% url "mypage_edit_profile"%}">登録情報の変更</a></li>
     <li><a href="{% url "auth_password_change"%}">パスワードの変更</a></li>
     <li><a href="{% url "registration_change_email"%}">メールアドレスの変更</a></li>
+    <li><a href="{% url "mypage_download_history"%}">資料ダウンロード履歴</a></li>
 </ul>
 {% if user.customer_company %}
 <h3>掲載企業メニュー</h3>

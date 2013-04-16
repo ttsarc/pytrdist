@@ -6,7 +6,7 @@ except ImportError:
     from django.conf.urls.defaults import *
 from django.views.generic import TemplateView
 from accounts.views import mypage_edit_profile, mypage_edit_company, mypage_home
-from documents.views import add, edit, edit_index, download_log
+from documents.views import add, edit, edit_index, download_log,my_download_history
 from django.contrib.auth import views as auth_views
 from registration.views import change_email,change_email_done
 urlpatterns = patterns('',
@@ -19,6 +19,7 @@ urlpatterns = patterns('',
                        url(r'^documents/leads/$', download_log, name='document_leads_index'),
                        url(r'^documents/leads/(?P<page>\d+)/$', download_log, name='document_leads_paging'),
                        url(r'^documents/leads/csv/$', download_log, {'type':'csv'}, name='document_leads_csv'),
+                       url(r'^history/document/$', my_download_history, name='mypage_download_history'),
                        url(r'^password/change/$',
                            auth_views.password_change,
                            name='auth_password_change'),

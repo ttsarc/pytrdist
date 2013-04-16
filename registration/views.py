@@ -4,24 +4,27 @@ Views which allow users to create and activate accounts.
 
 """
 from django import forms
-from django.shortcuts import redirect
-from django.shortcuts import render_to_response
+from django.shortcuts import redirect, render_to_response
 from django.template import RequestContext
-
-from registration.backends import get_backend
-from registration.models import RegistrationProfile, ChangeEmailProfile
-
-from accounts.forms import MyUserProfileForm
-from accounts.models import MyUser
 from django.contrib import messages
-
-from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-
-from registration.forms import ChangeEmailForm
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
+from django.views.decorators.csrf import csrf_protect
+from registration.backends import get_backend
+from registration.models import RegistrationProfile, ChangeEmailProfile
+from registration.forms import ChangeEmailForm
+from accounts.forms import MyUserProfileForm
+from accounts.models import MyUser
+from trwk.libs.request_utils import set_next_url
+
+def activate_complete(request):
+    
+    return render_to_response(
+        'registration/activation_complete.html',
+        context_instance=RequestContext(request)
+    )
 
 def activate(request, backend,
              template_name='registration/activate.html',
@@ -246,7 +249,9 @@ def register(request, backend, success_url=None, form_class=None,
                     return redirect(success_url)
     else:
         form = form_class()
-    
+
+    set_next_url(request)
+
     if extra_context is None:
         extra_context = {}
     context = RequestContext(request)
