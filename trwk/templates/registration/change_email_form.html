@@ -1,7 +1,7 @@
 {% extends "base_mypage.html" %}
 
 {% block content %}
-<form method="post" action=".">{% csrf_token %}
+<form method="post" action="">{% csrf_token %}
 <p>現在のメールアドレス：{{ user.email }}</p>
   {{ form.as_p }}
 

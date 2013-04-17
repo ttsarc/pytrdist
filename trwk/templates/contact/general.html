@@ -11,3 +11,8 @@
 </form>
 
 {% endblock %}
+
+{% block footer_scripts %}
+{{ block.super }}
+{% include 'common/full2half.html' %}
+{% endblock %}

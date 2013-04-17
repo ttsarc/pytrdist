@@ -1,0 +1,10 @@
+<script>
+$(function(){
+    $('#id_tel, #id_fax').blur(
+        function(){
+            var converted = full2half($(this).val());
+            $(this).val(converted);
+        }
+    );
+})
+</script>

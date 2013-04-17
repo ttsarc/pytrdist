@@ -337,9 +337,8 @@ class ChangeEmailProfile(models.Model):
     add_date =         models.DateTimeField('登録日', auto_now_add=True)
     update_date =      models.DateTimeField('更新日', auto_now=True)
     objects = ChangeEmailProfileManager()
-    
     ACTIVATED = u"ALREADY_ACTIVATED"
-    
+
     def __unicode__(self):
         return self.user.email
 
@@ -355,16 +354,12 @@ class ChangeEmailProfile(models.Model):
                                    ctx_dict)
         # Email subject *must not* contain newlines
         subject = ''.join(subject.splitlines())
-        
-        message = render_to_string('registration/change_email.txt',
-                                   ctx_dict)
-        
+        message = render_to_string('registration/change_email.txt', ctx_dict)
         send_mail(subject, message, settings.SERVER_EMAIL,
         [self.new_email], fail_silently=False)
 
     def activation_key_expired(self):
 
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
-        return self.activation_key == self.ACTIVATED or \
-               (self.user.date_joined + expiration_date <= datetime_now())
+        return self.activation_key == self.ACTIVATED or (self.add_date + expiration_date <= datetime_now())
     activation_key_expired.boolean = True

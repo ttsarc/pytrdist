@@ -1,0 +1,23 @@
+{% if requesr.is_secure %}
+<script src="https://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3-https.js" charset="UTF-8"></script>
+{% else %}
+<script src="http://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3.js" charset="UTF-8"></script>
+{% endif %}
+<script>
+    $(function(){
+        $('input[name=post_number]')
+        .blur(
+            function(){
+                var converted = $(this).val().replace(new RegExp("[^0-9０-９]", "g"), "");
+                converted =  full2half( converted );
+                $(this).val( converted );
+                AjaxZip3.zip2addr(this,'','prefecture','address');
+            }
+        )
+        .keyup(
+            function(){
+                AjaxZip3.zip2addr(this,'','prefecture','address');
+            }
+        );
+    });
+</script>

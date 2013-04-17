@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 from django.conf import settings
 from django import forms
-from django.contrib.formtools.preview import FormPreview
 from accounts.models import MyUser, MyUserProfile, Company
 
 class MyUserProfileForm(forms.ModelForm):
@@ -11,11 +10,6 @@ class MyUserProfileForm(forms.ModelForm):
     class Meta:
         model = MyUserProfile
         exclude = ('myuser',)
-
-class MyUserProfilePreviewForm(FormPreview):
-    def done(self, request, cleaned_data):
-        return HttpResponseRedirect('/')
-
 
 class MyUserProfileEditForm(forms.ModelForm):
     error_css_class = 'error'

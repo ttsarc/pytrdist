@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load static %}<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="utf-8">
@@ -50,6 +50,8 @@
 
 {% block footer %}{% endblock footer %}
 
-{% block footer_scripts %}{% endblock footer_scripts %}
+{% block footer_scripts %}
+<script src="{% static "js/common.js" %}"></script>
+{% endblock footer_scripts %}
 </body>
 </html>
