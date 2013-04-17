@@ -6,6 +6,7 @@
     <li><a href="{% url "auth_password_change"%}">パスワードの変更</a></li>
     <li><a href="{% url "registration_change_email"%}">メールアドレスの変更</a></li>
     <li><a href="{% url "mypage_download_history"%}">資料ダウンロード履歴</a></li>
+    <li><a href="{% url "mypage_entry_history"%}">セミナー申し込み履歴</a></li>
 </ul>
 {% if user.customer_company %}
 <h3>掲載企業メニュー</h3>
@@ -18,7 +19,13 @@
             <li><a href="{% url "document_leads_index"%}">リード情報</a></li>
         </ul>
     </li>
-    <li><h4>セミナー</h4></li>
+    <li><h4>セミナー</h4>
+        <ul>
+            <li><a href="{% url "seminar_add"%}">新規追加</a></li>
+            <li><a href="{% url "seminar_edit_index"%}">編集</a></li>
+            <li><a href="{% url "seminar_leads_index"%}">リード情報</a></li>
+        </ul>
+    </li>
 </ul>
 {% endif%}
 {% endblock %}

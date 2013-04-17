@@ -1,0 +1,16 @@
+{% extends 'base_mypage.html'%}
+{% block content %}
+<h1>セミナーの編集</h1>
+{% if seminars %}
+    <ul>
+    {% for semi in seminars %}
+        <li>
+            <a href="{% url 'seminar_edit' seminar_id=semi.pk %}">{{semi.title}}</a>
+            <a href="{% url 'seminar_preview' seminar_id=semi.pk %}" target="_blank">（表示確認）</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    セミナーがありません
+{% endif %}
+{% endblock %}

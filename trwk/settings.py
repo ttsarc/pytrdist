@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     #'django.contrib.admindocs',
     'accounts',
     'documents',
+    'seminars',
     'registration',
     'mypage',
     'contact',

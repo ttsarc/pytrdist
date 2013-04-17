@@ -1,0 +1,64 @@
+{% extends 'base_mypage.html'%}
+{%block head_after_link %}
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
+{%endblock%}
+{% block content %}
+<h1>リード情報の確認</h1>
+<div>
+<form method='get' action='{% url 'seminar_leads_index'%}'>
+<input type="hidden" value="1" name="search">
+{{form.start_date}} ～ {{form.end_date}}
+{{form.start_date.errors}}
+{{form.end_date.errors}}
+<input type="submit" value="検索">
+</form>
+</div>
+
+<a href="{% url 'seminar_leads_csv'%}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">この条件でCSVダウンロード</a>
+<table>
+{% if not leads %}
+該当するログはありません
+{% endif %} 
+{% for lead in leads %}
+    <tr>
+        <td>{{ lead.download_date }}</td>
+        <td>{{ lead.stage }}</td>
+        <td>{{ lead.company_name }}</td>
+        <td>{{ lead.seminar_title }}</td>
+        <td>{{ lead.discretion }}</td>
+        <td>{{ lead.business_type }}</td>
+        <td>{{ lead.position }}</td>
+        <td>{{ lead.job_content }}</td>
+        <td>{{ lead.firm_size }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if leads.has_previous %}
+            <a href="{% url 'seminar_leads_paging' page=leads.previous_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">&laquo前のページ</a>
+        {% endif %}
+
+        <span class="current">
+            {{ leads.number }} / {{ leads.paginator.num_pages }}ページ
+        </span>
+
+        {% if leads.has_next %}
+            <a href="{% url 'seminar_leads_paging' page=leads.next_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">次のページ&raquo</a>
+        {% endif %}
+    </span>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<script>
+$(function(){
+    $('#id_start_date, #id_end_date').datepicker({
+        firstDay: 1,
+        minDate: new Date(2013, 4-1, 1),
+        maxDate: 0
+    });
+});
+</script>
+{% endblock %}

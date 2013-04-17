@@ -1,0 +1,41 @@
+{% extends 'base_mypage.html'%}
+{% load static %}
+
+{%block head_after_link %}
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
+{%endblock%}
+
+{% block content %}
+<h1>セミナーの新規追加</h1>
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+<table>
+{{ form }}
+</table>
+<p>
+<input type="submit" value="保存する">
+</p>
+</form>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<!-- http://trentrichardson.com/examples/timepicker/ -->
+<script src="{% static "js/jquery-ui-timepicker-addon.js" %}"></script>
+<script>
+$(function(){
+    $('#id_limit_datetime').datetimepicker({
+        closeText:'閉じる',
+        currentText:'現在',
+        timeText:'時刻',
+        hourText:'時',
+        minuteText:'分'
+    });
+    $('#id_exhibition_date, #id_close_date').datepicker({
+        firstDay: 1,
+        minDate: 0,
+    });
+});
+</script>
+
+{% endblock %}
+
+

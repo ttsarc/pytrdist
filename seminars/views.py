@@ -20,8 +20,9 @@ from django.views.decorators.csrf import csrf_protect
 from django.utils.timezone import utc, make_naive, get_default_timezone
 from django.utils import timezone
 from accounts.forms import MyUserShowForm, MyUserProfileShowForm
-from documents.forms import DocumentForm, DownloadForm, LeadSearchForm
-from documents.models import Document, DocumentDownloadLog, DocumentDownloadCount, DocumentDownloadUser, DocumentDownloadUser
+from seminars.forms import SeminarForm, EntryForm, LeadSearchForm
+from seminars.models import Seminar, SeminarEntryLog, SeminarEntryUser
+from seminars.choices import *
 from trwk.libs.request_utils import *
 from trwk.api.email_utility import email_company_staff
 def _check_customer(user):
@@ -37,21 +38,21 @@ def add(request):
     user = request.user
     company = user.customer_company
     if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
+        form = SeminarForm(request.POST, request.FILES)
         if form.is_valid():
-            document = form.save(commit=False)
-            document.user = user
-            document.company = company
-            document.save()
-            messages.add_message(request, messages.SUCCESS, '資料を保存しました')
-            return redirect('document_edit', document_id=document.pk )
+            seminar = form.save(commit=False)
+            seminar.user = user
+            seminar.company = company
+            seminar.save()
+            messages.add_message(request, messages.SUCCESS, 'セミナーを保存しました')
+            return redirect('seminar_edit', seminar_id=seminar.pk )
     else:
-        form = DocumentForm()
+        form = SeminarForm()
 
     return render_to_response(
-        'documents/add_edit.html',
+        'seminars/add_edit.html',
         {
-            'action': 'add',
+            'action'  : 'add',
             'form' : form,
         },
         context_instance=RequestContext(request)
@@ -59,28 +60,28 @@ def add(request):
 
 @login_required
 @csrf_protect
-def edit(request, document_id):
+def edit(request, seminar_id):
     _check_customer(request.user)
-    document = get_object_or_404(Document, pk=document_id)
+    seminar = get_object_or_404(Seminar, pk=seminar_id)
     user = request.user
     company = user.customer_company
-    if user.customer_company.pk != document.company.pk:
-        messages.add_message(request, messages.ERROR, 'この資料を編集する権限はありません')
+    if user.customer_company.pk != seminar.company.pk:
+        messages.add_message(request, messages.ERROR, 'このセミナーを編集する権限はありません')
         return redirect('mypage_home' )
 
     if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES, instance=document)
+        form = SeminarForm(request.POST, request.FILES, instance=seminar)
         if form.is_valid():
-            document = form.save()
-            messages.add_message(request, messages.SUCCESS, '資料を保存しました')
-            return redirect('document_edit', document_id=document.pk )
+            seminar = form.save()
+            messages.add_message(request, messages.SUCCESS, 'セミナーを保存しました')
+            return redirect('seminar_edit', seminar_id=seminar.pk )
     else:
-        form = DocumentForm(instance=document)
+        form = SeminarForm(instance=seminar)
 
     return render_to_response(
-        'documents/add_edit.html',
+        'seminars/add_edit.html',
         {
-            'action':'edit',
+            'action': 'edit',
             'form' : form,
         },
         context_instance=RequestContext(request)
@@ -91,68 +92,69 @@ def edit(request, document_id):
 def edit_index(request):
     _check_customer(request.user)
     company = request.user.customer_company
-    documents = Document.objects.all().filter(company__exact=company)
+    seminars = Seminar.objects.all().filter(company__exact=company)
     return render_to_response(
-        'documents/edit_index.html',
+        'seminars/edit_index.html',
         {
-            'documents' : documents,
+            'seminars' : seminars,
         },
         context_instance=RequestContext(request)
     )
 
 def index(request, page=1):
-    documents = get_list_or_404(Document, status=1)
-    paginator = Paginator(documents, settings.DOCUMENTS_PER_PAGE)
+    seminars = get_list_or_404(Seminar, status=1)
+    paginator = Paginator(seminars, settings.DOCUMENTS_PER_PAGE)
     try:
-        paged_documents = paginator.page(page)
+        paged_seminars = paginator.page(page)
     except PageNotAnInteger:
         raise Http404
     except EmptyPage:
         raise Http404
 
     return render_to_response(
-        'documents/index.html',
+        'seminars/index.html',
         {
-            'documents' : paged_documents,
+            'seminars' : paged_seminars,
             'count': paginator.count,
         },
         context_instance=RequestContext(request)
     )
 
-def detail(request, document_id):
-    document = get_object_or_404(Document, pk=document_id, status=1)
+def detail(request, seminar_id):
+    seminar = get_object_or_404(Seminar, pk=seminar_id, status=1)
     return render_to_response(
-        'documents/detail.html',
+        'seminars/detail.html',
         {
-            'document' : document,
+            'seminar' : seminar,
         },
         context_instance=RequestContext(request)
     )
 
 @login_required
-def preview(request, document_id):
+def preview(request, seminar_id):
     _check_customer(request.user)
     company = request.user.customer_company
     if request.user.is_superuser:
-        document = get_object_or_404(Document, pk=document_id)
+        seminar = get_object_or_404(Seminar, pk=seminar_id)
     else:
-        document = get_object_or_404(Document, pk=document_id, company=company)
+        seminar = get_object_or_404(Seminar, pk=seminar_id, company=company)
     return render_to_response(
-        'documents/detail.html',
+        'seminars/detail.html',
         {
-            'document' : document,
+            'seminar' : seminar,
             'preview' : True,
         },
         context_instance=RequestContext(request)
     )
 
 
-def _add_download_log(document, form, user, company ,request):
+def _add_entry_log(seminar, form, user, company ,request):
     p = user.myuserprofile
-    log = DocumentDownloadLog(
-            # Document
-            document_id =     document.id,
-            document_title =  document.title,
+    log = SeminarEntryLog(
+            # Seminar
+            seminar_id =      seminar.id,
+            seminar_title =   seminar.title,
+            seminar_type =    seminar.type,
             # Company
             company =         company,
             # MyUser
@@ -179,7 +181,7 @@ def _add_download_log(document, form, user, company ,request):
             yearly_sales =    p.get_yearly_sales_display(),
             discretion =      p.get_discretion_display(),
             # DonwloadForm
-            stage =           dict(form.fields['stage'].choices)[ int(form.cleaned_data['stage']) ],
+            note =            form.cleaned_data['note'],
             ip =              get_request_addr_or_ip(request),
             ua =              get_request_ua(request),
     )
@@ -188,80 +190,59 @@ def _add_download_log(document, form, user, company ,request):
 
 def _notify_company_staff(log, request):
     content = render_to_string(
-        'email/notify_download.txt',
-        {'log' : log},
+        'email/notify_entry.txt',
+        {
+            'log' : log,
+        },
         context_instance=RequestContext(request)
     )
     subject = render_to_string(
-        'email/notify_download_subject.txt',
-        {'log' : log},
+        'email/notify_entry_subject.txt',
+        {
+            'log' : log,
+        },
         context_instance=RequestContext(request)
     )
     email_company_staff(log.company.id, subject = subject, content = content)
 
-def _add_download_count(document):
-    count_obj, created= DocumentDownloadCount.objects.get_or_create(document=document)
-    if created:
-        count_obj.count = 1
-    else:
-        new_count = count_obj.count + 1
-        count_obj.count = new_count
-    count_obj.save()
-
-def _add_download_user(document, user):
-    dl_user_obj, created = DocumentDownloadUser.objects.get_or_create(document=document, user=user)
+def _add_entry_user(seminar, user):
+    dl_user_obj, created = SeminarEntryUser.objects.get_or_create(seminar=seminar, user=user)
     if not created:
         dl_user_obj.save()
 
 @login_required
-def download_link(request, id_sign):
-    try:
-        data = signing.loads(id_sign)
-        document_id = data['id']
-    except signing.BadSignature:
-        raise Http404
-    document = get_object_or_404(Document, pk=document_id, status=1)
-    _add_download_user(document, request.user)
-    file = document.pdf_file
-    filename = file.name.split('/')[-1]
-    response = HttpResponse(file, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    response['Content-Length'] = file.tell()
-    return response
-
-@login_required
-def download(request, document_id):
-    document = get_object_or_404(Document, pk=document_id, status=1)
+def entry(request, seminar_id):
+    seminar = get_object_or_404(Seminar, pk=seminar_id, status=1)
     user = request.user
-    template_name = 'documents/download.html'
+    template_name = 'seminars/entry.html'
     if not user.myuserprofile:
         messages.add_message(request, messages.ERROR, 'ユーザー情報の設定が完了していません。お手数ですが管理者に御問合せください')
         return redirect('trwk_home' )
-    company = document.company
+    company = seminar.company
     if not company:
-        messages.add_message(request, messages.ERROR, '資料の提供元企業が存在しません')
+        messages.add_message(request, messages.ERROR, 'セミナーの提供元企業が存在しません')
         return redirect('trwk_home' )
 
     user_form = MyUserShowForm(instance=user)
     user_profile_form = MyUserProfileShowForm(instance=user.myuserprofile)
     if request.method == 'POST':
-        form = DownloadForm(request.POST)
+        form = EntryForm(request.POST)
         if form.is_valid():
             if request.POST.get('complete') == '1':
-                log = _add_download_log(document, form, user, company, request)
+                log = _add_entry_log(seminar, form, user, company, request)
                 _notify_company_staff(log, request)
-                _add_download_count(document)
-                #messages.add_message(request, messages.SUCCESS, '資料のダウンロードありがとうございました。')
-                return redirect('document_download_complete', id_sign=document.id_sign() )
+                _add_entry_user(seminar, user)
+                #messages.add_message(request, messages.SUCCESS, 'セミナーの申し込みありがとうございました。')
+                return redirect('seminar_entry_complete', seminar_id=seminar.id )
             elif not request.POST.get('complete'):
-                template_name = 'documents/download_preview.html'
+                template_name = 'seminars/entry_preview.html'
     else:
-        form = DownloadForm()
+        form = EntryForm()
 
     return render_to_response(
         template_name,
         {
-            'document' : document,
+            'seminar' : seminar,
             'form' : form,
             'user_form' : user_form,
             'user_profile_form' : user_profile_form,
@@ -270,49 +251,45 @@ def download(request, document_id):
     )
 
 @login_required
-def download_complete(request, id_sign):
-    try:
-        data = signing.loads(id_sign)
-        document_id = data['id']
-    except signing.BadSignature:
-        raise Http404
-    document = get_object_or_404(Document, pk=document_id, status=1)
+def entry_complete(request, seminar_id):
+    seminar = get_object_or_404(Seminar, pk=seminar_id, status=1)
     return render_to_response(
-                'documents/download_complete.html',
+                'seminars/entry_complete.html',
                     {
-                        'document': document,
+                        'seminar': seminar,
                     },
                     context_instance=RequestContext(request)
                 )
 
 def _export_csv(leads):
-    filename = 'trwk-doc-' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S') + '.csv'
+    filename = 'trwk-semi-' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S') + '.csv'
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="'+ filename +'"'
 
     csv_fields = {
-        1  : ('ダウンロード日', 'download_date'),
-        2  : ('資料タイトル',   'document_title'),
-        3  : ('会社名',         'company_name'),
-        4  : ('姓',             'last_name'),
-        5  : ('名',             'first_name'),
-        6  : ('姓（ふりがな）', 'last_name_kana'),
-        7  : ('名（ふりがな）', 'first_name_kana'),
-        8  : ('電話番号',       'tel'),
-        9  : ('FAX',            'fax'),
-        10 : ('郵便番号',       'post_number'),
-        11 : ('都道府県',       'prefecture'),
-        12 : ('住所',           'address'),
-        13 : ('ホームページURL','site_url'),
-        14 : ('部署名',         'department'),
-        15 : ('役職名',         'position'),
-        16 : ('役職区分',       'position_class'),
-        17 : ('業種',           'business_type'),
-        18 : ('職務内容',       'job_content'),
-        19 : ('従業員規模',     'firm_size'),
-        20 : ('年商',           'yearly_sales'),
-        21 : ('立場',           'discretion'),
-        22 : ('状況',           'stage'),
+        1  : ('申し込み日',       'entry_date'),
+        2  : ('セミナータイトル', 'seminar_title'),
+        3  : ('種別',             'seminar_type'),
+        4  : ('会社名',           'company_name'),
+        5  : ('姓',               'last_name'),
+        6  : ('名',               'first_name'),
+        7  : ('姓（ふりがな）',   'last_name_kana'),
+        8  : ('名（ふりがな）',   'first_name_kana'),
+        9  : ('電話番号',         'tel'),
+        10 : ('FAX',              'fax'),
+        11 : ('郵便番号',         'post_number'),
+        12 : ('都道府県',         'prefecture'),
+        13 : ('住所',             'address'),
+        14 : ('ホームページURL',  'site_url'),
+        15 : ('部署名',           'department'),
+        16 : ('役職名',           'position'),
+        17 : ('役職区分',         'position_class'),
+        18 : ('業種',             'business_type'),
+        19 : ('職務内容',         'job_content'),
+        20 : ('従業員規模',       'firm_size'),
+        21 : ('年商',             'yearly_sales'),
+        22 : ('立場',             'discretion'),
+        23 : ('備考',             'note'),
     }
     writer = csv.writer(response)
     head = []
@@ -340,27 +317,27 @@ def _export_csv(leads):
     return response
 
 @login_required
-def download_log(request, page=1, type='list'):
+def entry_log(request, page=1, type='list'):
     _check_customer(request.user)
     user = request.user
     company = user.customer_company
-    leads = DocumentDownloadLog.objects
+    leads = SeminarEntryLog.objects
     if 'search' in request.GET:
         form = LeadSearchForm(request.GET)
         if form.is_valid():
             if form.cleaned_data['start_date']:
                 start = datetime.datetime.strptime( str(form.cleaned_data['start_date']),'%Y-%m-%d').replace(tzinfo=timezone.utc)
-                leads = leads.filter(download_date__gte=start)
+                leads = leads.filter(entry_date__gte=start)
             if form.cleaned_data['end_date']:
                 #時刻まで条件に入っているっぽく、前日までしかとれないので+1日
                 end =   datetime.datetime.strptime( str(form.cleaned_data['end_date']),'%Y-%m-%d').replace(tzinfo=timezone.utc) + datetime.timedelta(days=1)
-                leads = leads.filter(download_date__lte=end)
+                leads = leads.filter(entry_date__lte=end)
     else:
         form = LeadSearchForm()
     try:
         leads = leads.filter(
             company=company,
-        ).order_by('-download_date')
+        ).order_by('-entry_date')
     except:
         messages.add_message(request, messages.ERROR, 'まだリード情報はありません')
         return redirect('mypage_home' )
@@ -368,7 +345,7 @@ def download_log(request, page=1, type='list'):
         paginator = Paginator(leads, settings.LOGS_PER_PAGE)
         leads_pages = paginator.page(page)
         return render_to_response(
-            'documents/download_leads_list.html',
+            'seminars/entry_leads_list.html',
             {
                 'leads' : leads_pages,
                 'form'  : form,
@@ -379,16 +356,16 @@ def download_log(request, page=1, type='list'):
         return _export_csv(leads)
 
 @login_required
-def my_download_history(request):
-    """自分がダウンロードした書式の一覧
+def my_entry_history(request):
+    """自分が申し込みした書式の一覧
     """
     try:
-        histories = DocumentDownloadUser.objects.filter(user=request.user).order_by('-update_date')
-    except DocumentDownloadUser.DoesNotExist:
+        histories = SeminarEntryUser.objects.filter(user=request.user).order_by('-add_date')
+    except SeminarEntryUser.DoesNotExist:
         histories = None
 
     return render_to_response(
-        'documents/my_download_history.html',
+        'seminars/my_entry_history.html',
         {
             'histories' : histories,
         },

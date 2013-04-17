@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^accounts/',  include('accounts.urls')),
     url(r'^mypage/',    include('mypage.urls')),
     url(r'^documents/', include('documents.urls')),
+    url(r'^seminars/',  include('seminars.urls')),
     url(r'^contact/',   include('contact.urls')),
 )
 

@@ -24,3 +24,9 @@
 {% endif %}
 
 {% endblock %}
+
+{% block footer_scripts %}
+{{ block.super }}
+{% include 'common/ajaxzip.html' %}
+{% include 'common/full2half.html' %}
+{% endblock %}
