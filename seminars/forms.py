@@ -21,7 +21,7 @@ class SeminarForm(forms.ModelForm):
 class EntryForm(forms.Form):
     error_css_class = 'error'
     required_css_class = 'required'
-    note = forms.CharField(label="備考", max_length=500, widget=forms.Textarea)
+    note = forms.CharField(label="備考", max_length=500, widget=forms.Textarea, required=False)
     confirmation = forms.BooleanField(label="規約に同意する")
 
 

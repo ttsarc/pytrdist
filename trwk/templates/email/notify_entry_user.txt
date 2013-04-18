@@ -1,0 +1,18 @@
+{% extends 'email/base.txt'%}
+{% block content %}
+{{ log.company }}　ご担当者様
+
+「とれわか」セミナー申し込みにて貴社のセミナーに
+申し込みがありました
+
+■会社名：{{ log.company_name }}
+■立場：{{ log.discretion }}
+■検討状況：{{ log.stage }}
+■サイトURL：{{ log.site_url }}
+■業種：{{ log.business_type }}
+■セミナー：{{ log.seminar_title }}
+
+詳細内容は下記管理画面からご確認下さい。
+http://{{ request.META.HTTP_HOST }}{% url 'mypage_home' %}
+
+{% endblock%}

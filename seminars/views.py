@@ -122,10 +122,12 @@ def index(request, page=1):
 
 def detail(request, seminar_id):
     seminar = get_object_or_404(Seminar, pk=seminar_id, status=1)
+    entry_count = SeminarEntryUser.objects.count_entry(seminar)
     return render_to_response(
         'seminars/detail.html',
         {
             'seminar' : seminar,
+            'entry_count': entry_count,
         },
         context_instance=RequestContext(request)
     )
@@ -205,14 +207,39 @@ def _notify_company_staff(log, request):
     )
     email_company_staff(log.company.id, subject = subject, content = content)
 
+def _notify_user(user, log, seminar, request):
+    data = {
+                'user': user,
+                'log' : log,
+                'seminar' : seminar,
+                'request' : request,
+            }
+    content = render_to_string(
+        'email/notify_entry_user.txt',
+        data,
+        context_instance=RequestContext(request)
+    )
+    subject = render_to_string(
+        'email/notify_entry_user_subject.txt',
+        data,
+        context_instance=RequestContext(request)
+    )
+    user.email_user(self, subject, content, from_email=settings.SERVER_EMAIL)
+
 def _add_entry_user(seminar, user):
     dl_user_obj, created = SeminarEntryUser.objects.get_or_create(seminar=seminar, user=user)
-    if not created:
-        dl_user_obj.save()
+    #満員になったら受付終了処理
+    if SeminarEntryUser.objects.count_entry(seminar) >= seminar.limit_number :
+        seminar.entry_status = 0
+        seminar.save()
 
 @login_required
 def entry(request, seminar_id):
     seminar = get_object_or_404(Seminar, pk=seminar_id, status=1)
+    entry_count = SeminarEntryUser.objects.count_entry(seminar)
+    if seminar.entry_status == 0:
+        messages.add_message(request, messages.ERROR, '申し訳ございません。定員数を超えてしまったため申込できません。')
+        return redirect('seminar_detail', seminar_id=seminar_id )
     user = request.user
     template_name = 'seminars/entry.html'
     if not user.myuserprofile:

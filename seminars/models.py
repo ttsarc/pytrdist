@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-import os, time
+import os, time, datetime
 from django.db import models
 from django.core.mail import send_mail
 from django.core import signing
 from django.utils import timezone
+from django.utils.timezone import utc
 from django.conf import settings
 from accounts.models import Company
 from seminars.choices import *
@@ -30,31 +31,39 @@ class Seminar(models.Model):
         upload_to = get_thumb_uplod_path,
         blank = True
     )
-    type =            models.SmallIntegerField('種別', choices=TYPE_CHOICES, default=0)
-    category =        models.CharField('カテゴリー', max_length=16, choices=CATEGORY_CHOICES)
-    catch =           models.TextField('概要（キャッチコピー）', max_length=150, help_text='例：今、最も旬なマーケティングツールはこれだ！')
-    target =          models.TextField('対象企業', max_length=200, blank=True, help_text='ターゲットとする方がどんな方かご記入ください')
-    detail =          models.TextField('詳細説明文', max_length=5000, help_text='セミナーの詳細をご記入ください')
-    exhibition_date = models.DateField('開催日', help_text='例：2013/05/01')
-    close_date =      models.DateField('終了日', blank=True, help_text='例：2013/05/10 一定の期間開催する場合はご記入ください。')
-    exhibition_time = models.CharField('開催時間', max_length=50, help_text='例：18:00 - 20:00')
-    accepting_start = models.CharField('受付開始時間', max_length=50, help_text='例：17:30受付開始')
-    promoter =        models.CharField('主催者', max_length=50, help_text='例：株式会社ミロク情報サービス')
-    capacity =        models.CharField('定員', max_length=50, help_text='例：50名')
-    expenses =        models.CharField('費用', max_length=50, help_text='例：5,000円')
-    place_name=       models.CharField('会場名', max_length=100, help_text='例：新宿センタービル')
-    prefecture =      models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES)
-    address =         models.CharField('会場住所', max_length=100)
-    place_url =       models.URLField('会場に関するURL',blank=True, help_text='施設のサイトURL、GoogleマップのURL等')
-    limit_number =    models.IntegerField('申し込み上限数', help_text='システムで利用する数字です。申し込み数がこの数を超えると申し込みができなくなります。')
-    limit_datetime =  models.DateTimeField('申し込み終了時間', blank=True, help_text='申し込み数がこの時刻を過ぎると申し込みができなくなります。')
-    mail_title =      models.CharField('自動返信メールタイトル', max_length=50, help_text='例：マーケティングセミナー受付完了')
-    mail_text =       models.TextField('自動返信メール本文', max_length=2000,  help_text='申し込み完了メールに記載される文章です。詳細、連絡先などを必ずご記入ください。')
-    status =          models.SmallIntegerField('公開状態', choices=STATUS_CHOICE, default=0)
-    add_date =        models.DateTimeField('登録日', auto_now_add=True)
-    update_date =     models.DateTimeField('更新日', auto_now=True)
+    type =               models.SmallIntegerField('種別', choices=TYPE_CHOICES, default=0)
+    category =           models.CharField('カテゴリー', max_length=16, choices=CATEGORY_CHOICES)
+    catch =              models.TextField('概要（キャッチコピー）', max_length=150, help_text='例：今、最も旬なマーケティングツールはこれだ！')
+    target =             models.TextField('対象企業', max_length=200, blank=True, help_text='ターゲットとする方がどんな方かご記入ください')
+    detail =             models.TextField('詳細説明文', max_length=5000, help_text='セミナーの詳細をご記入ください')
+    exhibition_date =    models.DateField('開催日', help_text='例：2013/05/01')
+    close_date =         models.DateField('終了日', blank=True, help_text='例：2013/05/10 一定の期間開催する場合はご記入ください。')
+    exhibition_time =    models.CharField('開催時間', max_length=50, help_text='例：18:00 - 20:00')
+    accepting_start =    models.CharField('受付開始時間', max_length=50, help_text='例：17:30受付開始')
+    promoter =           models.CharField('主催者', max_length=50, help_text='例：株式会社ミロク情報サービス')
+    capacity =           models.CharField('定員', max_length=50, help_text='例：50名')
+    expenses =           models.CharField('費用', max_length=50, help_text='例：5,000円')
+    place_name=          models.CharField('会場名', max_length=100, help_text='例：新宿センタービル')
+    prefecture =         models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES)
+    address =            models.CharField('会場住所', max_length=100)
+    place_url =          models.URLField('会場に関するURL',blank=True, help_text='施設のサイトURL、GoogleマップのURL等')
+    limit_number =       models.IntegerField('申し込み上限数', help_text='半角数字でご入力ください。システムで利用する数字です。申し込み数がこの数に達すると満員となり、申し込みができなくなります。')
+    limit_datetime =     models.DateTimeField('申し込み終了時間', blank=True, help_text='この時刻を過ぎると申し込みができなくなります。')
+    mail_title =         models.CharField('自動返信メールタイトル', max_length=50, help_text='例：マーケティングセミナー受付完了')
+    mail_text =          models.TextField('自動返信メール本文', max_length=2000, help_text='申し込み完了メールに記載される文章です。詳細、連絡先などを必ずご記入ください。')
+    entry_status =       models.SmallIntegerField('受付状態', choices=ENTRY_STATUS_CHOICES, default=0, help_text='満員になると自動で受付終了になります。再開する場合は手動でご変更ください。')
+    status =             models.SmallIntegerField('公開状態', choices=STATUS_CHOICES, default=0)
+    add_date =           models.DateTimeField('登録日', auto_now_add=True)
+    update_date =        models.DateTimeField('更新日', auto_now=True)
 
     objects = SeminarManager()
+    def is_open(self):
+        #print(self.limit_datetime)
+        #print(datetime.datetime.utcnow().replace(tzinfo=utc))
+        if self.limit_datetime < datetime.datetime.utcnow().replace(tzinfo=utc):
+            return False
+        else:
+            return True
 
     def __unicode__(self):
         return self.title
@@ -66,7 +75,14 @@ class Seminar(models.Model):
 
 
 class SeminarEntryUserManager(models.Manager):
-    pass
+    def count_entry(self, seminar):
+        return self.filter(seminar=seminar).count()
+
+    def is_entered(self, user):
+        if self.filter(user=user).count():
+            return True
+        else:
+            return False
 
 class SeminarEntryUser(models.Model):
     seminar =     models.ForeignKey(Seminar, verbose_name='セミナー')

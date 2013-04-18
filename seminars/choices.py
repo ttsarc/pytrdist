@@ -58,7 +58,13 @@ CATEGORY_CHOICES = (
         )
     ),
 )
-STATUS_CHOICE = (
+
+ENTRY_STATUS_CHOICES = (
+    (1, '受付中'),
+    (0, '受付終了'),
+)
+
+STATUS_CHOICES = (
     (0, '下書き'),
     (1, '公開'),
     (2, '削除'),

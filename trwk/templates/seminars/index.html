@@ -6,7 +6,8 @@
 <div>
     <h2><a href="{% url 'seminar_detail' seminar_id=semi.id %}">{{ semi.title }}</a></h2>
     <div>{{ semi.catch }}</div>
-    <div><a href="{% url 'seminar_entry' seminar_id=semi.id %}">ダウンロード</a></div>
+    <div><a href="{% url 'seminar_entry' seminar_id=semi.id %}">申し込む</a></div>
+    <div>{{ semi.is_open }}</div>
 </div>
 {% endfor %}
 <div>全{{ count|intcomma }}件</div>

@@ -144,6 +144,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         """
         Sends an email to this User.
         """
+        subject = subject.replace("\n","")
         send_mail(subject, message, from_email, [self.email])
 
     def get_profile(self):
