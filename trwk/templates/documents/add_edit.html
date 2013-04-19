@@ -1,6 +1,12 @@
 {% extends 'base_mypage.html'%}
 {% block content %}
+
+{% if action == 'add' %}
 <h1>資料の新規追加</h1>
+{% else %}
+<h1>資料「{{document.title}}」の編集</h1>
+{% endif %}
+
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 <table>
 {{ form }}
@@ -9,4 +15,8 @@
 <input type="submit" value="保存する">
 </p>
 </form>
+{% if action == 'edit'%}
+<a href="{% url 'document_preview' document_id=document.id%}" target="_blank">プレビュー</a>
+{% endif%}
+
 {% endblock %}

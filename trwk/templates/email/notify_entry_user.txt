@@ -1,18 +1,20 @@
 {% extends 'email/base.txt'%}
 {% block content %}
-{{ log.company }}　ご担当者様
+{{ log.last_name }} {{ log.first_name }}　様
 
-「とれわか」セミナー申し込みにて貴社のセミナーに
-申し込みがありました
+とれわか( http://{{ request.META.HTTP_HOST }} )
+にてセミナーに申し込み頂き、ありがとうございました。
 
-■会社名：{{ log.company_name }}
-■立場：{{ log.discretion }}
-■検討状況：{{ log.stage }}
-■サイトURL：{{ log.site_url }}
-■業種：{{ log.business_type }}
-■セミナー：{{ log.seminar_title }}
+■セミナー名：
+{{ log.seminar_title }}
 
-詳細内容は下記管理画面からご確認下さい。
-http://{{ request.META.HTTP_HOST }}{% url 'mypage_home' %}
+■詳細URL：
+http://{{ request.META.HTTP_HOST }}{% url 'seminar_detail' seminar_id=log.seminar_id %}
+
+■備考：
+{{ log.note }}
+
+■開催企業より
+{{ seminar.mail_text }}
 
 {% endblock%}

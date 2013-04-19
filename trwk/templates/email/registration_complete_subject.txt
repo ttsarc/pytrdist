@@ -1,0 +1,1 @@
+{% extends 'email/base_subject.txt'%}{% block content %}会員登録完了のお知らせ{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base_mypage.html'%}
+{%block head_after_link %}
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
+{%endblock%}
+{% block content %}
+<h1>リード情報の確認</h1>
+<div>
+<form method='get' action=''>
+<input type="hidden" value="1" name="search">
+{{form.start_date}} ～ {{form.end_date}}
+{{form.start_date.errors}}
+{{form.end_date.errors}}
+<input type="submit" value="検索">
+</form>
+</div>
+
+<table>
+{% if not companies %}
+該当するログはありません
+{% endif %}
+{% for com in companies %}
+    <tr>
+        <td>{{ com }}</td>
+        <td><a href="{% url 'operation_download_leads' log_type='document' company_id=com.pk %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">資料</a></td>
+        <td><a href="{% url 'operation_download_leads' log_type='seminar' company_id=com.pk %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">セミナー</a></td>
+    </tr>
+{% endfor %}
+</table>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<script>
+$(function(){
+    $('#id_start_date, #id_end_date').datepicker({
+        firstDay: 1,
+        minDate: new Date(2013, 4-1, 1),
+        maxDate: 0
+    });
+});
+</script>
+{% endblock %}

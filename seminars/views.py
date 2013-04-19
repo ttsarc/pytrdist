@@ -3,38 +3,31 @@
 Views which edit user accounts
 
 """
-import csv, datetime
+import datetime
 from django import forms
 from django.shortcuts import redirect, render_to_response, get_object_or_404, get_list_or_404
 from django.http import Http404,HttpResponse
-from django.core import signing
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login
-from django.contrib.sites.models import RequestSite, Site
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
-from django.utils.timezone import utc, make_naive, get_default_timezone
 from django.utils import timezone
 from accounts.forms import MyUserShowForm, MyUserProfileShowForm
 from seminars.forms import SeminarForm, EntryForm, LeadSearchForm
 from seminars.models import Seminar, SeminarEntryLog, SeminarEntryUser
 from seminars.choices import *
 from trwk.libs.request_utils import *
-from trwk.api.email_utility import email_company_staff
-def _check_customer(user):
-    if not user.is_customer:
-        messages.add_message(request, messages.ERROR, '掲載企業の担当者として登録されていません')
-        return redirect('mypage_home')
-    return True
+from trwk.api.company_utility import is_company_staff, email_company_staff
+from trwk.libs.csv_utils import export_csv
 
 @login_required
 @csrf_protect
 def add(request):
-    _check_customer(request.user)
+    if not is_company_staff(request.user):
+        return redirect('mypage_home')
     user = request.user
     company = user.customer_company
     if request.method == 'POST':
@@ -61,13 +54,11 @@ def add(request):
 @login_required
 @csrf_protect
 def edit(request, seminar_id):
-    _check_customer(request.user)
     seminar = get_object_or_404(Seminar, pk=seminar_id)
     user = request.user
     company = user.customer_company
-    if user.customer_company.pk != seminar.company.pk:
-        messages.add_message(request, messages.ERROR, 'このセミナーを編集する権限はありません')
-        return redirect('mypage_home' )
+    if not is_company_staff(request.user, seminar.company.pk):
+        return redirect('mypage_home')
 
     if request.method == 'POST':
         form = SeminarForm(request.POST, request.FILES, instance=seminar)
@@ -81,6 +72,7 @@ def edit(request, seminar_id):
     return render_to_response(
         'seminars/add_edit.html',
         {
+            'seminar' : seminar,
             'action': 'edit',
             'form' : form,
         },
@@ -90,7 +82,8 @@ def edit(request, seminar_id):
 @login_required
 @csrf_protect
 def edit_index(request):
-    _check_customer(request.user)
+    if not is_company_staff(request.user):
+        return redirect('mypage_home')
     company = request.user.customer_company
     seminars = Seminar.objects.all().filter(company__exact=company)
     return render_to_response(
@@ -102,20 +95,28 @@ def edit_index(request):
     )
 
 def index(request, page=1):
-    seminars = get_list_or_404(Seminar, status=1)
-    paginator = Paginator(seminars, settings.DOCUMENTS_PER_PAGE)
-    try:
-        paged_seminars = paginator.page(page)
-    except PageNotAnInteger:
-        raise Http404
-    except EmptyPage:
-        raise Http404
+    seminars = Seminar.objects.filter(
+        status=1,
+        entry_status=1,
+        limit_datetime__gt=datetime.datetime.utcnow().replace(tzinfo=utc)
+    )
+    paged_seminars = None
+    count = 0
+    if seminars:
+        paginator = Paginator(seminars, settings.SEMINARS_PER_PAGE)
+        try:
+            paged_seminars = paginator.page(page)
+            count = paginator.count
+        except PageNotAnInteger:
+            raise Http404
+        except EmptyPage:
+            raise Http404
 
     return render_to_response(
         'seminars/index.html',
         {
             'seminars' : paged_seminars,
-            'count': paginator.count,
+            'count': count,
         },
         context_instance=RequestContext(request)
     )
@@ -123,23 +124,29 @@ def index(request, page=1):
 def detail(request, seminar_id):
     seminar = get_object_or_404(Seminar, pk=seminar_id, status=1)
     entry_count = SeminarEntryUser.objects.count_entry(seminar)
+    is_entered = False
+    if request.user.is_authenticated() and SeminarEntryUser.objects.is_entered(seminar, request.user):
+        is_entered = True
     return render_to_response(
         'seminars/detail.html',
         {
             'seminar' : seminar,
             'entry_count': entry_count,
+            'is_entered' : is_entered,
         },
         context_instance=RequestContext(request)
     )
 
 @login_required
 def preview(request, seminar_id):
-    _check_customer(request.user)
+    if not is_company_staff(request.user):
+        return redirect('mypage_home')
     company = request.user.customer_company
     if request.user.is_superuser:
         seminar = get_object_or_404(Seminar, pk=seminar_id)
     else:
         seminar = get_object_or_404(Seminar, pk=seminar_id, company=company)
+
     return render_to_response(
         'seminars/detail.html',
         {
@@ -156,7 +163,7 @@ def _add_entry_log(seminar, form, user, company ,request):
             # Seminar
             seminar_id =      seminar.id,
             seminar_title =   seminar.title,
-            seminar_type =    seminar.type,
+            seminar_type =    dict(TYPE_CHOICES)[seminar.type],
             # Company
             company =         company,
             # MyUser
@@ -184,6 +191,7 @@ def _add_entry_log(seminar, form, user, company ,request):
             discretion =      p.get_discretion_display(),
             # DonwloadForm
             note =            form.cleaned_data['note'],
+            # request
             ip =              get_request_addr_or_ip(request),
             ua =              get_request_ua(request),
     )
@@ -224,7 +232,7 @@ def _notify_user(user, log, seminar, request):
         data,
         context_instance=RequestContext(request)
     )
-    user.email_user(self, subject, content, from_email=settings.SERVER_EMAIL)
+    user.email_user(subject, content, from_email=settings.SERVER_EMAIL)
 
 def _add_entry_user(seminar, user):
     dl_user_obj, created = SeminarEntryUser.objects.get_or_create(seminar=seminar, user=user)
@@ -240,8 +248,12 @@ def entry(request, seminar_id):
     if seminar.entry_status == 0:
         messages.add_message(request, messages.ERROR, '申し訳ございません。定員数を超えてしまったため申込できません。')
         return redirect('seminar_detail', seminar_id=seminar_id )
+
     user = request.user
-    template_name = 'seminars/entry.html'
+    if SeminarEntryUser.objects.is_entered(seminar_id, user):
+        messages.add_message(request, messages.ERROR, 'このセミナーにはすでに申し込み済みです')
+        return redirect('seminar_detail', seminar_id=seminar_id )
+
     if not user.myuserprofile:
         messages.add_message(request, messages.ERROR, 'ユーザー情報の設定が完了していません。お手数ですが管理者に御問合せください')
         return redirect('trwk_home' )
@@ -250,6 +262,7 @@ def entry(request, seminar_id):
         messages.add_message(request, messages.ERROR, 'セミナーの提供元企業が存在しません')
         return redirect('trwk_home' )
 
+    template_name = 'seminars/entry.html'
     user_form = MyUserShowForm(instance=user)
     user_profile_form = MyUserProfileShowForm(instance=user.myuserprofile)
     if request.method == 'POST':
@@ -257,9 +270,9 @@ def entry(request, seminar_id):
         if form.is_valid():
             if request.POST.get('complete') == '1':
                 log = _add_entry_log(seminar, form, user, company, request)
+                _notify_user(user, log, seminar, request)
                 _notify_company_staff(log, request)
                 _add_entry_user(seminar, user)
-                #messages.add_message(request, messages.SUCCESS, 'セミナーの申し込みありがとうございました。')
                 return redirect('seminar_entry_complete', seminar_id=seminar.id )
             elif not request.POST.get('complete'):
                 template_name = 'seminars/entry_preview.html'
@@ -288,77 +301,28 @@ def entry_complete(request, seminar_id):
                     context_instance=RequestContext(request)
                 )
 
-def _export_csv(leads):
-    filename = 'trwk-semi-' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S') + '.csv'
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="'+ filename +'"'
-
-    csv_fields = {
-        1  : ('申し込み日',       'entry_date'),
-        2  : ('セミナータイトル', 'seminar_title'),
-        3  : ('種別',             'seminar_type'),
-        4  : ('会社名',           'company_name'),
-        5  : ('姓',               'last_name'),
-        6  : ('名',               'first_name'),
-        7  : ('姓（ふりがな）',   'last_name_kana'),
-        8  : ('名（ふりがな）',   'first_name_kana'),
-        9  : ('電話番号',         'tel'),
-        10 : ('FAX',              'fax'),
-        11 : ('郵便番号',         'post_number'),
-        12 : ('都道府県',         'prefecture'),
-        13 : ('住所',             'address'),
-        14 : ('ホームページURL',  'site_url'),
-        15 : ('部署名',           'department'),
-        16 : ('役職名',           'position'),
-        17 : ('役職区分',         'position_class'),
-        18 : ('業種',             'business_type'),
-        19 : ('職務内容',         'job_content'),
-        20 : ('従業員規模',       'firm_size'),
-        21 : ('年商',             'yearly_sales'),
-        22 : ('立場',             'discretion'),
-        23 : ('備考',             'note'),
-    }
-    writer = csv.writer(response)
-    head = []
-    first = True
-    csv_encode = 'cp932'
-    for line in leads:
-        items = []
-        for key, field in sorted(csv_fields.items()):
-            label = field[0]
-            name = field[1]
-            if first:
-                head.append(label.encode( csv_encode ))
-            val = getattr(line, name)
-            if isinstance(val, unicode):
-                items.append(val.encode( csv_encode ))
-            elif isinstance(val, long):
-                items.append(str(val))
-            elif isinstance(val, datetime.datetime):
-                #ローカルタイムに変換してる
-                items.append(make_naive(val, get_default_timezone()).strftime('%Y-%m-%d %H:%M:%S') )
-        if first:
-            writer.writerow(head)
-            first = False
-        writer.writerow(items)
-    return response
-
 @login_required
 def entry_log(request, page=1, type='list'):
-    _check_customer(request.user)
+    if not is_company_staff(request.user):
+        return redirect('mypage_home')
     user = request.user
     company = user.customer_company
     leads = SeminarEntryLog.objects
+    filename = 'trwk-semi'
     if 'search' in request.GET:
         form = LeadSearchForm(request.GET)
         if form.is_valid():
             if form.cleaned_data['start_date']:
                 start = datetime.datetime.strptime( str(form.cleaned_data['start_date']),'%Y-%m-%d').replace(tzinfo=timezone.utc)
                 leads = leads.filter(entry_date__gte=start)
+                filename = filename + '-' + str(form.cleaned_data['start_date'])+ '^'
             if form.cleaned_data['end_date']:
                 #時刻まで条件に入っているっぽく、前日までしかとれないので+1日
                 end =   datetime.datetime.strptime( str(form.cleaned_data['end_date']),'%Y-%m-%d').replace(tzinfo=timezone.utc) + datetime.timedelta(days=1)
                 leads = leads.filter(entry_date__lte=end)
+                if not form.cleaned_data['start_date']:
+                    filename += '-^'
+                filename += str(form.cleaned_data['end_date'])
     else:
         form = LeadSearchForm()
     try:
@@ -380,7 +344,9 @@ def entry_log(request, page=1, type='list'):
             context_instance=RequestContext(request)
         )
     elif type == "csv":
-        return _export_csv(leads)
+        csv_fields = SeminarEntryLog.csv_fields
+        filename += '.csv'
+        return export_csv(leads, csv_fields, filename)
 
 @login_required
 def my_entry_history(request):
@@ -398,4 +364,3 @@ def my_entry_history(request):
         },
         context_instance=RequestContext(request)
     )
-

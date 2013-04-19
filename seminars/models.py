@@ -31,13 +31,13 @@ class Seminar(models.Model):
         upload_to = get_thumb_uplod_path,
         blank = True
     )
-    type =               models.SmallIntegerField('種別', choices=TYPE_CHOICES, default=0)
+    type =               models.SmallIntegerField('種別', choices=TYPE_CHOICES)
     category =           models.CharField('カテゴリー', max_length=16, choices=CATEGORY_CHOICES)
     catch =              models.TextField('概要（キャッチコピー）', max_length=150, help_text='例：今、最も旬なマーケティングツールはこれだ！')
     target =             models.TextField('対象企業', max_length=200, blank=True, help_text='ターゲットとする方がどんな方かご記入ください')
     detail =             models.TextField('詳細説明文', max_length=5000, help_text='セミナーの詳細をご記入ください')
-    exhibition_date =    models.DateField('開催日', help_text='例：2013/05/01')
-    close_date =         models.DateField('終了日', blank=True, help_text='例：2013/05/10 一定の期間開催する場合はご記入ください。')
+    exhibition_date =    models.DateField('開催日', help_text='例：2013-05-01')
+    close_date =         models.DateField('終了日', blank=True, help_text='例：2013-05-10 一定の期間開催する場合はご記入ください。')
     exhibition_time =    models.CharField('開催時間', max_length=50, help_text='例：18:00 - 20:00')
     accepting_start =    models.CharField('受付開始時間', max_length=50, help_text='例：17:30受付開始')
     promoter =           models.CharField('主催者', max_length=50, help_text='例：株式会社ミロク情報サービス')
@@ -51,7 +51,7 @@ class Seminar(models.Model):
     limit_datetime =     models.DateTimeField('申し込み終了時間', blank=True, help_text='この時刻を過ぎると申し込みができなくなります。')
     mail_title =         models.CharField('自動返信メールタイトル', max_length=50, help_text='例：マーケティングセミナー受付完了')
     mail_text =          models.TextField('自動返信メール本文', max_length=2000, help_text='申し込み完了メールに記載される文章です。詳細、連絡先などを必ずご記入ください。')
-    entry_status =       models.SmallIntegerField('受付状態', choices=ENTRY_STATUS_CHOICES, default=0, help_text='満員になると自動で受付終了になります。再開する場合は手動でご変更ください。')
+    entry_status =       models.SmallIntegerField('受付状態', choices=ENTRY_STATUS_CHOICES, default=1, help_text='満員になると自動で受付終了になります。再開する場合は手動でご変更ください。')
     status =             models.SmallIntegerField('公開状態', choices=STATUS_CHOICES, default=0)
     add_date =           models.DateTimeField('登録日', auto_now_add=True)
     update_date =        models.DateTimeField('更新日', auto_now=True)
@@ -78,8 +78,8 @@ class SeminarEntryUserManager(models.Manager):
     def count_entry(self, seminar):
         return self.filter(seminar=seminar).count()
 
-    def is_entered(self, user):
-        if self.filter(user=user).count():
+    def is_entered(self, seminar, user):
+        if self.filter(seminar=seminar, user=user).count():
             return True
         else:
             return False
@@ -138,6 +138,32 @@ class SeminarEntryLog(models.Model):
     ua=                models.CharField('ユーザーエージェント', max_length=256, blank=True)
 
     objects = SeminarEntryLogManager()
+
+    csv_fields = {
+                1  : ('申し込み日',       'entry_date'),
+                2  : ('セミナータイトル', 'seminar_title'),
+                3  : ('種別',             'seminar_type'),
+                4  : ('会社名',           'company_name'),
+                5  : ('姓',               'last_name'),
+                6  : ('名',               'first_name'),
+                7  : ('姓（ふりがな）',   'last_name_kana'),
+                8  : ('名（ふりがな）',   'first_name_kana'),
+                9  : ('電話番号',         'tel'),
+                10 : ('FAX',              'fax'),
+                11 : ('郵便番号',         'post_number'),
+                12 : ('都道府県',         'prefecture'),
+                13 : ('住所',             'address'),
+                14 : ('ホームページURL',  'site_url'),
+                15 : ('部署名',           'department'),
+                16 : ('役職名',           'position'),
+                17 : ('役職区分',         'position_class'),
+                18 : ('業種',             'business_type'),
+                19 : ('職務内容',         'job_content'),
+                20 : ('従業員規模',       'firm_size'),
+                21 : ('年商',             'yearly_sales'),
+                22 : ('立場',             'discretion'),
+                23 : ('備考',             'note'),
+        }
 
     def __unicode__(self):
         return self.email

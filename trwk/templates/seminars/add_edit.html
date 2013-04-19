@@ -6,7 +6,11 @@
 {%endblock%}
 
 {% block content %}
+{% if action == 'add' %}
 <h1>セミナーの新規追加</h1>
+{% else %}
+<h1>「{{ seminar.title }}」の編集</h1>
+{% endif %}
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 <table>
 {{ form }}
@@ -16,6 +20,9 @@
 </p>
 </form>
 
+{% if action == 'edit'%}
+<a href="{% url 'seminar_preview' seminar_id=seminar.id%}" target="_blank">プレビュー</a>
+{% endif%}
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 <!-- http://trentrichardson.com/examples/timepicker/ -->
@@ -23,6 +30,9 @@
 <script>
 $(function(){
     $('#id_limit_datetime').datetimepicker({
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'HH:mm:ss',
+        pickerTimeFormat: 'HH:mm:ss',
         closeText:'閉じる',
         currentText:'現在',
         timeText:'時刻',
@@ -30,6 +40,7 @@ $(function(){
         minuteText:'分'
     });
     $('#id_exhibition_date, #id_close_date').datepicker({
+        dateFormat: 'yy-mm-dd',
         firstDay: 1,
         minDate: 0,
     });

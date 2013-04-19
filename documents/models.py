@@ -146,6 +146,31 @@ class DocumentDownloadLog(models.Model):
 
     objects = DocumentDownloadLogManager()
 
+    csv_fields = {
+            1  : ('ダウンロード日', 'download_date'),
+            2  : ('資料タイトル',   'document_title'),
+            3  : ('会社名',         'company_name'),
+            4  : ('姓',             'last_name'),
+            5  : ('名',             'first_name'),
+            6  : ('姓（ふりがな）', 'last_name_kana'),
+            7  : ('名（ふりがな）', 'first_name_kana'),
+            8  : ('電話番号',       'tel'),
+            9  : ('FAX',            'fax'),
+            10 : ('郵便番号',       'post_number'),
+            11 : ('都道府県',       'prefecture'),
+            12 : ('住所',           'address'),
+            13 : ('ホームページURL','site_url'),
+            14 : ('部署名',         'department'),
+            15 : ('役職名',         'position'),
+            16 : ('役職区分',       'position_class'),
+            17 : ('業種',           'business_type'),
+            18 : ('職務内容',       'job_content'),
+            19 : ('従業員規模',     'firm_size'),
+            20 : ('年商',           'yearly_sales'),
+            21 : ('立場',           'discretion'),
+            22 : ('状況',           'stage'),
+        }
+
     def __unicode__(self):
         return self.email
 
@@ -153,3 +178,5 @@ class DocumentDownloadLog(models.Model):
         verbose_name = "ダウンロードログ"
         verbose_name_plural = "ダウンロードログ"
         ordering = ['-download_date']
+
+

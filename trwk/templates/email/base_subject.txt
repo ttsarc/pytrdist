@@ -1,10 +1,1 @@
-{% spaceless %}
-{% block header %}
-【とれわか】
-{% endblock%}
-{% block content %}
-{% endblock%}
-
-{% block footer %}
-{% endblock%}
-{% endspaceless %}
+{% block header %}【とれわか】{% endblock%}{% block content %}{% endblock%}{% block footer %}{% endblock%}

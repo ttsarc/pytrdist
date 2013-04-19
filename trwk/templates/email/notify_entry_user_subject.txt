@@ -1,7 +1,4 @@
 {% extends 'email/base_subject.txt'%}
-
 {% block content %}
-
-セミナー申し込みのお知らせ
-
+{{ seminar.mail_title }}
 {% endblock %}

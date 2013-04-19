@@ -1,7 +1,3 @@
-{% block header %}
-このメールはとれわか（ http://tr-wk.jp/ ）のシステムより自動送信しております。
-{% endblock%}
+{% block header %}このメールはとれわか（ http://tr-wk.jp/ ）のシステムより自動送信しております。{% endblock%}
 {% block content %}{% endblock%}
-{% block footer %}
-http://tr-wk.jp
-{% endblock%}
+{% block footer %}とれわか http://tr-wk.jp{% endblock%}

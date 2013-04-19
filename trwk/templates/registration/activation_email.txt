@@ -1,6 +1,13 @@
-{% load i18n %}
-{% trans "Activate account at" %} {{ site.name }}:
+{% extends 'email/base.txt'%}
+{% block content %}
+とれわかのご利用ありがとうございます。
+
+下記のリンクから本登録をお願い致します。
 
 http://{{ site.domain }}{% url "registration_activate" activation_key %}
 
-{% blocktrans %}Link is valid for {{ expiration_days }} days.{% endblocktrans %}
+このリンクは{{ expiration_days }}日間有効です。
+
+もし、登録した覚えのない場合は、リンクはクリックせず、
+お手数ですが本メールの削除をお願い致します。
+{% endblock%}

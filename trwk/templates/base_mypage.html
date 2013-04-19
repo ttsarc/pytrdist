@@ -14,18 +14,24 @@
     <li><a href="{% url "mypage_edit_company"%}">企業情報の編集</a></li>
     <li><h4>資料</h4>
         <ul>
-            <li><a href="{% url "document_add"%}">新規追加</a></li>
+            <li><a href="{% url "document_add"%}">追加</a></li>
             <li><a href="{% url "document_edit_index"%}">編集</a></li>
-            <li><a href="{% url "document_leads_index"%}">リード情報</a></li>
+            <li><a href="{% url "document_leads_index"%}">リード</a></li>
         </ul>
     </li>
     <li><h4>セミナー</h4>
         <ul>
-            <li><a href="{% url "seminar_add"%}">新規追加</a></li>
+            <li><a href="{% url "seminar_add"%}">追加</a></li>
             <li><a href="{% url "seminar_edit_index"%}">編集</a></li>
-            <li><a href="{% url "seminar_leads_index"%}">リード情報</a></li>
+            <li><a href="{% url "seminar_leads_index"%}">リード</a></li>
         </ul>
     </li>
 </ul>
 {% endif%}
+
+{% if request.user.is_superuser %}
+<ul>
+    <li><a href="{% url "operation_company_leads"%}">全会社リード</a></li>
+</ul>
+{% endif %}
 {% endblock %}

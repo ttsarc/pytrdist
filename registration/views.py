@@ -6,21 +6,38 @@ Views which allow users to create and activate accounts.
 from django import forms
 from django.shortcuts import redirect, render_to_response
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-from django.contrib.sites.models import RequestSite
-from django.contrib.sites.models import Site
+from django.contrib.sites.models import RequestSite, Site
 from django.views.decorators.csrf import csrf_protect
+from django.conf import settings
 from registration.backends import get_backend
 from registration.models import RegistrationProfile, ChangeEmailProfile
 from registration.forms import ChangeEmailForm
 from accounts.forms import MyUserProfileForm
 from accounts.models import MyUser
 from trwk.libs.request_utils import set_next_url
+def _send_complete_email(user, request):
+    data = {
+                'user': user,
+                'p' : user.myuserprofile,
+                'request':request,
+            }
+    content = render_to_string(
+        'email/registration_complete.txt',
+        data,
+        context_instance=RequestContext(request)
+    )
+    subject = render_to_string(
+        'email/registration_complete_subject.txt',
+        data,
+        context_instance=RequestContext(request)
+    )
+    user.email_user(subject, content, from_email=settings.SERVER_EMAIL)
 
 def activate_complete(request):
-    
     return render_to_response(
         'registration/activation_complete.html',
         context_instance=RequestContext(request)
@@ -100,7 +117,7 @@ def activate(request, backend,
 
     if is_activatable == False:
         messages.add_message(request, messages.ERROR, 'すでにプロフィールを登録済みです')
-        return redirect('trwk_home')
+        return redirect('home')
 
     if request.method == 'POST':
         form = MyUserProfileForm(request.POST)
@@ -112,20 +129,21 @@ def activate(request, backend,
                     form_valid.save()
                 except:
                     messages.add_message(request, messages.ERROR, 'すでにプロフィールを登録済みです')
-
                 else:
                     backend = get_backend(backend)
                     account = backend.activate(request, **kwargs)
                     #自動ログイン
                     #http://stackoverflow.com/questions/2787650/manually-logging-in-a-user-without-password
                     user.backend = 'django.contrib.auth.backends.ModelBackend'
+                    _send_complete_email(user, request)
                     login(request, user)
                     if account:
                         if success_url is None:
                             to, args, kwargs = backend.post_activation_redirect(request, account)
                             return redirect(to, *args, **kwargs)
                         else:
-                            return redirect(success_url)
+                            messages.add_message(request, messages.SUCCESS, 'ありがとうございます。ユーザー登録が完了致しました。')
+                            return redirect('home')
             #修正するをクリックした時
             elif request.POST.get('complete') == '0':
                 pass
@@ -300,12 +318,10 @@ def change_email(request, backend, success_url=None, form_class=None,
 def change_email_done(request, activation_key,
                       template_name='registration/change_email_done.html',
                       extra_context=None):
-    
     result = ChangeEmailProfile.objects.change_email(activation_key, request.user)
-    
     if result:
         return redirect('registration_change_email_complete')
-    
+
     context = RequestContext(request)
     if extra_context is None:
         extra_context = {}

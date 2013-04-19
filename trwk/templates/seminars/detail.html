@@ -14,5 +14,14 @@
 <h1>{{ seminar.title }}</h1>
 <div>{{ seminar.catch }}</div>
 <div>現在の申し込み数: {{ entry_count }}/ {{ seminar.limit_number }}</div>
+{% if is_entered %}
+すでに申し込み済みです
+{% elif not seminar.is_open %}
+申し込み受け付けが終了しました。
+{% elif seminar.entry_status == 0 %}
+申し訳ございません。満員となり現在申込できません
+{% else %}
 <div><a href="{% url 'seminar_entry' seminar_id=seminar.id %}">参加申し込み</a></div>
+{% endif%}
+
 {% endblock %}

@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^documents/', include('documents.urls')),
     url(r'^seminars/',  include('seminars.urls')),
     url(r'^contact/',   include('contact.urls')),
+    url(r'^operations/',include('operations.urls')),
 )
 
 if settings.DEBUG:

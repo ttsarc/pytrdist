@@ -1,1 +1,1 @@
-{% load i18n %}{% trans "Account activation on" %} {{ site.name }}
+{% extends 'email/base_subject.txt'%}{% block content %}メールアドレスの確認{% endblock %}

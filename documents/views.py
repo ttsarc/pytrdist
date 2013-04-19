@@ -3,7 +3,7 @@
 Views which edit user accounts
 
 """
-import csv, datetime
+import datetime
 from django import forms
 from django.shortcuts import redirect, render_to_response, get_object_or_404, get_list_or_404
 from django.http import Http404,HttpResponse
@@ -14,26 +14,21 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-from django.contrib.sites.models import RequestSite, Site
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
-from django.utils.timezone import utc, make_naive, get_default_timezone
 from django.utils import timezone
 from accounts.forms import MyUserShowForm, MyUserProfileShowForm
 from documents.forms import DocumentForm, DownloadForm, LeadSearchForm
 from documents.models import Document, DocumentDownloadLog, DocumentDownloadCount, DocumentDownloadUser, DocumentDownloadUser
 from trwk.libs.request_utils import *
-from trwk.api.email_utility import email_company_staff
-def _check_customer(user):
-    if not user.is_customer:
-        messages.add_message(request, messages.ERROR, '掲載企業の担当者として登録されていません')
-        return redirect('mypage_home')
-    return True
+from trwk.libs.csv_utils import export_csv
+from trwk.api.company_utility import is_company_staff, email_company_staff
 
 @login_required
 @csrf_protect
 def add(request):
-    _check_customer(request.user)
+    if not is_company_staff(request.user):
+        return redirect('mypage_home')
     user = request.user
     company = user.customer_company
     if request.method == 'POST':
@@ -60,13 +55,11 @@ def add(request):
 @login_required
 @csrf_protect
 def edit(request, document_id):
-    _check_customer(request.user)
     document = get_object_or_404(Document, pk=document_id)
     user = request.user
     company = user.customer_company
-    if user.customer_company.pk != document.company.pk:
-        messages.add_message(request, messages.ERROR, 'この資料を編集する権限はありません')
-        return redirect('mypage_home' )
+    if not is_company_staff(request.user, document.company.pk):
+        return redirect('mypage_home')
 
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES, instance=document)
@@ -80,6 +73,7 @@ def edit(request, document_id):
     return render_to_response(
         'documents/add_edit.html',
         {
+            'document': document,
             'action':'edit',
             'form' : form,
         },
@@ -89,7 +83,8 @@ def edit(request, document_id):
 @login_required
 @csrf_protect
 def edit_index(request):
-    _check_customer(request.user)
+    if not is_company_staff(request.user):
+        return redirect('mypage_home')
     company = request.user.customer_company
     documents = Document.objects.all().filter(company__exact=company)
     return render_to_response(
@@ -101,20 +96,24 @@ def edit_index(request):
     )
 
 def index(request, page=1):
-    documents = get_list_or_404(Document, status=1)
-    paginator = Paginator(documents, settings.DOCUMENTS_PER_PAGE)
-    try:
-        paged_documents = paginator.page(page)
-    except PageNotAnInteger:
-        raise Http404
-    except EmptyPage:
-        raise Http404
+    documents = Document.objects.filter(status=1)
+    paged_documents = None
+    count = None
+    if documents:
+        paginator = Paginator(documents, settings.DOCUMENTS_PER_PAGE)
+        try:
+            paged_documents = paginator.page(page)
+            count = paginator.count
+        except PageNotAnInteger:
+            raise Http404
+        except EmptyPage:
+            raise Http404
 
     return render_to_response(
         'documents/index.html',
         {
             'documents' : paged_documents,
-            'count': paginator.count,
+            'count': count,
         },
         context_instance=RequestContext(request)
     )
@@ -131,7 +130,8 @@ def detail(request, document_id):
 
 @login_required
 def preview(request, document_id):
-    _check_customer(request.user)
+    if not is_company_staff(request.user):
+        return redirect('mypage_home')
     company = request.user.customer_company
     if request.user.is_superuser:
         document = get_object_or_404(Document, pk=document_id)
@@ -180,6 +180,7 @@ def _add_download_log(document, form, user, company ,request):
             discretion =      p.get_discretion_display(),
             # DonwloadForm
             stage =           dict(form.fields['stage'].choices)[ int(form.cleaned_data['stage']) ],
+            # request
             ip =              get_request_addr_or_ip(request),
             ua =              get_request_ua(request),
     )
@@ -251,7 +252,6 @@ def download(request, document_id):
                 log = _add_download_log(document, form, user, company, request)
                 _notify_company_staff(log, request)
                 _add_download_count(document)
-                #messages.add_message(request, messages.SUCCESS, '資料のダウンロードありがとうございました。')
                 return redirect('document_download_complete', id_sign=document.id_sign() )
             elif not request.POST.get('complete'):
                 template_name = 'documents/download_preview.html'
@@ -285,76 +285,28 @@ def download_complete(request, id_sign):
                     context_instance=RequestContext(request)
                 )
 
-def _export_csv(leads):
-    filename = 'trwk-doc-' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S') + '.csv'
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="'+ filename +'"'
-
-    csv_fields = {
-        1  : ('ダウンロード日', 'download_date'),
-        2  : ('資料タイトル',   'document_title'),
-        3  : ('会社名',         'company_name'),
-        4  : ('姓',             'last_name'),
-        5  : ('名',             'first_name'),
-        6  : ('姓（ふりがな）', 'last_name_kana'),
-        7  : ('名（ふりがな）', 'first_name_kana'),
-        8  : ('電話番号',       'tel'),
-        9  : ('FAX',            'fax'),
-        10 : ('郵便番号',       'post_number'),
-        11 : ('都道府県',       'prefecture'),
-        12 : ('住所',           'address'),
-        13 : ('ホームページURL','site_url'),
-        14 : ('部署名',         'department'),
-        15 : ('役職名',         'position'),
-        16 : ('役職区分',       'position_class'),
-        17 : ('業種',           'business_type'),
-        18 : ('職務内容',       'job_content'),
-        19 : ('従業員規模',     'firm_size'),
-        20 : ('年商',           'yearly_sales'),
-        21 : ('立場',           'discretion'),
-        22 : ('状況',           'stage'),
-    }
-    writer = csv.writer(response)
-    head = []
-    first = True
-    csv_encode = 'cp932'
-    for line in leads:
-        items = []
-        for key, field in sorted(csv_fields.items()):
-            label = field[0]
-            name = field[1]
-            if first:
-                head.append(label.encode( csv_encode ))
-            val = getattr(line, name)
-            if isinstance(val, unicode):
-                items.append(val.encode( csv_encode ))
-            elif isinstance(val, long):
-                items.append(str(val))
-            elif isinstance(val, datetime.datetime):
-                #ローカルタイムに変換してる
-                items.append(make_naive(val, get_default_timezone()).strftime('%Y-%m-%d %H:%M:%S') )
-        if first:
-            writer.writerow(head)
-            first = False
-        writer.writerow(items)
-    return response
-
 @login_required
 def download_log(request, page=1, type='list'):
-    _check_customer(request.user)
+    if not is_company_staff(request.user):
+        return redirect('mypage_home')
     user = request.user
     company = user.customer_company
     leads = DocumentDownloadLog.objects
+    filename = 'trwk-doc'
     if 'search' in request.GET:
         form = LeadSearchForm(request.GET)
         if form.is_valid():
             if form.cleaned_data['start_date']:
                 start = datetime.datetime.strptime( str(form.cleaned_data['start_date']),'%Y-%m-%d').replace(tzinfo=timezone.utc)
                 leads = leads.filter(download_date__gte=start)
+                filename = filename + '-' + str(form.cleaned_data['start_date'])+ '^'
             if form.cleaned_data['end_date']:
                 #時刻まで条件に入っているっぽく、前日までしかとれないので+1日
                 end =   datetime.datetime.strptime( str(form.cleaned_data['end_date']),'%Y-%m-%d').replace(tzinfo=timezone.utc) + datetime.timedelta(days=1)
                 leads = leads.filter(download_date__lte=end)
+                if not form.cleaned_data['start_date']:
+                    filename += '-^'
+                filename += str(form.cleaned_data['end_date'])
     else:
         form = LeadSearchForm()
     try:
@@ -376,7 +328,9 @@ def download_log(request, page=1, type='list'):
             context_instance=RequestContext(request)
         )
     elif type == "csv":
-        return _export_csv(leads)
+        csv_fields = DocumentDownloadLog.csv_fields
+        filename += '.csv'
+        return export_csv(leads, csv_fields, filename)
 
 @login_required
 def my_download_history(request):

@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'registration',
     'mypage',
     'contact',
+    'operations',
 )
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
@@ -190,7 +191,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
 DOCUMENTS_PER_PAGE = 5
-SEMINAR_PER_PAGE = 5
+SEMINARS_PER_PAGE = 5
 LOGS_PER_PAGE = 10
 
 AUTH_USER_MODEL = 'accounts.MyUser'
