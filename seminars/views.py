@@ -98,7 +98,7 @@ def index(request, page=1):
     seminars = Seminar.objects.filter(
         status=1,
         entry_status=1,
-        limit_datetime__gt=datetime.datetime.utcnow().replace(tzinfo=utc)
+        limit_datetime__gt=datetime.datetime.utcnow().replace(tzinfo=timezone.utc)
     )
     paged_seminars = None
     count = 0
