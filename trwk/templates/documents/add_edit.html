@@ -1,4 +1,12 @@
 {% extends 'base_mypage.html'%}
+{% block title %}
+{% if action == 'add' %}
+資料の新規追加
+{% else %}
+資料「{{document.title}}」の編集
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
 {% if action == 'add' %}
@@ -11,9 +19,11 @@
 <table>
 {{ form }}
 </table>
-<p>
-<input type="submit" value="保存する">
-</p>
+
+{% with submit_value='保存する'%}
+{% include 'common/form_btn_confirm.html' %}
+{% endwith %}
+
 </form>
 {% if action == 'edit'%}
 <a href="{% url 'document_preview' document_id=document.id%}" target="_blank">プレビュー</a>

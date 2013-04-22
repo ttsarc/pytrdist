@@ -1,7 +1,8 @@
 {% extends 'base.html'%}
+{% block title %}セミナー一覧{% endblock %}
 {% block content %}
 
-<h1>セミナー</h1>
+<h1>セミナー一覧</h1>
 {% for semi in seminars %}
 <div>
     <h2><a href="{% url 'seminar_detail' seminar_id=semi.id %}">{{ semi.title }}</a></h2>

@@ -1,5 +1,12 @@
 {% extends 'base_mypage.html'%}
 {% load static %}
+{% block title %}
+{% if action == 'add' %}
+セミナーの新規追加
+{% else %}
+「{{ seminar.title }}」の編集
+{% endif %}
+{% endblock %}
 
 {%block head_after_link %}
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
@@ -15,9 +22,9 @@
 <table>
 {{ form }}
 </table>
-<p>
-<input type="submit" value="保存する">
-</p>
+{% with submit_value='保存する'%}
+{% include 'common/form_btn_confirm.html' %}
+{% endwith %}
 </form>
 
 {% if action == 'edit'%}

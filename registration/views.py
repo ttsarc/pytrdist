@@ -248,23 +248,26 @@ def register(request, backend, success_url=None, form_class=None,
         form_class = backend.get_form_class(request)
 
     if request.method == 'POST':
-        form = form_class(data=request.POST, files=request.FILES)
+        form = form_class(request.POST)
         if form.is_valid():
-            try:
-                new_user = backend.register(request, **form.cleaned_data)
-            except:
-                #確認メール再送
-                email = form.cleaned_data['email']
-                user = MyUser.objects.get(email=email)
-                profile = RegistrationProfile.objects.filter(user=user.id).order_by('-id')[0]
-                profile.send_activation_email(site = Site.objects.get_current())
-                messages.add_message(request, messages.WARNING, 'すでに送信済みのメールアドレスです。確認メールを再送しましたのでご確認ください')
-            else:
-                if success_url is None:
-                    to, args, kwargs = backend.post_registration_redirect(request, new_user)
-                    return redirect(to, *args, **kwargs)
+            if request.POST.get('complete') == '1':
+                try:
+                    new_user = backend.register(request, **form.cleaned_data)
+                except:
+                    #確認メール再送
+                    email = form.cleaned_data['email']
+                    user = MyUser.objects.get(email=email)
+                    profile = RegistrationProfile.objects.filter(user=user.id).order_by('-id')[0]
+                    profile.send_activation_email(site = Site.objects.get_current())
+                    messages.add_message(request, messages.WARNING, 'すでに送信済みのメールアドレスです。確認メールを再送しましたのでご確認ください')
                 else:
-                    return redirect(success_url)
+                    if success_url is None:
+                        to, args, kwargs = backend.post_registration_redirect(request, new_user)
+                        return redirect(to, *args, **kwargs)
+                    else:
+                        return redirect(success_url)
+            elif not request.POST.get('complete'):
+                template_name='registration/registration_form_confirm.html'
     else:
         form = form_class()
 

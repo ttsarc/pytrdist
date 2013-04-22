@@ -1,10 +1,18 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% block title %}とれわか会員登録{% endblock %}
 
 {% block content %}
+<h1>とれわか会員登録</h1>
+<p>下記のフォームにメールアドレスとパスワードを入力してください。確認のメールが送信されます。</p>
 <form method="post" action="">{% csrf_token %}
-  {{ form.as_p }}
-
-  <input type="submit" value="{% trans 'Submit' %}" />
+<table>
+{{ form }}
+</table>
+{% include 'common/form_btn_confirm.html' %}
 </form>
+{% endblock %}
+
+{% block footer_scripts %}
+{{ block.super }}
+{% include 'common/honeypod.html' %}
 {% endblock %}

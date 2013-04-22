@@ -50,6 +50,7 @@ class Document(models.Model):
     catch =       models.TextField('資料概要（キャッチコピー）', max_length=150)
     detail =      models.TextField('資料詳細説明文', max_length=500, blank=True)
     results =     models.TextField('導入実績', max_length=500, blank=True)
+    download_status = models.SmallIntegerField('ダウンロード状態', choices=DOWNLOAD_STATUS_CHOICES, default=1, help_text='ダウンロード可否')
     status =      models.SmallIntegerField('公開状態', choices=STATUS_CHOICE, default=0)
     add_date =    models.DateTimeField('登録日', auto_now_add=True)
     update_date = models.DateTimeField('更新日', auto_now=True)

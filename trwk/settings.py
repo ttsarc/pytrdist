@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # Django settings for trwk project.
 
 DEBUG = True
@@ -140,6 +141,7 @@ INSTALLED_APPS = (
     'mypage',
     'contact',
     'operations',
+    'sites',
 )
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 

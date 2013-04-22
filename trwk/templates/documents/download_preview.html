@@ -1,5 +1,5 @@
 {% extends 'base.html'%}
-{% block title %}{{ document.title }}{% endblock %}
+{% block title %}{{ document.title }}のプレビュー{% endblock %}
 
 {% block content %}
 <h1>送信内容の確認　{{ document.title }}</h1>
@@ -54,16 +54,10 @@
     </tr>
 {% endfor %}
 </table>
-<p>
-<input type="hidden" name="complete" value="1" />
-<input type="submit" value="修正する" id="back-submit" />
-<input type="submit" value="資料をダウンロード">
-</p>
-<script>
-    $('#back-submit').click(function(){
-        $('input[name=complete]').val(0);
-        return true;
-    });
-</script>
+
+{% with submit_value='資料をダウンロード'%}
+{% include 'common/form_btn_complete.html' %}
+{% endwith %}
+
 </form>
 {% endblock %}

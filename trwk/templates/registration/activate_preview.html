@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block title %}会員情報入力の確認{% endblock %}
 {% block content %}
 
 {% if is_activatable %}
@@ -29,19 +29,14 @@
         </td>
     </tr>
 {% endfor %}
-</table> 
-  <input type="hidden" name="complete" value="1" />
-  <input type="submit" value="修正する" id="back-submit" />
-  <input type="submit" value="登録する" />
-  <input type="hidden" name="next" value="{{ next }}" />
+</table>
+{% with submit_value='登録する'%}
+{% include 'common/form_btn_complete.html' %}
+{% endwith %}
+<input type="hidden" name="next" value="{{ next }}" />
 </form>
 
-<script>
-    $('#back-submit').click(function(){
-        $('input[name=complete]').val(0);
-        return true;
-    });
-</script>
+
 {% else %}
 
 <p>認証に失敗しました</p>

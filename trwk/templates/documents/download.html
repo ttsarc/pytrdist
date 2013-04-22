@@ -1,5 +1,5 @@
 {% extends 'base.html'%}
-{% block title %}{{ document.title }}{% endblock %}
+{% block title %}{{ document.title }}のダウンロード{% endblock %}
 
 {% block content %}
 <h1>{{ document.title }}</h1>
@@ -36,8 +36,8 @@
 <table>
 {{ form }}
 </table>
-<p>
-<input type="submit" value="送信内容の確認">
-</p>
+
+{% include 'common/form_btn_confirm.html' %}
+
 </form>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-
+{% block title %}メールアドレスを変更しました{% endblock %}
 {% block content %}
-{{user.email}}
+<p>新しいメールアドレス：{{user.email}}</p>
 <p>メールアドレスを変更しました</p>
 {% endblock %}

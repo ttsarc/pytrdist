@@ -23,6 +23,7 @@ class CompanyEditform(forms.ModelForm):
     required_css_class = 'required'
     class Meta:
         model = Company
+        exclude = ('slug_name')
 
 class MyUserShowForm(forms.ModelForm):
     class Meta:

@@ -7,6 +7,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.core.mail import send_mail, EmailMessage
 from contact.forms import ContactForm
+from trwk.libs.request_utils import *
 
 def _notify_sender(form_data, request):
     content = render_to_string(
@@ -27,10 +28,23 @@ def _notify_sender(form_data, request):
             to=[form_data['email']],
            )
     mail.send()
+    request_data ={
+        'ip' : get_request_addr_or_ip(request),
+        'ua' : get_request_ua(request),
+    }
+    admin_content = render_to_string(
+        'email/contact_general.txt',
+        {
+            'data' : form_data,
+            'request_data': request_data,
+        },
+        context_instance=RequestContext(request)
+    )
+    subject = 'admin' + subject
     admin_mail = EmailMessage(
-            subject=subject,
-            body=content,
-            from_email=settings.SERVER_EMAIL,
+            subject = subject,
+            body = admin_content,
+            from_email = settings.SERVER_EMAIL,
             to=[settings.CONTACT_EMAIL],
            )
     admin_mail.send()

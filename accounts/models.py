@@ -20,6 +20,7 @@ class CompanyManager(models.Manager):
 class Company(models.Model):
     name =             models.CharField('掲載企業名', max_length=100)
     kana =             models.CharField('掲載企業名（フリガナ）', max_length=100)
+    slug_name =        models.SlugField('スラッグ', blank=True, help_text='CSVのファイル名などに使われます。半角英数字')
     business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES, blank=True, null=True)
     tel =              models.CharField('電話番号', max_length=16,validators=[TelFaxValidaor], help_text='例：03-3343-5746')
     fax =              models.CharField('FAX', max_length=16, validators=[TelFaxValidaor], help_text='例：03-5326-0360')
@@ -202,7 +203,7 @@ class MyUserProfile(models.Model):
     job_content =      models.SmallIntegerField('職務内容', choices=JOB_CONTENT_CHOICES)
     firm_size =        models.SmallIntegerField('従業員数', choices=FIRM_SIZE_CHOICES)
     yearly_sales =     models.SmallIntegerField('年商', choices=YEARLY_SALES_CHOICES)
-    discretion  =      models.SmallIntegerField('あなたはサービス導入の意思決定に、どのような立場で関わっていますか？', choices=DISCRETION_CHOICES)
+    discretion  =      models.SmallIntegerField('あなたの立場', choices=DISCRETION_CHOICES)
     update_date =      models.DateTimeField('更新日', auto_now=True)
 
     def __unicode__(self):

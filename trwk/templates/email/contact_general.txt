@@ -22,5 +22,9 @@ FAX: {{data.fax}}
 お問い合わせ内容:
 {{data.message}}
 
+{% if request_data %}
+host: {{request_data.ip}}
+UserAgent: {{request_data.ua}}
+{% endif %}
 
 {% endblock%}

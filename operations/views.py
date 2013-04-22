@@ -54,10 +54,14 @@ def download_leads(request, log_type, company_id):
     else:
         messages.add_message(request, messages.ERROR, 'log_typeが正しくありません')
         return None
-
+    company = Company.objects.get(pk=company_id)
     csv_fields = log_obj.csv_fields
     leads = log_obj.objects
-    filename = company_id +'-'+ log_type
+    if company.slug_name :
+        filename = company.slug_name
+    else:
+        filename = company_id
+    filename += '-' + log_type
     if 'search' in request.GET:
         form = LeadSearchForm(request.GET)
         if form.is_valid():
@@ -67,7 +71,7 @@ def download_leads(request, log_type, company_id):
                     '{0}__{1}'.format(date_field, 'gte'):start,
                 }
                 leads = leads.filter(**query)
-                filename = filename + '-' + str(form.cleaned_data['start_date'])+ '^'
+                filename += str(form.cleaned_data['start_date'])+ '^'
             if form.cleaned_data['end_date']:
                 #時刻まで条件に入っているっぽく、前日までしかとれないので+1日
                 end =   datetime.datetime.strptime( str(form.cleaned_data['end_date']),'%Y-%m-%d').replace(tzinfo=timezone.utc) + datetime.timedelta(days=1)
@@ -77,14 +81,14 @@ def download_leads(request, log_type, company_id):
                 leads = leads.filter(**query)
                 if not form.cleaned_data['start_date']:
                     filename += '-^'
-                filename = filename + str(form.cleaned_data['end_date'])
+                filename += str(form.cleaned_data['end_date'])
     else:
         form = LeadSearchForm()
+        filename += '-all(' + make_naive(datetime.datetime.utcnow().replace(tzinfo=timezone.utc), get_default_timezone()).strftime('%Y%m%d-%H%M%S') + ')'
 
-    company = Company.objects.get(pk=company_id)
     leads = leads.filter(
         company=company,
     ).order_by(date_field)
-    filename = filename + '.csv'
+    filename += '.csv'
     return export_csv(leads, csv_fields, filename)
 

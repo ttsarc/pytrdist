@@ -4,6 +4,8 @@ from django import forms
 from accounts.validators import TelFaxValidaor
 
 class ContactForm(forms.Form):
+    error_css_class = 'error'
+    required_css_class = 'required'
     TYPE_CHOICES = (
         ('掲載について','掲載について'),
         ('ユーザー登録について','ユーザー登録について'),
@@ -22,6 +24,9 @@ class ContactForm(forms.Form):
     site_url = forms.URLField(label='ホームページURL', required=False)
     message = forms.CharField(label="お問い合わせ内容", max_length=2000, widget=forms.Textarea)
     confirmation = forms.BooleanField(label="利用規約に同意する")
-    error_css_class = 'error'
-    required_css_class = 'required'
+    website = forms.CharField(required=False, label="空のままにしてください（スパム対策）")
+    def clean_website(self):
+        if self.cleaned_data['website']:
+            raise forms.ValidationError("Invalid form")
+        return ''
 

@@ -1,4 +1,5 @@
 {% extends 'base_mypage.html'%}
+{% block title %}登録情報の編集{% endblock %}
 {% block content %}
 {% if request.session.next %}
 <p><a href="{{ request.session.next }}">&laquo;ご利用中のページへ戻る</a></p>

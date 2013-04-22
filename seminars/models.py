@@ -163,7 +163,7 @@ class SeminarEntryLog(models.Model):
                 21 : ('年商',             'yearly_sales'),
                 22 : ('立場',             'discretion'),
                 23 : ('備考',             'note'),
-        }
+    }
 
     def __unicode__(self):
         return self.email

@@ -5,6 +5,7 @@ try:
 except ImportError:
     from django.conf.urls.defaults import *
 from django.views.generic import TemplateView
+from django.conf import settings
 #from accounts.views import mypage_edit_profile, mypage_edit_company, mypage_home
 from django.contrib.auth import views as auth_views
 
@@ -19,6 +20,7 @@ urlpatterns = patterns('',
                            name='auth_logout'),
                        url(r'^password/reset$',
                            auth_views.password_reset,
+                           {'from_email': settings.SERVER_EMAIL },
                            name='auth_password_reset'),
                        url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)$',
                            auth_views.password_reset_confirm,

@@ -59,9 +59,14 @@ class RegistrationForm(forms.Form):
     registration backend.
     
     """
-    email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,maxlength=75)),label=_("E-mail"))
+    email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,maxlength=75)),label='メールアドレス')
     password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),label=_("Password"), validators=[MinLengthValidator(6)])
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),label=_("Password (again)"),validators=[MinLengthValidator(6)] )
+    website = forms.CharField(required=False, label="空のままにしてください（スパム対策）")
+    def clean_website(self):
+        if self.cleaned_data['website']:
+            raise forms.ValidationError("Invalid form")
+        return ''
 
     bad_domains = settings.BAD_EMAIL_DOMAIN
 

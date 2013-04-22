@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}会員登録 送信内容の確認{% endblock %}
+{% block content %}
+<h1>会員登録 送信内容の確認</h1>
+<form method="post" action="">{% csrf_token %}
+
+{% for field in form %}{{ field.as_hidden }}{% endfor %}
+<table>
+    <tr><th>{{ form.email.label }}</th><td>{{ form.email.value }}</td></tr>
+    <tr><th>パスワード：</th><td>入力されたパスワード</td></tr>
+</table>
+
+{% with submit_value='送信する' back_value='修正する'%}
+{% include 'common/form_btn_complete.html' %}
+{% endwith %}
+</form>
+{% endblock %}

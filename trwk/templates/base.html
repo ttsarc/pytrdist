@@ -1,8 +1,8 @@
-{% load static %}<!DOCTYPE html>
+{% load static %}{% load site_extra %}<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}とれわか！{% endblock title%}</title>
+    <title>{% block title_header %}{% endblock %}{% block title %}{% endblock title%}{% block title_footer %} - {% site_name %}{% endblock %}</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <!--<link rel="stylesheet" href="css/XXXX.css" media="all">-->

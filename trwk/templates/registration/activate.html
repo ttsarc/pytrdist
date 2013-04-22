@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-
+{% block title %}会員情報入力{% endblock %}
 {% block content %}
 
 {% if is_activatable %}
-<p>メールアドレスが確認できました。</p>
-<p>下記の情報を入力して下さい。</p>
+<p>とれわか会員登録の申し込みありがとうございます。</p>
+<p>下記の情報を入力すると登録が完了いたします。</p>
 <form action="" method="post">{% csrf_token %}
 <table>
 <tr>
@@ -13,7 +13,7 @@
 {{ form }}
 </table>
   <div class="">利用規約テキスト</div>
-  <input type="submit" value="確認する" />
+{% include 'common/form_btn_confirm.html' %}
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
 

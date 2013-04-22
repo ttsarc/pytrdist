@@ -1,5 +1,5 @@
 {% extends 'base.html'%}
-{% block title %}{{ seminar.title }}{% endblock %}
+{% block title %}セミナー参加申し込み - {{ seminar.title }}{% endblock %}
 
 {% block content %}
 <h1>{{ seminar.title }}</h1>
@@ -36,8 +36,8 @@
 <table>
 {{ form }}
 </table>
-<p>
-<input type="submit" value="送信内容の確認">
-</p>
+
+{% include 'common/form_btn_confirm.html' %}
+
 </form>
 {% endblock %}

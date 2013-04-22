@@ -1,0 +1,9 @@
+<input type="hidden" name="complete" value="1" />
+<input type="submit" value="{{back_value | default:'修正する'}}" id="back-submit" />
+<input type="submit" value="{{submit_value | default:'送信'}}">
+<script>
+    $('#back-submit').click(function(){
+        $('input[name=complete]').val(0);
+        return true;
+    });
+</script>
