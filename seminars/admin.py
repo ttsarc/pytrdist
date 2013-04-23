@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from seminars.models import Seminar,SeminarEntryLog, SeminarEntryUser
-class SeminarAdmin(admin.ModelAdmin):
+from sorl.thumbnail.admin import AdminImageMixin
+
+class SeminarAdmin(admin.ModelAdmin, AdminImageMixin):
     list_display = ('title', 'company', 'user', 'add_date', 'update_date' )
 
 admin.site.register(Seminar, SeminarAdmin)

@@ -6,6 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import ugettext, ugettext_lazy as _
 from accounts.models import MyUser,MyUserProfile, Company
+from sorl.thumbnail.admin import AdminImageMixin
 
 class MyUserCreationForm(forms.ModelForm):
     """
@@ -112,7 +113,7 @@ class MyUserAdmin(UserAdmin):
             'classes': ('wide',),
             'fields': (
                 'email',
-                'password1', 
+                'password1',
                 'password2',
                 'username',
                 'customer_company',
@@ -130,6 +131,6 @@ class MyUserAdmin(UserAdmin):
 
 admin.site.register(MyUser, MyUserAdmin)
 
-class CompanyAdmin(admin.ModelAdmin):
+class CompanyAdmin(admin.ModelAdmin, AdminImageMixin):
     pass
 admin.site.register(Company, CompanyAdmin)

@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{% load thumbnail %}
 {% block title %}セミナー一覧{% endblock %}
 {% block content %}
 
@@ -8,6 +9,11 @@
     <h2><a href="{% url 'seminar_detail' seminar_id=semi.id %}">{{ semi.title }}</a></h2>
     <div>{{ semi.catch }}</div>
     <div><a href="{% url 'seminar_entry' seminar_id=semi.id %}">申し込む</a></div>
+    {% if semi.thumb_file %}
+    {% thumbnail semi.thumb_file "200" as img %}
+    <img src="{{ img.url }}" height="{{ img.height}}" width="{{img.width}}">
+    {% endthumbnail %}
+    {% endif %}
 </div>
 {% endfor %}
 <div>全{{ count|intcomma }}件</div>

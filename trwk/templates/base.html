@@ -15,7 +15,7 @@
 <body>
 {% block header %}
 {% if user.is_authenticated %}
-    ログイン中:{{ user.email }} 
+    ログイン中:{{ user.email }}
     <a href="{% url 'mypage_home' %}">マイページ</a>
     <a href="{% url 'auth_logout' %}">ログアウト</a>
     {% if user.customer_company %}
@@ -29,8 +29,9 @@
     <li><a href="{% url 'home'%}">HOME</a></li>
     <li><a href="{% url 'document_index'%}">資料一覧</a></li>
     <li><a href="{% url 'seminar_index'%}">セミナー一覧</a></li>
+    <li><a href="{% url 'company_index'%}">掲載企業一覧</a></li>
     <li><a href="{% url 'contact'%}">お問い合わせ</a></li>
-    <li><a href="{% url 'admin:index' %}">管理画面</a></li>
+    {% if admin %}<li><a href="{% url 'admin:index' %}">管理画面</a></li>{% endif%}
 </ul>
 {% endblock header %}
 

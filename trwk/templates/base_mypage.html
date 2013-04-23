@@ -29,7 +29,7 @@
 </ul>
 {% endif%}
 
-{% if request.user.is_superuser %}
+{% if admin %}
 <h3>管理者メニュー</h3>
 <ul>
     <li><a href="{% url "operation_company_leads"%}">顧客リード取得</a></li>

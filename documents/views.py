@@ -309,6 +309,7 @@ def download_log(request, page=1, type='list'):
                 filename += str(form.cleaned_data['end_date'])
     else:
         form = LeadSearchForm()
+        filename += '-all(' + timezone.make_naive(datetime.datetime.utcnow().replace(tzinfo=timezone.utc), timezone.get_default_timezone()).strftime('%Y%m%d-%H%M%S') + ')'
     try:
         leads = leads.filter(
             company=company,

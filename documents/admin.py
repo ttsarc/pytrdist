@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from documents.models import Document,DocumentDownloadLog, DocumentDownloadCount, DocumentDownloadUser
-class DocumentAdmin(admin.ModelAdmin):
+from sorl.thumbnail.admin import AdminImageMixin
+
+class DocumentAdmin(admin.ModelAdmin, AdminImageMixin):
     list_display = ('title', 'company', 'user', 'add_date', 'update_date' )
 
 admin.site.register(Document, DocumentAdmin)

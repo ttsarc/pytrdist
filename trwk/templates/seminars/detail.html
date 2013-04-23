@@ -1,4 +1,6 @@
 {% extends 'base.html'%}
+{% load thumbnail %}
+
 {% block title %}{{ seminar.title }}{% endblock %}
 
 {% block content %}
@@ -12,6 +14,10 @@
     {% endif%}
 {% endif %}
 <h1>{{ seminar.title }}</h1>
+{% thumbnail seminar.thumb_file "300" as img %}
+    <img src="{{ img.url }}">
+{% endthumbnail %}
+
 <div>{{ seminar.catch }}</div>
 <div>現在の申し込み数: {{ entry_count }}/ {{ seminar.limit_number }}</div>
 {% if is_entered %}

@@ -4,7 +4,7 @@ Views which edit user accounts
 
 """
 from django import forms
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import redirect, render_to_response, get_object_or_404, get_list_or_404
 from django.template import RequestContext
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
@@ -17,6 +17,8 @@ from registration.models import RegistrationProfile, ChangeEmailProfile
 from accounts.forms import MyUserProfileEditForm, CompanyEditform
 from accounts.models import MyUserProfile, Company
 from trwk.libs.request_utils import set_next_url
+from documents.models import Document
+from seminars.models import Seminar
 
 @login_required
 def mypage_home(request):
@@ -72,3 +74,27 @@ def mypage_edit_company(request):
         context_instance=RequestContext(request)
     )
 
+def company_detail(request, company_id):
+    company = get_object_or_404(Company, pk=company_id, status=1)
+
+    documents = Document.objects.filter(company=company_id).order_by('-update_date')[0:10]
+    seminars = Seminar.objects.filter(company=company.id).order_by('-update_date')[0:10]
+    return render_to_response(
+        'accounts/company_detail.html',
+        {
+            'company' : company,
+            'documents' : documents,
+            'seminars' : seminars,
+        },
+        context_instance=RequestContext(request)
+    )
+
+def company_index(request):
+    companies = get_list_or_404(Company.objects.order_by('pk'), status=1)
+    return render_to_response(
+        'accounts/company_index.html',
+        {
+            'companies' : companies,
+        },
+        context_instance=RequestContext(request)
+    )

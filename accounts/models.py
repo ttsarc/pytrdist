@@ -13,6 +13,7 @@ from accounts.choices import *
 from accounts.validators import TelFaxValidaor, PostNumberValidaor
 from trwk.libs.fields import ImageWithThumbsField
 from trwk.libs.file_utils import normalize_filename
+from sorl.thumbnail import ImageField
 
 class CompanyManager(models.Manager):
     pass
@@ -36,6 +37,7 @@ class Company(models.Model):
     capital =          models.CharField('資本金', max_length=30)
     yearly_sales =     models.CharField('年商', max_length=30, blank=True)
     listing =          models.CharField('上場有無', max_length=30, blank=True)
+    status =           models.SmallIntegerField('公開状態', choices=STATUS_CHOICES, default=1, help_text='非公開にすると掲載企業一覧で表示されなくなります')
 
     def get_logo_uplod_path(self, filename):
         filename = normalize_filename(filename)
@@ -43,9 +45,8 @@ class Company(models.Model):
         user_path = os.path.join(root_path, str(self.pk))
         return os.path.join(user_path, filename)
 
-    logo_file = ImageWithThumbsField(
+    logo_file = ImageField(
         verbose_name = '企業ロゴ',
-        sizes = ((160,160),),
         upload_to = get_logo_uplod_path,
         blank = True
     )

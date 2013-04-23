@@ -1,0 +1,24 @@
+{% extends 'base_mypage.html'%}
+{% block title %}{{ company.name}} - 掲載企業詳細{% endblock %}
+{% block content %}
+<h1>{{ company.name}}  掲載企業詳細</h1>
+
+{% if documents %}
+<h2>{{ company.name}}の資料</h2>
+<ul>
+{% for d in documents %}
+    <li><a href="{% url 'document_detail' document_id=d.id%}">{{d.title}}</a></li>
+{% endfor%}
+</ul>
+{% endif%}
+
+{% if seminars %}
+<h2>{{ company.name}}のセミナー</h2>
+<ul>
+{% for s in seminars %}
+    <li><a href="{% url 'seminar_detail' seminar_id=s.id%}">{{s.title}}</a></li>
+{% endfor%}
+</ul>
+{% endif%}
+{% endblock %}
+

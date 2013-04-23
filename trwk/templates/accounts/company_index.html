@@ -1,0 +1,11 @@
+{% extends 'base_mypage.html'%}
+{% block title %}掲載企業一覧{% endblock %}
+{% block content %}
+<h1>掲載企業一覧</h1>
+<ul>
+{% for c in companies %}
+    <li><a href="{% url 'company_detail' company_id=c.id%}">{{c.name}}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
+

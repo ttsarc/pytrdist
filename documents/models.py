@@ -9,6 +9,7 @@ from accounts.models import Company
 from documents.choices import *
 from trwk.libs.fields import ImageWithThumbsField, ContentTypeRestrictedFileField
 from trwk.libs.file_utils import normalize_filename
+from sorl.thumbnail import ImageField
 
 class DocumentManager(models.Manager):
     pass
@@ -37,9 +38,8 @@ class Document(models.Model):
         user_path = os.path.join(root_path, str(self.company.pk), time.strftime('%Y/%m'))
         return os.path.join(user_path, filename)
 
-    thumb_file = ImageWithThumbsField(
+    thumb_file = ImageField(
         verbose_name = 'サムネイル画像',
-        sizes = ((200,200),),
         upload_to = get_thumb_uplod_path,
         blank = True
     )

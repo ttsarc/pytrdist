@@ -17,7 +17,7 @@ class DocumentForm(forms.ModelForm):
 class DownloadForm(forms.Form):
     error_css_class = 'error'
     required_css_class = 'required'
-    stage = forms.ChoiceField(label='今回ダウンロードされる資料について現在のご状況をお聞かせ下さい',choices=STAGE_CHOICE, widget=RadioSelect)
+    stage = forms.ChoiceField(label='現在のご状況',choices=STAGE_CHOICE, widget=RadioSelect)
     confirmation = forms.BooleanField(label="規約に同意する")
 
 

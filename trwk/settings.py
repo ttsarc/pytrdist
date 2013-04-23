@@ -1,7 +1,8 @@
 # -*- encoding: utf-8 -*-
 # Django settings for trwk project.
 
-DEBUG = True
+DEBUG = False
+ADMIN = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -131,16 +132,18 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.admin',
+    #'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     #'django.contrib.admindocs',
+    #'gunicorn',
+    'sorl.thumbnail',
     'accounts',
     'documents',
     'seminars',
     'registration',
     'mypage',
     'contact',
-    'operations',
+    #'operations',
     'sites',
 )
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

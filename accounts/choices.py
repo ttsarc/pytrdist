@@ -140,3 +140,8 @@ PREFECTURES_CHOICES =(
     (47,'沖縄県'),
     (48,'海外'),
 )
+
+STATUS_CHOICES = (
+    (0, '非公開'),
+    (1, '公開'),
+)

@@ -11,6 +11,7 @@ from seminars.choices import *
 from accounts.choices import PREFECTURES_CHOICES
 from trwk.libs.fields import ImageWithThumbsField
 from trwk.libs.file_utils import normalize_filename
+from sorl.thumbnail import ImageField
 
 class SeminarManager(models.Manager):
     pass
@@ -25,9 +26,8 @@ class Seminar(models.Model):
         user_path = os.path.join(root_path, str(self.company.pk), time.strftime('%Y/%m'))
         return os.path.join(user_path, filename)
 
-    thumb_file = ImageWithThumbsField(
+    thumb_file = ImageField(
         verbose_name = 'イメージ画像',
-        sizes = ((200,200),),
         upload_to = get_thumb_uplod_path,
         blank = True
     )
@@ -45,7 +45,7 @@ class Seminar(models.Model):
     expenses =           models.CharField('費用', max_length=50, help_text='例：5,000円')
     place_name=          models.CharField('会場名', max_length=100, help_text='例：新宿センタービル')
     prefecture =         models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES)
-    address =            models.CharField('会場住所', max_length=100)
+    address =            models.CharField('会場住所', max_length=255)
     place_url =          models.URLField('会場に関するURL',blank=True, help_text='施設のサイトURL、GoogleマップのURL等')
     limit_number =       models.IntegerField('申し込み上限数', help_text='半角数字でご入力ください。システムで利用する数字です。申し込み数がこの数に達すると満員となり、申し込みができなくなります。')
     limit_datetime =     models.DateTimeField('申し込み終了時間', blank=True, help_text='この時刻を過ぎると申し込みができなくなります。')
