@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{% load thumbnail %}
 {% block title %}{{ document.title }}{% endblock %}
 
 {% block content %}
@@ -13,5 +14,20 @@
 {% endif %}
 <h1>{{ document.title }}</h1>
 <div>{{ document.catch }}</div>
+
+{% if document.thumb_file %}
+    thumb_file
+    {% thumbnail document.thumb_file "200" as img %}
+    <img src="{{ img.url }}" height="{{ img.height}}" width="{{img.width}}">
+    {% endthumbnail %}
+{% endif %}
+
+{% if 0 %}
+    pdf_file
+    {% thumbnail document.pdf_file "200" as img %}
+    <img src="{{ img.url }}" height="{{ img.height}}" width="{{img.width}}">
+    {% endthumbnail %}
+{% endif %}
+
 <div><a href="{% url 'document_download' document_id=document.id %}">ダウンロード</a></div>
 {% endblock %}

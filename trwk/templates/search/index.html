@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+{% load search_extra %}
+{% block title %}検索{% endblock %}
+{% block content %}
+<h1>検索</h1>
+<form action="" method="get">
+{{ form.keyword }}
+<input type="submit" value="検索">
+</form>
+
+
+{% for item in results %}
+    <li>
+    {%if item|to_class_name == 'Document'%}
+    <a href="{%url 'document_detail' document_id=item.pk %}">資料：{{item.title}}({{item.company}})</a>
+    {% elif item|to_class_name == 'Seminar'%}
+    <a href="{%url 'seminar_detail' seminar_id=item.pk %}">セミナー：{{item.title}}{{item.company}}</a>
+    {% endif%}
+    </li>
+{% empty %}
+見つかりませんでした
+{% endfor %}
+{% endblock %}
+

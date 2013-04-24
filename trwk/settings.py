@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     'contact',
     #'operations',
     'sites',
+    'search',
 )
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
@@ -249,6 +250,9 @@ BAD_EMAIL_DOMAIN = [
     #'gmail.com',
     'hotmail.com',
 ]
+
+THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
+THUMBNAIL_DEBUG = False
 
 from django import template
 template.add_to_builtins('django.contrib.humanize.templatetags.humanize')
