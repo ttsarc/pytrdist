@@ -32,6 +32,10 @@ class Command(BaseCommand):
                 semi.catch,
                 semi.detail,
                 semi.target,
+                semi.promoter,
+                semi.place_name,
+                semi.address,
+                semi.get_category_display(),
             )
             text = ' '.join( sorce.encode('utf-8') for sorce in text_sorces )
             search, created = Search.objects.get_or_create(model='Seminar', model_pk=semi.pk)

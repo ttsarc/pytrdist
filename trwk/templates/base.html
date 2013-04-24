@@ -48,7 +48,17 @@
 {% block content %}{% endblock%}
 {% block content_after %}{% endblock%}
 
-{% block sidebar %}{% endblock sidebar %}
+{% block sidebar %}
+<h3>さいどばー</h3>
+{% load search_extra %}
+<div class="search-form">
+<form method="get" action="{% url 'search_index'%}">
+検索：{% search_form %}
+
+<input type="submit" value="検索">
+</form>
+</div>
+{% endblock sidebar %}
 
 {% block footer %}{% endblock footer %}
 
