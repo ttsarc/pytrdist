@@ -16,7 +16,7 @@ class SeminarForm(forms.ModelForm):
     required_css_class = 'required'
     class Meta:
         model = Seminar
-        exclude = ('user', 'company')
+        exclude = ('user', 'company', 'notable_rank')
 
 class EntryForm(forms.Form):
     error_css_class = 'error'

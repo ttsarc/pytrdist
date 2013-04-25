@@ -44,16 +44,17 @@ class Document(models.Model):
         blank = True
     )
 
-    category =    models.CharField('サービスカテゴリ', max_length=16, choices=SERVICE_CHOICES)
-    target_type = models.CharField('対象業種', max_length=16,choices=TARGET_TYPE_CHOICE)
-    target_size = models.CharField('対象会社規模', max_length=16, choices=TARGET_SIZE_CHOICE)
-    catch =       models.TextField('資料概要（キャッチコピー）', max_length=150)
-    detail =      models.TextField('資料詳細説明文', max_length=500, blank=True)
-    results =     models.TextField('導入実績', max_length=500, blank=True)
+    category =        models.CharField('サービスカテゴリ', max_length=16, choices=SERVICE_CHOICES)
+    target_type =     models.CharField('対象業種', max_length=16,choices=TARGET_TYPE_CHOICE)
+    target_size =     models.CharField('対象会社規模', max_length=16, choices=TARGET_SIZE_CHOICE)
+    catch =           models.TextField('資料概要（キャッチコピー）', max_length=150)
+    detail =          models.TextField('資料詳細説明文', max_length=500, blank=True)
+    results =         models.TextField('導入実績', max_length=500, blank=True)
     download_status = models.SmallIntegerField('ダウンロード状態', choices=DOWNLOAD_STATUS_CHOICES, default=1, help_text='ダウンロード可否')
-    status =      models.SmallIntegerField('公開状態', choices=STATUS_CHOICE, default=0)
-    add_date =    models.DateTimeField('登録日', auto_now_add=True)
-    update_date = models.DateTimeField('更新日', auto_now=True)
+    notable_rank =    models.SmallIntegerField('注目ランク', default=0, help_text='注目用。0で非表示、大きい方が上に出ます。0～32767')
+    status =          models.SmallIntegerField('公開状態', choices=STATUS_CHOICE, default=0)
+    add_date =        models.DateTimeField('登録日', auto_now_add=True)
+    update_date =     models.DateTimeField('更新日', auto_now=True)
 
     objects = DocumentManager()
 

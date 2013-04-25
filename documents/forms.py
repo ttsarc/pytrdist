@@ -12,7 +12,7 @@ class DocumentForm(forms.ModelForm):
     required_css_class = 'required'
     class Meta:
         model = Document
-        exclude = ('user', 'company','download_status')
+        exclude = ('user', 'company','download_status', 'notable_rank')
 
 class DownloadForm(forms.Form):
     error_css_class = 'error'
