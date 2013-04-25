@@ -8,4 +8,3 @@ trwk/local_settings.py
 *.zip
 *.gz
 trwk/media
-trwk/static

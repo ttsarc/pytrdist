@@ -15,7 +15,7 @@ class DocumentManager(models.Manager):
     pass
 
 class Document(models.Model):
-    title =       models.CharField('タイトル', max_length=40)
+    title =       models.CharField('タイトル', max_length=80)
     user =        models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作成ユーザー', null=True, on_delete=models.SET_NULL)
     company =     models.ForeignKey(Company, verbose_name='掲載企業')
     def get_pdf_uplod_path(self, filename):
@@ -110,41 +110,41 @@ class DocumentDownloadLogManager(models.Manager):
     pass
 
 class DocumentDownloadLog(models.Model):
-    download_date =    models.DateTimeField('ダウンロード日', auto_now_add=True)
+    download_date =   models.DateTimeField('ダウンロード日', auto_now_add=True)
     # Document
-    document_id =      models.IntegerField(verbose_name='資料ID', null=True, blank=True)
-    document_title =   models.CharField('資料タイトル', max_length=255)
+    document_id =     models.IntegerField(verbose_name='資料ID', null=True, blank=True)
+    document_title =  models.CharField('資料タイトル', max_length=255)
     # Company
-    company =          models.ForeignKey(Company, verbose_name='掲載企業', null=True, blank=True, on_delete=models.SET_NULL)
+    company =         models.ForeignKey(Company, verbose_name='掲載企業', null=True, blank=True, on_delete=models.SET_NULL)
     # MyUser
-    user_id =          models.IntegerField(verbose_name='ユーザーID', null=True, blank=True)
-    email =            models.CharField('メールアドレス', max_length=255)
+    user_id =         models.IntegerField(verbose_name='ユーザーID', null=True, blank=True)
+    email =           models.CharField('メールアドレス', max_length=255)
     # MyUserProfile
-    last_name =        models.CharField('姓', max_length=64)
-    first_name =       models.CharField('名', max_length=64)
-    last_name_kana =   models.CharField('姓（ふりがな）', max_length=64)
-    first_name_kana =  models.CharField('名（ふりがな）', max_length=64)
-    company_name =     models.CharField('会社名', max_length=255)
-    tel =              models.CharField('電話番号', max_length=20)
-    fax =              models.CharField('FAX', max_length=20, blank=True)
-    post_number =      models.CharField('郵便番号', max_length=7)
-    prefecture =       models.CharField('都道府県', max_length=16)
-    address =          models.CharField('住所', max_length=255)
-    site_url =         models.CharField('ホームページURL', max_length=255, blank=True)
-    department =       models.CharField('部署名', max_length=255)
-    position =         models.CharField('役職名', max_length=255, blank=True)
-    position_class =   models.CharField('役職区分', max_length=64)
-    business_type =    models.CharField('業種', max_length=64)
-    job_content =      models.CharField('職務内容', max_length=64)
-    firm_size =        models.CharField('従業員規模', max_length=64)
-    yearly_sales =     models.CharField('年商', max_length=64)
-    discretion =       models.CharField('立場', max_length=255)
+    last_name =       models.CharField('姓', max_length=64)
+    first_name =      models.CharField('名', max_length=64)
+    last_name_kana =  models.CharField('姓（ふりがな）', max_length=64)
+    first_name_kana = models.CharField('名（ふりがな）', max_length=64)
+    company_name =    models.CharField('会社名', max_length=255)
+    tel =             models.CharField('電話番号', max_length=20)
+    fax =             models.CharField('FAX', max_length=20, blank=True)
+    post_number =     models.CharField('郵便番号', max_length=7)
+    prefecture =      models.CharField('都道府県', max_length=16)
+    address =         models.CharField('住所', max_length=255)
+    site_url =        models.CharField('ホームページURL', max_length=255, blank=True)
+    department =      models.CharField('部署名', max_length=255)
+    position =        models.CharField('役職名', max_length=255, blank=True)
+    position_class =  models.CharField('役職区分', max_length=64)
+    business_type =   models.CharField('業種', max_length=64)
+    job_content =     models.CharField('職務内容', max_length=64)
+    firm_size =       models.CharField('従業員規模', max_length=64)
+    yearly_sales =    models.CharField('年商', max_length=64)
+    discretion =      models.CharField('立場', max_length=255)
     # DonwloadForm
-    stage =            models.CharField('状況', max_length=255)
+    stage =           models.CharField('状況', max_length=255)
 
     # Other
-    ip =               models.CharField('IPアドレス', max_length=64, blank=True)
-    ua=                models.CharField('ユーザーエージェント', max_length=256, blank=True)
+    ip =              models.CharField('IPアドレス', max_length=64, blank=True)
+    ua=               models.CharField('ユーザーエージェント', max_length=256, blank=True)
 
     objects = DocumentDownloadLogManager()
 

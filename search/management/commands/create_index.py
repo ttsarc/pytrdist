@@ -4,9 +4,16 @@ from documents.models import Document
 from seminars.models import Seminar
 from search.models import Search
 from search.libs import mecab_separate
+from django.db import connection
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
+        #reset table
+        search = Search.objects.all()
+        search.delete()
+        cursor = connection.cursor()
+        table_name = Search._meta.db_table
+        cursor.execute('ALTER TABLE '+ str(table_name) +' AUTO_INCREMENT = 1;')
         #Document
         docs = Document.objects.all()
         for doc in docs:
