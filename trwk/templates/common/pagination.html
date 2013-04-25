@@ -1,0 +1,10 @@
+{% if items_total > 0 %}
+{% load bootstrap_pagination %}
+
+全 {{ items_total|intcomma }} 件
+<div>{{ items.number }} / {{ items.paginator.num_pages }} ページ</div>
+{% if items.paginator.num_pages > 1 %}
+{% bootstrap_paginate items previous_label='&laquo前のページ' next_label='次のページ&raquo' first_label='1' last_label='最後'%}
+{% endif %}
+
+{% endif %}

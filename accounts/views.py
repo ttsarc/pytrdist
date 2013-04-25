@@ -16,7 +16,7 @@ from registration.backends import get_backend
 from registration.models import RegistrationProfile, ChangeEmailProfile
 from accounts.forms import MyUserProfileEditForm, CompanyEditform
 from accounts.models import MyUserProfile, Company
-from trwk.libs.request_utils import set_next_url
+from trwk.libs.request_utils import set_next_url, get_next_url
 from documents.models import Document
 from seminars.models import Seminar
 
@@ -33,15 +33,19 @@ def mypage_home(request):
 def mypage_edit_profile(request):
     user_pk = request.user.pk
     current_profile = MyUserProfile.objects.get(myuser=user_pk)
+    set_next_url(request)
     if request.method == 'POST':
         form = MyUserProfileEditForm(request.POST, instance=current_profile)
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.SUCCESS, 'ユーザー情報の変更に成功しました')
-            return redirect('mypage_home')
+            if get_next_url(request):
+                return redirect(get_next_url(request))
+            else:
+                return redirect('mypage_home')
     else:
         form = MyUserProfileEditForm(instance=current_profile)
-    set_next_url(request)
+
     return render_to_response(
         'accounts/edit_profile.html',
         {

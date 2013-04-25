@@ -14,6 +14,12 @@ def get_request_ua(request):
         return ua[0:255]
     return 'none'
 
+def get_next_url(request):
+    if 'next' in request.session and request.session['next']:
+        return request.session['next']
+    else:
+        return False
+
 def set_next_url(request):
     if 'next' in request.GET and request.GET['next'][0] == '/' and request.GET['next'][1] != '/':
         request.session['next'] = urlquote(request.GET['next'])

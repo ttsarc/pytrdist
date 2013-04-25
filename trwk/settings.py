@@ -132,10 +132,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    #'django.contrib.admindocs',
-    #'gunicorn',
     'sorl.thumbnail',
     'accounts',
     'documents',
@@ -143,9 +139,11 @@ INSTALLED_APPS = (
     'registration',
     'mypage',
     'contact',
-    #'operations',
     'sites',
     'search',
+    'icybackup',
+    'bootstrap-pagination',
+    'blog',
 )
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
@@ -196,6 +194,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.request',
 )
+ITEMS_PER_PAGE = 5
 DOCUMENTS_PER_PAGE = 5
 SEMINARS_PER_PAGE = 5
 LOGS_PER_PAGE = 10

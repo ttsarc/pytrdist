@@ -20,7 +20,6 @@ class DownloadForm(forms.Form):
     stage = forms.ChoiceField(label='現在のご状況',choices=STAGE_CHOICE, widget=RadioSelect)
     confirmation = forms.BooleanField(label="規約に同意する")
 
-
 class LeadSearchForm(forms.Form):
     date_format = ['%Y/%m/%d', '%Y-%m-%d',]
     start_date = forms.DateField(label='開始', input_formats=date_format, required=False)

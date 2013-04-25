@@ -17,7 +17,7 @@ class Search(models.Model):
         return str(self.model) + ' ' + str(self.model_pk)
 
     class Meta:
-        verbose_name = "フリーワード検索対象"
-        verbose_name_plural = "フリーワード検索対象"
+        verbose_name = "検索用データ"
+        verbose_name_plural = "検索用データ"
         ordering = ['-update_date']
         unique_together = (("model", "model_pk"),)

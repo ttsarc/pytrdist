@@ -20,5 +20,8 @@
 <li>見つかりませんでした</li>
 {% endfor %}
 </ul>
+
+{% include 'common/pagination.html' with items=results items_total=count %}
+
 {% endblock %}
 

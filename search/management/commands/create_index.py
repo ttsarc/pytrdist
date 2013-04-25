@@ -1,9 +1,10 @@
 # -*- encoding: utf-8 -*-
 from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
 from documents.models import Document
 from seminars.models import Seminar
 from search.models import Search
-from search.libs import mecab_separate
+from search.libs import mecab_separate, update_document_search_data, update_seminar_search_data
 from django.db import connection
 
 class Command(BaseCommand):
@@ -13,41 +14,15 @@ class Command(BaseCommand):
         search.delete()
         cursor = connection.cursor()
         table_name = Search._meta.db_table
-        cursor.execute('ALTER TABLE '+ str(table_name) +' AUTO_INCREMENT = 1;')
+        cursor.execute('ALTER TABLE ' + table_name + ' AUTO_INCREMENT = 1;')
         #Document
         docs = Document.objects.all()
         for doc in docs:
-            text_sorces = (
-                doc.title,
-                str(doc.company),
-                doc.catch,
-                doc.detail,
-                doc.results,
-            )
-            text = ' '.join( sorce.encode('utf-8') for sorce in text_sorces )
-            search, created = Search.objects.get_or_create(model='Document', model_pk=doc.pk)
-            search.text = mecab_separate(text)
-            search.update_date = doc.update_date
-            search.status = doc.status
-            search.save()
+            print( str(doc) )
+            update_document_search_data(doc)
         #Seminar
         semis = Seminar.objects.all()
         for semi in semis:
-            text_sorces = (
-                semi.title,
-                str(semi.company),
-                semi.catch,
-                semi.detail,
-                semi.target,
-                semi.promoter,
-                semi.place_name,
-                semi.address,
-                semi.get_category_display(),
-            )
-            text = ' '.join( sorce.encode('utf-8') for sorce in text_sorces )
-            search, created = Search.objects.get_or_create(model='Seminar', model_pk=semi.pk)
-            search.text = mecab_separate(text)
-            search.update_date = semi.update_date
-            search.status = semi.status
-            search.save()
+            print( str(semi) )
+            update_seminar_search_data(semi)
 
