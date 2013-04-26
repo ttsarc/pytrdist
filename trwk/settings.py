@@ -195,9 +195,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
 ITEMS_PER_PAGE = 5
+POSTS_PER_PAGE = 5
 DOCUMENTS_PER_PAGE = 5
 SEMINARS_PER_PAGE = 5
 LOGS_PER_PAGE = 10
+
+#Postの記事内に埋め込むサムネイルサイズ
+POST_THUMBNAIL_SIZE ='240x240'
 
 AUTH_USER_MODEL = 'accounts.MyUser'
 AUTH_PROFILE_MODULE = 'accounts.MyUserProfile'

@@ -1,0 +1,11 @@
+{% extends 'base.html'%}
+{% load thumbnail %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+{% autoescape off %}
+<div>{{ post.content_with_img | linebreaks  }}</div>
+{% endautoescape %}
+
+{% endblock %}

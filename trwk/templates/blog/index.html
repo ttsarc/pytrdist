@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% block title %}お知らせ一覧{% endblock %}
+{% block content %}
+
+<h1>お知らせ一覧</h1>
+{% for post in posts %}
+<div>
+    <h2><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h2>
+    <div>{{ post.content|striptags|truncatechars:200 }}</div>
+    <div>{{ post.update_date }}</div>
+</div>
+{% empty %}
+見つかりません
+{% endfor %}
+
+{% include 'common/pagination.html' with items=posts items_total=count %}
+
+{% endblock %}

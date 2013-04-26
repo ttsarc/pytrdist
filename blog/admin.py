@@ -5,8 +5,9 @@ from sorl.thumbnail.admin import AdminImageMixin
 from accounts.models import MyUser
 
 class PostAdmin(admin.ModelAdmin, AdminImageMixin):
-    list_display = ('title', 'date', 'status', )
-
+    list_display = ('title', 'update_date', 'status', 'author', )
+    search_fields = ('title', 'content')
+    raw_id_fields = ('main_img', 'img',)
     #http://djangosnippets.org/snippets/1558/
     def get_form(self, request, obj=None):
         form = super(PostAdmin,self).get_form(request, obj)
@@ -23,7 +24,7 @@ class PostCategoryAdmin(admin.ModelAdmin, AdminImageMixin):
 admin.site.register(PostCategory, PostCategoryAdmin)
 
 class PostImageAdmin(admin.ModelAdmin, AdminImageMixin):
-    list_display = ('alt',)
+    list_display = ('title',)
 
 admin.site.register(PostImage, PostImageAdmin)
 

@@ -2,20 +2,8 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 from django.conf import settings
 
-# Uncomment the next two lines to enable the admin:
-
-
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'trwk.views.home', name='home'),
-    # url(r'^trwk/', include('trwk.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^$',          TemplateView.as_view(template_name='base.html'), name='home'),
-    #url(r'^admin/',     include(admin.site.urls)),
     url(r'^accounts/',  include('registration.backends.default.urls')),
     url(r'^accounts/',  include('accounts.urls')),
     url(r'^company/',   include('accounts.company_urls')),
@@ -24,7 +12,7 @@ urlpatterns = patterns('',
     url(r'^seminars/',  include('seminars.urls')),
     url(r'^contact/',   include('contact.urls')),
     url(r'^search/',    include('search.urls')),
-    #url(r'^operations/',include('operations.urls')),
+    url(r'^blog/',      include('blog.urls')),
 )
 
 if settings.DEBUG:

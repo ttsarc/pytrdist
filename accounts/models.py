@@ -102,7 +102,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         unique=True,
         db_index=True,
     )
-    username =         models.CharField('ユーザー名', max_length=30, blank=True, help_text="システム内のファイル名等で使われます。半角英数字で入力してください（オプション）",validators=[validate_slug])
+    username =         models.CharField('ユーザー名', max_length=30, blank=True, help_text="システム内で使われます。半角英数字",validators=[validate_slug])
     is_active =        models.BooleanField('有効', default=True)
     is_admin =         models.BooleanField('管理者', default=False)
     is_staff =         models.BooleanField('スタッフ', default=False)

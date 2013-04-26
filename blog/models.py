@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from blog.choices import *
-from sorl.thumbnail import ImageField
+from sorl.thumbnail import ImageField, get_thumbnail
 from trwk.libs.file_utils import normalize_filename
 
 class PostCategory(models.Model):
@@ -27,27 +27,54 @@ class PostImage(models.Model):
     img_file = ImageField(
         verbose_name = '画像',
         upload_to = get_img_uplod_path,
-        blank = True,
     )
-    alt = models.CharField('タイトル', max_length=255)
+    title = models.CharField('タイトル', max_length=255, help_text="管理画面でのラベル、altなどに使われます")
+    update_date = models.DateTimeField('更新日', auto_now=True)
     class Meta:
         verbose_name = "画像"
         verbose_name_plural = "画像"
     def __unicode__(self):
-        return self.alt
+        return self.title
 
 class Post(models.Model):
-    title =    models.CharField('タイトル', max_length=255)
-    slug =     models.SlugField('スラッグ', help_text='URLに使われます。半角英数')
-    content =  models.TextField('本文')
-    category = models.ManyToManyField(PostCategory, blank=True, verbose_name='カテゴリー')
-    img =      models.ManyToManyField(PostImage, blank=True, verbose_name='画像')
-    author =   models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='著者', null=True, on_delete=models.SET_NULL)
-    date =     models.DateTimeField('更新日', default=timezone.now, blank=True)
-    status =   models.SmallIntegerField('公開状態', choices=STATUS_CHOICE, default=1)
+    title =       models.CharField('タイトル', max_length=255)
+    slug =        models.SlugField('スラッグ', help_text='URLに使われます。半角英数')
+    content =     models.TextField('本文', help_text='画像にアップしたものを  &lt;!-- img {画像ID} --&gt;  で埋め込むことができます。')
+    category =    models.ManyToManyField(PostCategory, blank=True, verbose_name='カテゴリー')
+    main_img =    models.ForeignKey(PostImage, blank=True, verbose_name='メイン画像', related_name="post_with_main_img")
+    img =         models.ManyToManyField(PostImage, blank=True, verbose_name='画像')
+    author =      models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='著者', null=True, on_delete=models.SET_NULL)
+    update_date = models.DateTimeField('更新日', default=timezone.now, blank=True)
+    add_date =    models.DateTimeField('登録日', auto_now_add=True)
+    status =      models.SmallIntegerField('公開状態', choices=STATUS_CHOICE, default=1)
     class Meta:
         verbose_name = "投稿"
         verbose_name_plural = "投稿"
-        ordering = ['-date']
+        ordering = ['-add_date']
     def __unicode__(self):
         return self.title
+
+    def content_with_img(self, size=None):
+        import re
+        if size == None:
+            size = settings.POST_THUMBNAIL_SIZE
+        format_re='(<!\-\- ?img ?([0-9]+) ?\-\->)'
+        content = self.content
+        pat = re.compile(format_re)
+        imgs = pat.findall(self.content)
+        if not imgs:
+            return content
+        for img in imgs:
+            try:
+                tag = img[0]
+                pk =  int(img[1])
+                img = PostImage.objects.get(pk=pk)
+                thumb = get_thumbnail(img.img_file, size)
+                img_tag = '<a href="%s" target="_blank" class="post-thumbnail"><img src="%s" alt="%s" width="%s" height="%s"></a>' % (img.img_file.url, thumb.url, self.title, thumb.width, thumb.height )
+            except:
+                content = content.replace(tag, '<!-- img error ' + str(pk) + ' -->')
+                import sys
+                print "Unexpected error:", sys.exc_info()[0]
+            else:
+                content = content.replace(tag, img_tag)
+        return content
