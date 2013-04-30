@@ -1,5 +1,11 @@
 {% extends "base.html" %}
+{% block title %}確認メール送信完了{% endblock %}
+{% block breadcrumb_inner %}{{ block.super}}
+	{% breadcrumb '確認メール送信完了' %}
+{% endblock %}
 
 {% block content %}
-<p>確認のメールを送信しましたのでご確認ください。</p>
+<h1 class="content-title">確認メール送信完了</h1>
+<p>確認のメールを送信しました。</p>
+<p>ほとんどの場合、10分以内に到着しますが、システムからの自動送信のため<strong>迷惑メールフォルダ</strong>に入りやすくなっております。しばらく待っても届かない場合は迷惑メールフォルダをご確認ください。</p>
 {% endblock %}

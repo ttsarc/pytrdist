@@ -1,7 +1,12 @@
 {% extends 'base.html'%}
 {% block title %}お問い合わせ{% endblock %}
+{% block breadcrumb_inner %}{{ block.super}}
+	{% breadcrumb 'お問い合わせ' %}
+{% endblock %}
 {% block content %}
-<h1>お問い合わせ</h1>
+<h1 class="content-title">お問い合わせ</h1>
+
+<div class="content-table request-form">
 <form action="" method="post">{% csrf_token %}
 <table>
 {{ form }}
@@ -10,6 +15,7 @@
 <input type="submit" value="送信内容の確認">
 </p>
 </form>
+</div>
 
 {% endblock %}
 

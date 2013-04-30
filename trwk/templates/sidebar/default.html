@@ -1,0 +1,76 @@
+	{% load static %}<div id="side">
+		<div class="side-searchbox">
+			<form method="get" action="{% url 'search_index'%}">
+				<h2 class="side-searchbox-title">キーワード検索</h2>
+				{% load search_extra %}{% search_form %}
+				<!--<input type="text" name="" value="" placeholder="検索ワードを入力してください">-->
+				<input type="image" src="{% static "images/side-searchbox-submit.png"%}" width="55" height="30"  name="" alt="検索">
+				{% comment %}
+				<div class="side-searchbox-radio">
+					<label for="side-searchbox-data"><input type="radio" name="type" value="document" id="side-searchbox-data">資料</label>
+					<label for="side-searchbox-seminar"><input type="radio" name="type" value="seminar" id="side-searchbox-seminar">セミナー</label>
+				</div>--><!-- .side-searchbox-radio -->
+				{% endcomment %}
+			</form>
+		</div><!-- .side-searchbox -->
+		{% comment %}
+		<div class="side-keywords">
+			<h2 class="side-keywords-title">人気キーワード</h2>
+			<a href="#">キーワード</a>　<a href="#">キーワード</a>　<a href="#">キーワード</a>
+		</div><!-- .side-keywords -->
+		{% endcomment %}
+		<div class="side-item">
+			<h2 class="side-title">最近チェックしたもの</h2>
+			<article>
+				<a href="#" class="block">
+					<img src="{% static 'images/thumb-100x75.png'%}" alt="" width="100" height="75" class="thumbnail">
+					<h1 class="article-title">タイトルタイトルタイトルタイトルタイトルタイトル</h1>
+				</a>
+			</article>
+
+			<article>
+				<a href="#" class="block">
+					<img src="{% static 'images/thumb-100x75.png'%}" alt="" width="100" height="75" class="thumbnail">
+					<h1 class="article-title">タイトルタイトルタイトルタイトルタイトルタイトル</h1>
+				</a>
+			</article>
+
+			<article>
+				<a href="#" class="block">
+					<img src="{% static 'images/thumb-100x75.png'%}" alt="" width="100" height="75" class="thumbnail">
+					<h1 class="article-title">タイトルタイトルタイトルタイトルタイトルタイトル</h1>
+				</a>
+			</article>
+
+		</div><!-- .side-item -->
+
+		<div class="side-freearea">
+			<h2 class="side-title">フリーエリア</h2>
+			<article>
+				テキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト<br>
+				好きなものいれられるような<br>
+				ボックス
+			</article>
+
+		</div><!-- .side-item -->
+
+		<div class="side-item">
+			<h2 class="side-title">お知らせ</h2>
+			<article>
+				<time class="date" datetime="2013-05-01" pubdate>2013/05/01</time>
+				<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトルタイトルタイ</a></h1>
+			</article>
+
+			<article>
+				<time class="date" datetime="2013-05-01" pubdate>2013/05/01</time>
+				<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトルタイトルタイ</a></h1>
+			</article>
+
+			<article>
+				<time class="date" datetime="2013-05-01" pubdate>2013/05/01</time>
+				<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトルタイトルタイ</a></h1>
+			</article>
+
+		</div><!-- .side-item -->
+
+	</div><!-- #side -->

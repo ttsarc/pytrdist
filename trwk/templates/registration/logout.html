@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block title %}ログアウト{% endblock %}
+
+{% block breadcrumb_inner %}{{ block.super}}
+	{% breadcrumb 'ログアウト' %}
+{% endblock %}
+
 {% block content %}
+<h1 class="content-title">とわれか会員ログアウト</h1>
 <p>ログアウトしました</p>
 {% endblock %}

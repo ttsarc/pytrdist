@@ -4,3 +4,9 @@ function full2half(text){
     text = text.replace(new RegExp("[ー－]","g"), '-');
     return text;
 }
+$(function(){
+    $('tr.required label').each(function(){
+        var text = $(this).text()
+        $(this).html( text.replace(':',':<span class="required">(必須)</span>'));
+    });
+});

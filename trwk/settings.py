@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.flatpages',
     'sorl.thumbnail',
     'accounts',
     'documents',
@@ -257,8 +258,6 @@ BAD_EMAIL_DOMAIN = [
 THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
 THUMBNAIL_DEBUG = False
 
-from django import template
-template.add_to_builtins('django.contrib.humanize.templatetags.humanize')
 
 try:
     from local_settings import *

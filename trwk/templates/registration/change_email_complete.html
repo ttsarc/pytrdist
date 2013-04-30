@@ -1,6 +1,10 @@
 {% extends "base.html" %}
-{% block title %}メールアドレスを変更しました{% endblock %}
+{% block title %}メールアドレスを変更完了{% endblock %}
+{% block breadcrumb_mypage %}
+	{% breadcrumb 'メールアドレスを変更完了' %}
+{% endblock %}
+
 {% block content %}
+<h1 class="content-title">メールアドレスの変更が完了しました</h1>
 <p>新しいメールアドレス：{{user.email}}</p>
-<p>メールアドレスを変更しました</p>
 {% endblock %}

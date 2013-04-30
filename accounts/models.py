@@ -115,6 +115,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    def get_display_name(self):
+        if self.username:
+            return self.username
+        else:
+            return self.email
+
     def is_customer(self):
         if self.customer_company:
             return True

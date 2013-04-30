@@ -3,8 +3,14 @@
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
 {%endblock%}
 {% block title %}リード情報の確認{% endblock%}
+
+{% block breadcrumb_mypage %}
+	{% breadcrumb '管理メニュー' %}
+	{% breadcrumb 'リード情報の確認' %}
+{% endblock %}
+
 {% block content %}
-<h1>リード情報の確認</h1>
+<h1 class="content-title">リード情報の確認</h1>
 <div>
 <form method='get' action=''>
 <input type="hidden" value="1" name="search">
@@ -14,7 +20,7 @@
 <input type="submit" value="検索">
 </form>
 </div>
-
+<div class="content-table">
 <table>
 {% if not companies %}
 該当するログはありません
@@ -27,7 +33,7 @@
     </tr>
 {% endfor %}
 </table>
-
+</div>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 <script>

@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% block title %}{{ flatpage.title }}{% endblock %}
+{% block breadcrumb_inner %}{{ block.super}}
+	{% breadcrumb flatpage.title %}
+{% endblock %}
+
+{% block content %}
+<h1 class="content-title">{{ flatpage.title }}</h1>
+
+{% autoescape off %}
+{{ flatpage.content }}
+{% endautoescape %}
+
+{% endblock %}

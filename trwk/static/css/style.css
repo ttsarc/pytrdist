@@ -1,0 +1,1443 @@
+/*! normalize.css v2.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 8/9.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+	display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 8/9.
+ */
+
+audio,
+canvas,
+video {
+	display: inline-block;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+	display: none;
+	height: 0;
+}
+
+/**
+ * Address styling not present in IE 8/9.
+ */
+
+[hidden] {
+	display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *	and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *	Opera.
+ * 3. Set default font family to sans-serif.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *	user zoom.
+ */
+
+html {
+	background: #fff; /* 1 */
+	color: #000; /* 2 */
+	font-family: sans-serif; /* 3 */
+	-ms-text-size-adjust: 100%; /* 4 */
+	-webkit-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Remove default margin.
+ */
+
+body {
+	margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+	outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+	outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address variable `h1` font-size and margin within `section` and `article`
+ * contexts in Firefox 4+, Safari 5, and Chrome.
+ */
+
+h1 {
+	font-size: 2em;
+	margin: 0.67em 0;
+}
+
+/**
+ * Address styling not present in IE 8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+	border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 4+, Safari 5, and Chrome.
+ */
+
+b,
+strong {
+	font-weight: bold;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+	font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ */
+
+hr {
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	height: 0;
+}
+
+/**
+ * Address styling not present in IE 8/9.
+ */
+
+mark {
+	background: #ff0;
+	color: #000;
+}
+
+/**
+ * Correct font family set oddly in Safari 5 and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+	font-family: monospace, serif;
+	font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+	white-space: pre-wrap;
+}
+
+/**
+ * Set consistent quote types.
+ */
+
+q {
+	quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+	font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+	font-size: 75%;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+
+sup {
+	top: -0.5em;
+}
+
+sub {
+	bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * Remove border when inside `a` element in IE 8/9.
+ */
+
+img {
+	border: 0;
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+	overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 8/9 and Safari 5.
+ */
+
+figure {
+	margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+	border: 1px solid #c0c0c0;
+	margin: 0 2px;
+	padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct `color` not being inherited in IE 8/9.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ */
+
+legend {
+	border: 0; /* 1 */
+	padding: 0; /* 2 */
+}
+
+/**
+ * 1. Correct font family not being inherited in all browsers.
+ * 2. Correct font size not being inherited in all browsers.
+ * 3. Address margins set differently in Firefox 4+, Safari 5, and Chrome.
+ */
+
+button,
+input,
+select,
+textarea {
+	font-family: inherit; /* 1 */
+	font-size: 100%; /* 2 */
+	margin: 0; /* 3 */
+}
+
+/**
+ * Address Firefox 4+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+	line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 8+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+	text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *	and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *	`input` and others.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+	-webkit-appearance: button; /* 2 */
+	cursor: pointer; /* 3 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+	cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to `content-box` in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+	box-sizing: border-box; /* 1 */
+	padding: 0; /* 2 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *	(include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+	-webkit-appearance: textfield; /* 1 */
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box; /* 2 */
+	box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+	-webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 4+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+	overflow: auto; /* 1 */
+	vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+Tables
+========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+
+/* ==========================================================================
+	とれわか サイトレイアウト
+========================================================================== */
+
+body{
+	background: #fbfaf9;
+	font-size: 12px;
+	line-height: 22px;
+	color: #333;
+	font-family: 'メイリオ' , sans-serif;
+}
+
+a:link{
+	color:#1a64a8;
+	text-decoration: underline;
+}
+a:visited{
+	color:#0d4c86;
+	text-decoration: underline;
+}
+a:hover,
+a:active{
+	color:#348dde;
+	text-decoration: none;
+}
+
+a:hover img{
+	zoom: 1;
+	filter: alpha(opacity=80);
+	opacity: 0.8;
+}
+
+
+/* ==========================================================================
+	Sprite CSS
+========================================================================== */
+
+.arrow-black{
+	display: inline-block;
+	background: url(../images/sprite.png) no-repeat 0 0;
+	width: 10px;
+	height: 10px;
+	vertical-align: middle;
+}
+.arrow-red{
+	display: inline-block;
+	background: url(../images/sprite.png) no-repeat 0 -60px;
+	width: 10px;
+	height: 10px;
+	vertical-align: middle;
+}
+.icon-data{
+	display: inline-block;
+	background: url(../images/sprite.png) no-repeat 0 -884px;
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
+}
+.icon-seminar{
+	display: inline-block;
+	background: url(../images/sprite.png) no-repeat 0 -954px;
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
+}
+
+/* ==========================================================================
+	ヘッダー
+========================================================================== */
+
+#header-bg{
+	background: #fff;
+}
+
+#header	{
+	width: 960px;
+	margin: 0 auto;
+	zoom: 1;
+}
+#header:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#header-logo{
+	display: block;
+	width: 140px;
+	height: 90px;
+	padding: 5px 0;
+	margin: 0;
+	float: left;
+	font-size: 100%;
+}
+#header-logo a{
+	display: block;
+	background: url(../images/sprite.png) no-repeat 0 -744px;
+	width: 140px;
+	padding-top: 90px;
+	height: 0;
+	overflow: hidden;
+}
+
+/* 掲載数 */
+#header-count{
+	float: left;
+	padding: 20px 0 0;
+	margin: 0;
+	font-size: 14px;
+	line-height: 28px;
+}
+#header-count li{
+	display: block;
+}
+#header-count strong{
+	color: #ff6600;
+	font-size: 24px;
+}
+#header-count span{
+	font-size: 18px;
+}
+
+/* ログインボタン */
+#header-navi{
+	float: right;
+	margin: 10px 0 0;
+	padding: 0;
+	text-align: right;
+}
+#header-navi li{
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	height: 23px;
+	border-right: 1px solid #ece9e6;
+	border-bottom: 1px solid #ece9e6;
+	border-top: 1px solid #ece9e6;
+}
+#header-navi li a{
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	text-align: center;
+	min-width: 88px;
+	height: 19px;
+	overflow: hidden;
+	color:#333;
+	text-decoration: none;
+	font-size: 11px;
+	line-height: 18px;
+	padding: 4px 5px 0;
+	border-left: 1px solid #fff;
+	background: #f9f7f5;
+	background: linear-gradient(to bottom,  #ffffff 20%,#f9f7f5 80%,#ffffff 100%);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f9f7f5', GradientType=0)";
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f9f7f5',GradientType=0 );
+}
+#header-navi li a:hover{
+	text-decoration: underline;
+}
+
+#header-navi li.right,
+#header-navi li.right a{
+	border-radius: 0 4px 4px 0;
+}
+#header-navi li.left,
+#header-navi li.left a{
+	border-radius: 4px 0 0 4px;
+}
+#header-navi li.left{
+	border-left: 1px solid #ece9e6;
+}
+
+/* ==========================================================================
+	グローバルナビ
+========================================================================== */
+
+#gnavi{
+	border-bottom: 2px solid #ae2e38;
+}
+#gnavi ul{
+	display: block;
+	width: 960px;
+	margin: 0 auto;
+	padding: 0;
+}
+#gnavi ul li{
+	display: inline;
+	margin-right: 4px;
+}
+#gnavi ul li a{
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	background: url(../images/sprite.png) no-repeat top left;
+	color:#333;
+	text-decoration: none;
+	font-size: 14px;
+	line-height: 26px;
+	padding-top: 2px;
+	text-align: left;
+}
+#gnavi ul li a.hover,
+#gnavi ul li a:hover{
+	color:#fff;
+}
+#gnavi ul li.gnavi-01 a{
+	background-position: 0 -198px; width: 71px; height: 26px;
+	padding-left: 40px;
+}
+#gnavi ul li.gnavi-01 a.hover,
+#gnavi ul li.gnavi-01 a:hover{
+	background-position: 0 -120px;
+}
+#gnavi ul li.gnavi-02 a{
+	background-position: 0 -354px; width: 86px; height: 26px;
+	padding-left: 35px;
+}
+#gnavi ul li.gnavi-02 a.hover,
+#gnavi ul li.gnavi-02 a:hover{
+	background-position: 0 -276px;
+}
+#gnavi ul li.gnavi-03 a{
+	background-position: 0 -510px; width: 116px; height: 26px;
+	padding-left: 35px;
+}
+#gnavi ul li.gnavi-03 a.hover,
+#gnavi ul li.gnavi-03 a:hover{
+	background-position: 0 -432px;
+}
+#gnavi ul li.gnavi-04 a{
+	background-position: 0 -666px; width: 86px; height: 26px;
+	padding-left: 35px;
+}
+#gnavi ul li.gnavi-04 a.hover,
+#gnavi ul li.gnavi-04 a:hover{
+	background-position: 0 -588px;
+}
+
+/* ホバー時表示エリア */
+#gnavi-content{
+	width: 960px;
+	height: 0;
+	margin: 0 auto;
+	position: relative;
+}
+.gnavi-item{
+	border-left: 1px solid #ece9e6;
+	border-right: 1px solid #ece9e6;
+	border-bottom: 1px solid #ece9e6;
+	width: 618px;
+	padding: 25px 20px;
+	background: #fff;
+	box-shadow: 1px 1px 3px #f4f0eb;
+	font-size: 11px;
+	line-height: 18px;
+	position: absolute;
+	left: -10px;
+	top: 0;
+}
+.gnavi-item a{
+	color:#333;
+}
+.gnavi-item a:visited{
+	color:#222;
+}
+.gnavi-item a:hover{
+	color:#666;
+	text-decoration: none;
+}
+
+.gnavi-item-arrow{
+	display: inline;
+}
+.gnavi-item-arrow span,
+.gnavi-item-arrow a{
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	background: url(../images/sprite.png) no-repeat 5px -56px;
+	font-size: 14px;
+	line-height: 20px;
+	padding: 0 0 0 20px;
+}
+
+.gnavi-item-links{
+	clear: both;
+	margin: 0 0 5px 20px;
+}
+
+/* ==========================================================================
+	コンテンツ部分レイアウト
+========================================================================== */
+
+#wrapper{
+	width: 960px;
+	margin: 20px auto;
+	zoom: 1;
+}
+#wrapper:after{
+	content:"";
+	display: block;
+	clear: both;
+}
+#content{
+	width: 640px;
+	float: left;
+}
+#side{
+	width: 300px;
+	float: right;
+}
+
+/* メインカラムが左（未指定時も同じ） */
+#wrapper.layout-a{
+}
+#wrapper.layout-a #content{
+	float: left;
+}
+#wrapper.layout-a #side{
+	float: right;
+}
+
+/* メインカラムが右 */
+#wrapper.layout-b{
+}
+#wrapper.layout-b #content{
+	float: right;
+}
+#wrapper.layout-b #side{
+	float: left;
+}
+
+/* ==========================================================================
+	footer
+========================================================================== */
+
+#footer{
+	clear: both;
+	width: 960px;
+	margin: 0 auto;
+}
+#footer-inner{
+	border-bottom: 2px solid #ae2e38;
+	position: relative;
+	font-size: 11px;
+	line-height: 23px;
+}
+#footer-pagetop{
+	display: block;
+	background: #ae2e38;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 130px;
+	height: 23px;
+	border-radius: 4px 4px 0 0;
+	text-align: center;
+	text-decoration: none;
+	color:#fff;
+}
+#footer-link{
+	margin: 0;
+	padding: 0;
+}
+#footer-link li{
+	display: inline;
+	padding: 0 5px;
+	border-right: 1px solid #333;
+}
+#footer-link li.last
+#footer-link li:last-child{
+	border-right: none;
+}
+#footer-link li a{
+	color:#333;
+}
+#footer-copyright{
+	display: block;
+	text-align: center;
+	font-size: 11px;
+	line-height: 20px;
+	padding: 15px 0;
+	color:#666;
+	font-family: Helvetica, Arial;
+}
+
+
+/* ==========================================================================
+	side
+========================================================================== */
+
+/* 各エリアのマージン */
+.side-item,
+.side-freearea{
+	margin: 40px 0;
+}
+
+/* サイドバー共通タイトル */
+.side-title{
+	background: url(../images/sprite.png) no-repeat 3px 3px;
+	font-size: 14px;
+	line-height: 20px;
+	border-bottom: 1px solid #ece9e6;
+	padding: 0 0 3px 20px;
+	margin: 0;
+}
+
+/* サイドバー リスト */
+.side-item{
+}
+.side-item article{
+	padding: 9px 0 10px;
+	border-bottom: 1px solid #ece9e6;
+	zoom: 1;
+}
+.side-item article:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.side-item article a.block{
+	display: block;
+	zoom: 1;
+}
+.side-item article a.block:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.side-item .thumbnail{
+	display: block;
+	float: left;
+	margin: 0 5px 0 0;
+	max-width: 100px;
+}
+.side-item .article-title{
+	margin: 0;
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: normal;
+}
+.side-item .date{
+	font-size: 10px;
+	line-height: 18px;
+}
+
+/* フリーエリア */
+.side-freearea{
+}
+.side-freearea article{
+	padding: 9px 0 10px;
+	border-bottom: 1px solid #ece9e6;
+	zoom: 1;
+}
+.side-freearea article:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+
+/* 検索ボックス */
+.side-searchbox{
+	background: #333;
+	border: 1px solid #000;
+	color: #fff;
+	padding: 9px;
+}
+.side-searchbox-title{
+	background: url(../images/side-searchbox-title.png) no-repeat 0 0;
+	padding: 0 0 0 25px;
+	margin: 0 0 5px;
+	font-size: 14px;
+}
+.side-searchbox form{
+	margin: 0;
+}
+.side-searchbox input[type="text"]{
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	width: 205px;
+	border: none;
+	font-size: 10px;
+	height: 30px;
+	padding: 0 5px;
+	vertical-align: middle;
+}
+.side-searchbox input[type="image"]{
+	vertical-align: middle;
+}
+.side-searchbox-radio{
+	margin: 5px 0 0;
+}
+
+/* 人気ワード */
+.side-keywords{
+	margin: 10px 0 40px;
+}
+.side-keywords-title{
+	font-size: 14px;
+	line-height: 20px;
+	margin: 0;
+}
+
+
+/* マイページメニュー */
+.side-menu{
+	margin: 0 0 20px;
+}
+.side-menu-title{
+	background: url(../images/side-menu-title-bg.png) no-repeat 0 0;
+	padding: 6px 5px 4px 10px;
+	height: 20px;
+	font-size: 14px;
+	line-height: 20px;
+	overflow: hidden;
+	margin: 0;
+}
+.side-menu ul{
+	border-left: 1px solid #ece9e6;
+	border-right: 1px solid #ece9e6;
+	border-bottom: 1px solid #ece9e6;
+	padding: 4px;
+	font-size: 12px;
+	line-height: 20px;
+	margin: 0;
+	background: #fff;
+}
+.side-menu ul li{
+	display: block;
+	border-bottom: 1px solid #ece9e6;
+	padding: 5px 5px 4px;
+}
+.side-menu ul li:last-child,
+.side-menu ul li.last{
+	border-bottom: none;
+}
+.side-menu ul li a{
+	display: block;
+	text-decoration: none;
+	color:#333;
+}
+.side-menu ul li a:hover{
+	text-decoration: underline;
+}
+.side-menu .side-menu-subtitle{
+	background: url(../images/side-menu-subtitle-bg.png) no-repeat 0 13px;
+	padding: 10px 0 0 15px;
+	margin: 0;
+	line-height: 20px;
+	font-size: 14px;
+	color: #4e4a45;
+}
+
+
+/* ログインフォーム */
+
+/* ie7以下のみ表示 */
+.side-text-ie{
+	display: none;
+	/display: block;
+	color:#444;
+	font-size: 12px;
+	margin: 5px 0;
+}
+
+
+/* ==========================================================================
+	メインカラム
+========================================================================== */
+
+#top-keyvisual{
+	margin: 0 0 20px;
+}
+#top-keyvisual img{
+	display: block;
+}
+
+/* list-640 */
+.list-title-640{
+	background: url(../images/title-bg-640.png) no-repeat 0 0;
+	width: 640px;
+	height: 30px;
+	overflow: hidden;
+	font-size: 14px;
+	line-height: 30px;
+	margin: 0;
+}
+
+.list-title-640 .icon-data,
+.list-title-640 .icon-seminar{
+	margin: 0 5px 0 10px;
+}
+
+.list-640{
+	border-left: 1px solid #ece9e6;
+	border-right: 1px solid #ece9e6;
+	border-bottom: 1px solid #ece9e6;
+	margin: 0 0 40px;
+	background: #fff;
+	padding: 0 10px;
+}
+.list-640 article{
+	border-bottom: 1px solid #ece9e6;
+	padding: 15px 5px;
+	zoom: 1;
+}
+.list-640 article:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.list-640 article.last,
+.list-640 article:last-child{
+	border-bottom: none;
+}
+.list-640 article .thumbnail{
+	float: left;
+	display: block;
+	max-width: 200px;
+}
+.list-640 article .text{
+	margin: 0 0 0 215px;
+}
+.list-640 article .article-title{
+	margin: 0 0 10px;
+	font-size: 16px;
+	line-height: 20px;
+}
+.list-640 article p{
+	font-size: 12px;
+	line-height: 16px;
+}
+.list-640 article footer ul{
+	padding: 0;
+}
+.list-640 article footer li{
+	display: inline;
+}
+.list-640 article .article-more{
+	text-align: right;
+	margin: 5px 0 0;
+}
+
+
+/* list-310 */
+.list-310-wrapper{
+	clear: both;
+	margin: 0 0 40px;
+	zoom: 1;
+}
+.list-310-wrapper:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+
+.list-title-310{
+	background: url(../images/title-bg-310.png) no-repeat 0 0;
+	width: 310px;
+	height: 30px;
+	overflow: hidden;
+	font-size: 14px;
+	line-height: 30px;
+	margin: 0;
+}
+
+.list-title-310 .icon-data,
+.list-title-310 .icon-seminar{
+	margin: 0 5px 0 10px;
+}
+
+.list-310{
+	width: 310px;
+	float: left;
+}
+.list-310.left{
+	margin-right: 20px;
+}
+.list-310 article{
+	border-bottom: 1px solid #ece9e6;
+	padding: 15px 10px;
+	zoom: 1;
+}
+.list-310 article:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.list-310 article .thumbnail{
+	float: left;
+	display: block;
+	max-width: 100px;
+}
+.list-310 article .text{
+	margin: 0 0 0 115px;
+}
+.list-310 article .article-title{
+	margin: 0 0 10px;
+	font-size: 12px;
+	line-height: 18px;
+}
+.list-310-more{
+	padding: 10px 0;
+	zoom: 1;
+}
+.list-310-more:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.list-310-more a{
+	display: block;
+	float: right;
+	color:#fff;
+	font-weight: bold;
+	text-decoration: none;
+	background: #333;
+	border: 1px solid #000;
+	font-size: 10px;
+	line-height: 20px;
+	width: 88px;
+	text-align: center;
+}
+.list-310-more a:hover{
+	background: #444;
+}
+
+
+.top-seminar-more{
+	display: block;
+	zoom: 1;
+	float: right;
+	margin: -20px 1px 20px;
+	width: 200px;
+	height: 0;
+	padding-top: 40px;
+	overflow: hidden;
+	background: url(../images/top-seminar-link.png) no-repeat 0 0;
+}
+.top-seminar-more:hover{
+	filter: alpha(opacity=80);
+	opacity: 0.8;
+}
+
+
+/* ==========================================================================
+	下層ページ
+========================================================================== */
+
+/* #breadcrumb */
+#breadcrumb{
+	font-size: 10px;
+	line-height: 20px;
+	margin: 0 0 10px;
+}
+#breadcrumb a{
+	color:#333;
+	text-decoration: none;
+}
+#breadcrumb a:hover{
+	text-decoration: underline;
+}
+
+/* .content-xxx */
+.content-title{
+	font-size: 18px;
+	line-height: 20px;
+	padding: 0 0 4px;
+	border-bottom: 1px solid #ece9e6;
+	margin: 0 0 10px;
+}
+.content-date{
+	display: block;
+	font-size: 11px;
+	text-align: right;
+	margin: 10px 0;
+}
+.content-text{
+	font-size: 12px;
+	line-height: 22px;
+}
+.content-text p{
+	margin: 0 0 25px;
+}
+.content-text hr{
+	border: none;
+	border-top: 1px solid #ece9e6;
+	margin: 20px 0;
+}
+.content-text ul{
+	margin: 0 0 25px;
+	padding: 0 0 0 10px;
+	font-size: 12px;
+	line-height: 20px;
+}
+.content-text ul li{
+	display: block;
+	background: url(../images/list-arrow.png) no-repeat 0 10px;
+	padding: 5px 0 5px 17px;
+}
+.content-title-h2{
+	font-size: 16px;
+	line-height: 20px;
+	color:#4e4a45;
+	font-weight: bold;
+	padding: 0 0 4px 15px;
+	border-bottom: 1px solid #ece9e6;
+	background: url(../images/content-h2-bg.png) no-repeat 0 4px;
+	margin: 0 0 10px;
+}
+.content-title-h3{
+	font-size: 14px;
+	line-height: 20px;
+	color:#a55520;
+	font-weight: bold;
+	margin: 20px 0;
+}
+
+/* .content-table */
+.content-table{
+}
+.content-table table{
+	width: 640px;
+	border-top: 1px solid #ece9e6;
+	margin: 20px auto;
+}
+.content-table th,
+.content-table td{
+	border-bottom: 1px solid #ece9e6;
+	padding: 5px 20px;
+}
+.content-table th{
+	text-align: left;
+	color:#4e4a45;
+	font-weight: normal;
+	width: 140px;
+}
+.content-table td{
+	line-height: 30px;
+}
+.content-table span.required{
+	color:#ae2e38;
+	font-size: 10px;
+	font-weight: bold;
+}
+.content-table .helptext{
+	display: block;
+	color:#999;
+	font-size: 10px;
+	margin-top: -5px;
+}
+.content-table input[type="text"],
+.content-table input.text,
+.content-table input[type="password"],
+.content-table input.password{
+	border: 1px solid #ece9e6;
+	height: 25px;
+	background: #fff;
+	padding: 0 5px;
+	/width: 250px;
+	margin: 3px 0;
+}
+.content-table textarea{
+	border: 1px solid #ece9e6;
+	height: 60px;
+	width: 400px;
+	background: #fff;
+	padding: 0 5px;
+	margin: 3px 0;
+}
+.content-table input[type="radio"],
+.content-table input.radio{
+	margin: 0 3px 0 0;
+}
+.content-table select{
+	border: 1px solid #ece9e6;
+	background: #fff;
+	padding: 0 0 0 5px;
+	margin: 5px 0;
+}
+.content-table input[type="submit"],
+.content-table input.submit{
+	display: block;
+	height: 35px;
+	width: 150px;
+	background: url(../images/form-submit-button.png) no-repeat 0 0;
+	margin: 20px auto;
+	text-indent: -9999px;
+	border: none;
+}
+.content-table input[type="submit"]:hover,
+.content-table input.submit:hover{
+	filter: alpha(opacity=80);
+	opacity: 0.8;
+}
+
+.content-table.member-form input[type="submit"],
+.content-table.member-form input.submit{
+	width: 150px;
+	background: url(../images/submit-save-button.png) no-repeat 0 0;
+	margin: 20px auto;
+}
+
+.content-table.request-form input[type="submit"],
+.content-table.request-form input.submit{
+	width: 190px;
+	background: url(../images/submit-request-button.png) no-repeat 0 0;
+	margin: 10px auto 20px;
+}
+.content-table.request-form p{
+	text-align: center;
+}
+
+.content-table.request-check input[type="submit"],
+.content-table.request-check input.submit{
+	width: 190px;
+	background: url(../images/submit-check-button.png) no-repeat 0 0;
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	margin: 10px 10px 20px;
+}
+.content-table.request-check input#back-submit{
+	width: 130px;
+	background: url(../images/submit-revise-button.png) no-repeat 0 0;
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	margin: 10px 10px 20px;
+}
+.content-table.request-check p,
+.content-table.register p{
+	text-align: center;
+}
+
+.member-edit-link{
+	text-align: right;
+	font-size: 10px;
+	margin: -10px 0 10px;
+}
+.member-edit-link a{
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	background: url(../images/list-arrow.png) no-repeat 0 5px;
+	padding-left: 15px;
+}
+
+/* .pager */
+.pager{
+	border-top: 1px solid #ece9e6;
+	padding: 10px 0 0;
+	margin: 30px 0;
+}
+.pager-count{
+	font-size: 11px;
+	text-align: right;
+}
+.pager-count strong{
+	font-weight: bold;
+	font-size: 14px;
+}
+.pager-number{
+	text-align: right;
+	font-size: 11px;
+}
+.pager-button{
+	text-align: center;
+	margin: 20px 0;
+}
+.pager-button a{
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	background: #333;
+	border: 1px solid #000;
+	color: #fff;
+	text-decoration: none;
+	padding: 7px 30px;
+	font-size: 12px;
+	line-height: 14px;
+	font-weight: bold;
+	margin: 0 5px;
+}
+
+
+/* ==========================================================================
+	詳細ページ
+========================================================================== */
+
+.content-text .detail-button{
+	text-align: center;
+	margin: 20px auto;
+}
+
+.detail-button.close{
+	width: 252px;
+	border: 1px solid #ece9e6;
+	background: #fff;
+	font-size: 12px;
+	line-height: 22px;
+	padding: 8px;
+}
+.detail-button.close a{
+	font-size: 11px;
+}
+.detail-button .request,
+.detail-button .download{
+	display: block;
+	zoom: 1;
+	margin: 0 auto;
+	width: 170px;
+	height: 0;
+	overflow: hidden;
+	padding-top: 35px;
+}
+.detail-button .request{
+	background: url(../images/detail-request-button.png) no-repeat 0 0;
+}
+.detail-button .download{
+	background: url(../images/detail-download-button.png) no-repeat 0 0;
+}
+.detail-button .request:hover,
+.detail-button .download:hover{
+	filter: alpha(opacity=80);
+	opacity: 0.8;
+}
+
+.detail-thumbnail{
+	text-align: center;
+	margin: 20px 0;
+}
+.detail-thumbnail img{
+	display: block;
+	margin: 0 auto;
+}

@@ -1,32 +1,43 @@
 {% extends 'base_mypage.html'%}
+
 {% block title %}
 {% if action == 'add' %}
-資料の新規追加
+	資料の新規追加
 {% else %}
-資料「{{document.title}}」の編集
+	{{document.title}}の編集
 {% endif %}
+{% endblock %}
+
+{% block breadcrumb_mypage %}
+	{% if action == 'add' %}
+		{% breadcrumb '資料の新規追加' %}
+	{% else %}
+		{% breadcrumb_url '資料の編集' 'document_edit_index'  %}
+		{% breadcrumb document.title  %}
+	{% endif %}
 {% endblock %}
 
 {% block content %}
 
 {% if action == 'add' %}
-<h1>資料の新規追加</h1>
+<h1 class="content-title">資料の新規追加</h1>
 {% else %}
-<h1>資料「{{document.title}}」の編集</h1>
+<h1 class="content-title">{{document.title}}の編集</h1>
 {% endif %}
 
-<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-<table>
-{{ form }}
-</table>
+<div class="content-table document-form">
+	<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+	<table>
+	{{ form }}
+	</table>
+	{% with submit_value='保存する'%}
+	{% include 'common/form_btn_confirm.html' %}
+	{% endwith %}
+	</form>
+</div><!-- .content-table -->
 
-{% with submit_value='保存する'%}
-{% include 'common/form_btn_confirm.html' %}
-{% endwith %}
-
-</form>
 {% if action == 'edit'%}
-<a href="{% url 'document_preview' document_id=document.id%}" target="_blank">プレビュー</a>
+<p class="edit-preview"><a href="{% url 'document_preview' document_id=document.id%}" target="_blank">プレビュー</a></p>
 {% endif%}
 
 {% endblock %}

@@ -1,6 +1,49 @@
 {% extends 'base.html'%}
+{% block wrapper_start %}
+<div id="wrapper" class="layout-b">
+{% endblock %}
+
+{% block breadcrumb_inner %}
+		{% breadcrumb_url 'マイページ' 'mypage_home' %}
+		{% block breadcrumb_mypage %}{% endblock %}
+{% endblock %}
+
 {% block sidebar %}
-<h3>メニュー</h3>
+<div id="side">
+<div class="side-menu">
+{% if admin %}
+<div class="side-menu">
+<h3 class="side-menu-title">管理メニュー</h3>
+<ul>
+    <li><a href="{% url "operation_company_leads"%}">会社別リード取得</a></li>
+</ul>
+</div><!-- .side-menu -->
+{% endif %}
+
+{% if user.customer_company %}
+<div class="side-menu">
+<h3 class="side-menu-title">掲載メニュー</h3>
+<ul>
+    <li><a href="{% url "mypage_edit_company"%}">企業情報の編集</a></li>
+    <li><h4 class="side-menu-subtitle">資料</h4></li>
+
+            <li><a href="{% url "document_add"%}">新規</a></li>
+            <li><a href="{% url "document_edit_index"%}">編集</a></li>
+            <li><a href="{% url "document_leads_index"%}">リード</a></li>
+
+    </li>
+    <li><h4 class="side-menu-subtitle">セミナー</h4></li>
+
+            <li><a href="{% url "seminar_add"%}">新規</a></li>
+            <li><a href="{% url "seminar_edit_index"%}">編集</a></li>
+            <li><a href="{% url "seminar_leads_index"%}">リード</a></li>
+
+    </li>
+</ul>
+</div><!-- .side-menu -->
+{% endif%}
+
+<h3 class="side-menu-title">会員メニュー</h3>
 <ul>
     <li><a href="{% url "mypage_edit_profile"%}">登録情報の変更</a></li>
     <li><a href="{% url "auth_password_change"%}">パスワードの変更</a></li>
@@ -8,31 +51,9 @@
     <li><a href="{% url "mypage_download_history"%}">資料ダウンロード履歴</a></li>
     <li><a href="{% url "mypage_entry_history"%}">セミナー申し込み履歴</a></li>
 </ul>
-{% if user.customer_company %}
-<h3>掲載企業メニュー</h3>
-<ul>
-    <li><a href="{% url "mypage_edit_company"%}">企業情報の編集</a></li>
-    <li><h4>資料</h4>
-        <ul>
-            <li><a href="{% url "document_add"%}">新規</a></li>
-            <li><a href="{% url "document_edit_index"%}">編集</a></li>
-            <li><a href="{% url "document_leads_index"%}">リード</a></li>
-        </ul>
-    </li>
-    <li><h4>セミナー</h4>
-        <ul>
-            <li><a href="{% url "seminar_add"%}">新規</a></li>
-            <li><a href="{% url "seminar_edit_index"%}">編集</a></li>
-            <li><a href="{% url "seminar_leads_index"%}">リード</a></li>
-        </ul>
-    </li>
-</ul>
-{% endif%}
+</div><!-- .side-menu -->
 
-{% if admin %}
-<h3>管理者メニュー</h3>
-<ul>
-    <li><a href="{% url "operation_company_leads"%}">会社別リード取得</a></li>
-</ul>
-{% endif %}
+
+
+</div><!-- #side -->
 {% endblock %}

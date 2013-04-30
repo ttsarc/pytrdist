@@ -1,11 +1,14 @@
 {% extends "base_mypage.html" %}
 {% block title %}メールアドレスの変更{% endblock %}
+{% block breadcrumb_mypage %}
+	{% breadcrumb 'メールアドレスの変更' %}
+{% endblock %}
+
 {% block content %}
-<h1>メールアドレスの変更</h1>
+<h1 class="content-title">メールアドレスの変更</h1>
 <form method="post" action="">{% csrf_token %}
 <p>現在のメールアドレス：{{ user.email }}</p>
   {{ form.as_p }}
-
   <input type="submit" value="確認メールを送信" />
 </form>
 {% endblock %}

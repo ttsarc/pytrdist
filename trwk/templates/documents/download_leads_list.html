@@ -1,11 +1,14 @@
 {% extends 'base_mypage.html'%}
-{% block title %}リード情報の確認{% endblock %}
+{% block title %}資料リード情報の確認{% endblock %}
+{% block breadcrumb_mypage %}
+	{% breadcrumb '資料リード情報の確認' %}
+{% endblock %}
 
 {%block head_after_link %}
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
 {%endblock%}
 {% block content %}
-<h1>リード情報の確認</h1>
+<h1 class="content-title">資料リード情報の確認</h1>
 <div>
 <form method='get' action='{% url 'document_leads_index'%}'>
 <input type="hidden" value="1" name="search">
@@ -17,40 +20,34 @@
 </div>
 
 <a href="{% url 'document_leads_csv'%}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">この条件でCSVダウンロード</a>
+<div class="content-table">
 <table>
 {% if not leads %}
 該当するログはありません
-{% endif %} 
+{% endif %}
 {% for lead in leads %}
     <tr>
         <td>{{ lead.download_date }}</td>
         <td>{{ lead.stage }}</td>
         <td>{{ lead.company_name }}</td>
         <td>{{ lead.document_title }}</td>
-        <td>{{ lead.discretion }}</td>
-        <td>{{ lead.business_type }}</td>
-        <td>{{ lead.position }}</td>
-        <td>{{ lead.job_content }}</td>
-        <td>{{ lead.firm_size }}</td>
     </tr>
 {% endfor %}
 </table>
-
-<div class="pagination">
-    <span class="step-links">
-        {% if leads.has_previous %}
-            <a href="{% url 'document_leads_paging' page=leads.previous_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">&laquo前のページ</a>
-        {% endif %}
-
-        <span class="current">
-            {{ leads.number }} / {{ leads.paginator.num_pages }}ページ
-        </span>
-
-        {% if leads.has_next %}
-            <a href="{% url 'document_leads_paging' page=leads.next_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">次のページ&raquo</a>
-        {% endif %}
-    </span>
 </div>
+
+<div class="pager">
+	<div class="pager-count"><strong>{{ leads.number }}</strong>ページ / <strong>{{ leads.paginator.num_pages }}</strong>ページ中</div>
+	<div class="pager-button">
+		{% if leads.has_previous %}
+		<a href="{% url 'document_leads_paging' page=leads.previous_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">&laquo前のページ</a>
+		{% endif %}
+
+		{% if leads.has_next %}
+		<a href="{% url 'document_leads_paging' page=leads.next_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">次のページ&raquo</a>
+		{% endif %}
+	</div><!-- .pager-button -->
+</div><!-- .pager -->
 
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>

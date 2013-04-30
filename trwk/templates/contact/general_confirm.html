@@ -1,7 +1,14 @@
 {% extends 'base.html'%}
 {% block title %}お問い合わせ内容の確認{% endblock %}
+
+{% block breadcrumb_inner %}{{ block.super}}
+	{% breadcrumb_url 'お問い合わせ' 'contact' %}
+	{% breadcrumb 'お問い合わせ内容の確認' %}
+{% endblock %}
+
 {% block content %}
-<h1>お問い合わせ内容の確認</h1>
+<h1 class="content-title">お問い合わせ内容の確認</h1>
+<div class="content-table request-check">
 <form action="" method="post">{% csrf_token %}
 {% for field in form %}{{ field.as_hidden }}{% endfor %}
 <table>
@@ -31,5 +38,6 @@
 {% include 'common/form_btn_complete.html' %}
 {% endwith %}
 </form>
+</div>
 
 {% endblock %}

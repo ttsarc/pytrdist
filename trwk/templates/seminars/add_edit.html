@@ -1,11 +1,21 @@
 {% extends 'base_mypage.html'%}
 {% load static %}
+
 {% block title %}
 {% if action == 'add' %}
-セミナーの新規追加
+	セミナーの新規追加
 {% else %}
-「{{ seminar.title }}」の編集
+	{{ seminar.title }}の編集
 {% endif %}
+{% endblock %}
+
+{% block breadcrumb_mypage %}
+	{% if action == 'add' %}
+		{% breadcrumb 'セミナーの新規追加' %}
+	{% else %}
+		{% breadcrumb_url 'セミナーの編集' 'seminar_edit_index'  %}
+		{% breadcrumb seminar.title  %}
+	{% endif %}
 {% endblock %}
 
 {%block head_after_link %}
@@ -14,21 +24,24 @@
 
 {% block content %}
 {% if action == 'add' %}
-<h1>セミナーの新規追加</h1>
+	<h1 class="content-title">セミナーの新規追加</h1>
 {% else %}
-<h1>「{{ seminar.title }}」の編集</h1>
+	<h1 class="content-title">「{{ seminar.title }}」の編集</h1>
 {% endif %}
-<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-<table>
-{{ form }}
-</table>
-{% with submit_value='保存する'%}
-{% include 'common/form_btn_confirm.html' %}
-{% endwith %}
-</form>
+
+<div class="content-table seminar-form">
+	<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+	<table>
+	{{ form }}
+	</table>
+	{% with submit_value='保存する'%}
+	{% include 'common/form_btn_confirm.html' %}
+	{% endwith %}
+	</form>
+</div><!-- .content-table -->
 
 {% if action == 'edit'%}
-<a href="{% url 'seminar_preview' seminar_id=seminar.id%}" target="_blank">プレビュー</a>
+<p class="edit-preview"><a href="{% url 'seminar_preview' seminar_id=seminar.id%}" target="_blank">プレビュー</a></p>
 {% endif%}
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>

@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 {% block title %}ログイン{% endblock %}
+{% block breadcrumb_inner %}{{ block.super}}
+	{% breadcrumb 'ログイン' %}
+{% endblock %}
 {% block content %}
+<h1 class="content-title">とわれか会員ログイン</h1>
+<div class="content-table">
 <form method="post" action=".">{% csrf_token %}
-  {{ form.as_p }}
+  <table>{{ form }}</table>
   <input type="submit" value="ログイン" />
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
-
-<p>パスワードを忘れた方 <a href="{% url "auth_password_reset" %}">パスワードの再設定</a></p>
-<p>会員登録がまだの方 <a href="{% url "registration_register" %}{% if next %}?next={{ next }}{% endif %}">新規登録</a></p>
+</div>
+<ul>
+	<li>パスワードを忘れた方: <a href="{% url "auth_password_reset" %}">パスワードの再設定</a></li>
+	<li>会員登録がまだの方: <a href="{% url "registration_register" %}{% if next %}?next={{ next }}{% endif %}">新規登録</a></li>
+<ul>
 {% endblock %}

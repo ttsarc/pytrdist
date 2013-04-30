@@ -1,15 +1,23 @@
 {% extends 'base_mypage.html'%}
 {% block title %}企業情報の編集{% endblock %}
+{% block breadcrumb_inner %}{{ block.super }}
+	{% block breadcrumbs %}
+		{% breadcrumb '企業情報の編集' 'mypage_edit_company' %}
+	{% endblock %}
+{% endblock %}
+
 {% block content %}
-<h1>企業情報の編集</h1>
-<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-<table>
-{{ form }}
-</table>
-<p>
-<input type="submit" value="保存する">
-</p>
-</form>
+<h1 class="content-title">企業情報の編集</h1>
+<div class="content-table">
+	<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+	<table>
+	{{ form }}
+	</table>
+	<p>
+	<input type="submit" value="保存する">
+	</p>
+	</form>
+</div><!-- .content-table -->
 {% endblock %}
 
 {% block footer_scripts %}

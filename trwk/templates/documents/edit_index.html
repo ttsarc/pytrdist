@@ -1,17 +1,20 @@
 {% extends 'base_mypage.html'%}
 {% block title %}資料の編集{% endblock %}
+{% block breadcrumb_mypage %}
+	{% breadcrumb '資料の編集' %}
+{% endblock %}
 {% block content %}
-<h1>資料の編集</h1>
+<h1 class="content-title">資料の編集</h1>
 {% if documents %}
     <ul>
     {% for doc in documents %}
         <li>
             <a href="{% url 'document_edit' document_id=doc.pk %}">{{doc.title}}</a>
-            <a href="{% url 'document_preview' document_id=doc.pk %}" target="_blank">（表示確認）</a>
+            <a href="{% url 'document_preview' document_id=doc.pk %}" target="_blank">（確認）</a>
         </li>
     {% endfor %}
     </ul>
 {% else %}
-    資料がありません
+    <p>まだ作成した資料がありません</p>
 {% endif %}
 {% endblock %}

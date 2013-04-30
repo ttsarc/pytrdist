@@ -1,27 +1,23 @@
 {% extends 'base_mypage.html'%}
 {% block title %}登録情報の編集{% endblock %}
+{% block breadcrumb_inner %}{{ block.super }}
+	{% block breadcrumbs %}
+		{% breadcrumb '登録情報の編集' 'mypage_edit_profile' %}
+	{% endblock %}
+{% endblock %}
+
 {% block content %}
-{% if request.session.next %}
-<p><a href="{{ request.session.next }}">&laquo;ご利用中のページへ戻る</a></p>
-{% endif %}
-
-<h1>登録情報の編集</h1>
-{% if request.session.next %}
-{% endif %}
-
-<form action="" method="post">{% csrf_token %}
-<table>
-{{ form }}
-</table>
-<p>
-<input type="submit" value="保存する">
-</p>
-</form>
-
-{% if request.session.next %}
-<p><a href="{{ request.session.next }}">&laquo;ご利用中のページへ戻る</a></p>
-{% endif %}
-
+{% if request.session.next %}<p><a href="{{ request.session.next }}">&laquo;ご利用中のページへ戻る</a></p>{% endif %}
+<h1 class="content-title">登録情報の編集</h1>
+<div class="content-table member-form">
+	<form action="" method="post">{% csrf_token %}
+		<table>
+			{{ form }}
+		</table>
+		<p><input type="submit" value="保存する"></p>
+	</form>
+</div><!-- .content-table.member-form -->
+{% if request.session.next %}<p><a href="{{ request.session.next }}">&laquo;ご利用中のページへ戻る</a></p>{% endif %}
 
 {% endblock %}
 

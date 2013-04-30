@@ -1,17 +1,20 @@
 {% extends 'base_mypage.html'%}
 {% block title %}セミナーの編集{% endblock %}
+{% block breadcrumb_mypage %}
+	{% breadcrumb 'セミナーの編集' %}
+{% endblock %}
 {% block content %}
-<h1>セミナーの編集</h1>
+<h1 class="content-title">セミナーの編集</h1>
 {% if seminars %}
     <ul>
     {% for semi in seminars %}
         <li>
             <a href="{% url 'seminar_edit' seminar_id=semi.pk %}">{{semi.title}}</a>
-            <a href="{% url 'seminar_preview' seminar_id=semi.pk %}" target="_blank">（表示確認）</a>
+            <a href="{% url 'seminar_preview' seminar_id=semi.pk %}" target="_blank">（確認）</a>
         </li>
     {% endfor %}
     </ul>
 {% else %}
-    セミナーがありません
+    <p>まだ作成したセミナーがありません</p>
 {% endif %}
 {% endblock %}

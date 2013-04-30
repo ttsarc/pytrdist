@@ -1,9 +1,10 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 from django.conf import settings
+from trwk.views import trwk_home
 
 urlpatterns = patterns('',
-    url(r'^$',          TemplateView.as_view(template_name='base.html'), name='home'),
+    url(r'^$',          trwk_home, name='home'),
     url(r'^accounts/',  include('registration.backends.default.urls')),
     url(r'^accounts/',  include('accounts.urls')),
     url(r'^company/',   include('accounts.company_urls')),
@@ -13,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^contact/',   include('contact.urls')),
     url(r'^search/',    include('search.urls')),
     url(r'^blog/',      include('blog.urls')),
+    url(r'^pages/',     include('django.contrib.flatpages.urls')),
 )
 
 if settings.DEBUG:
