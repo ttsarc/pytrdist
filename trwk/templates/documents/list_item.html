@@ -1,0 +1,19 @@
+{% load thumbnail %}{% load static %}
+<article>
+	<a href="{{ item.get_absolute_url }}">{% include 'common/thumbnail/medium.html' with img_file=item.thumb_file alt=item.title%}</a>
+	<div class="text">
+		<h1 class="article-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h1>
+		<p>
+			{{ item.catch }}
+		</p>
+		<footer>
+			<ul>
+				<li>企業名：{{ item.company }}</li>
+			</ul>
+			<ul>
+				<li>カテゴリ：{{ item.get_category_display }}</li>
+			</ul>
+			<div class="article-more"><a href="{{ item.get_absolute_url }}"><img src="{% static 'images/list-more-white.png'%}" alt="詳細を見る" width="150" height="35"></a>　<a href="{{ item.get_download_url }}"><img src="{% static 'images/list-download-red.png'%}" alt="ダウンロード" width="150" height="35"></a></div>
+		</footer>
+	</div><!-- .text -->
+</article>

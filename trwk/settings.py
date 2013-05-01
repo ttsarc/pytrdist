@@ -257,7 +257,7 @@ BAD_EMAIL_DOMAIN = [
 
 THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
 THUMBNAIL_DEBUG = False
-
+DEFAULT_THUMBNAIL = os.path.join(SITE_ROOT, 'static', 'images', 'thumb-400x300.png')
 
 try:
     from local_settings import *

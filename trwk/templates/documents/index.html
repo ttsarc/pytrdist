@@ -1,30 +1,29 @@
 {% extends 'base.html'%}
-{% block title %}資料一覧{% endblock %}
+{% block title %}最新資料一覧{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb_url '資料' 'document_index'%}
+	{% if documents.number > 1 %}
+	{% breadcrumb documents.number %}ページ
+	{% endif %}
+{% endblock %}
+
 {% block content %}
 
-<h1>資料一覧</h1>
-{% for doc in documents %}
-<div>
-    <h2><a href="{% url 'document_detail' document_id=doc.id %}">{{ doc.title }}</a></h2>
-    <div>{{ doc.catch }}</div>
-    <div><a href="{% url 'document_download' document_id=doc.id %}">ダウンロード</a></div>
-</div>
+<h1 class="content-title">最新資料一覧</h1>
+
+{% with items=documents pagenation_url='document_paged' %}
+{% include 'common/pager_info.html' %}
+{% endwith %}
+
+<div class="bottom-list">
+{% for item in documents %}
+{% include 'documents/list_item.html'%}
 {% endfor %}
-<div>全{{ count|intcomma }}件</div>
-<div class="pagination">
-    <span class="step-links">
-        {% if documents.has_previous %}
-            <a href="{% url 'document_paged' page=documents.previous_page_number %}">&laquo前のページ</a>
-        {% endif %}
+</div><!-- .bottom-list -->
 
-        <span class="current">
-            {{ documents.number }} / {{ documents.paginator.num_pages }}ページ
-        </span>
+{% with items=documents pagenation_url='document_paged' %}
+{% include 'common/pager.html' %}
+{% endwith %}
 
-        {% if documents.has_next %}
-            <a href="{% url 'document_paged' page=documents.next_page_number %}">次のページ&raquo</a>
-        {% endif %}
-    </span>
-</div>
 
 {% endblock %}

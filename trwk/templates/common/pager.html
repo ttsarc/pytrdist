@@ -1,0 +1,7 @@
+<div class="pager">
+	<div class="pager-count">全<strong>{{ count|intcomma }}</strong>件 <strong>{{ items.number }}</strong>ページ / <strong>{{ items.paginator.num_pages }}</strong>ページ中</div>
+	<div class="pager-button">
+		{% if items.has_previous %}<a href="{% url pagenation_url page=items.previous_page_number %}">&laquo;前のページへ</a>{% endif %}
+		{% if items.has_next %}<a href="{% url pagenation_url page=items.next_page_number %}">次のページへ&raquo</a>{% endif %}
+	</div><!-- .pager-button -->
+</div><!-- .pager -->

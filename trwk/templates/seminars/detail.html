@@ -1,7 +1,9 @@
 {% extends 'base.html'%}
-{% load thumbnail %}
-
 {% block title %}{{ seminar.title }}{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb_url 'セミナー' 'seminar_index'%}
+	{% breadcrumb seminar.title %}
+{% endblock %}
 
 {% block content %}
 {%if preview == True %}
@@ -13,21 +15,82 @@
         <div>スーパーユーザー権限で閲覧中です</div>
     {% endif%}
 {% endif %}
-<h1>{{ seminar.title }}</h1>
-{% thumbnail seminar.thumb_file "300" as img %}
-    <img src="{{ img.url }}">
-{% endthumbnail %}
 
-<div>{{ seminar.catch }}</div>
-<div>現在の申し込み数: {{ entry_count }}/ {{ seminar.limit_number }}</div>
+
+<h1 class="content-title">{{ seminar.title }}</h1>
+<div class="detail-thumbnail">
+{% include 'common/thumbnail/large.html' with img_file=seminar.thumb_file alt=seminar.title%}
+</div>
+
 {% if is_entered %}
-すでに申し込み済みです
-{% elif not seminar.is_open %}
-申し込み受け付けが終了しました。
-{% elif seminar.entry_status == 0 %}
-申し訳ございません。満員となり現在申込できません
+<p class="detail-button close">
+	すでにこのセミナーに申込済みです。<br>
+	<a href="{% url 'seminar_index'%}">&gt;&gt;他のセミナーを探す</a>
+</p><!-- .detail-button.close -->
+{% elif seminar.entry_status == 1 and seminar.is_open %}
+<p class="detail-button">
+	<a href="{{ seminar.get_entry_url }}" class="request">&gt;&gt;お申込み</a>
+</p><!-- .detail-button -->
 {% else %}
-<div><a href="{% url 'seminar_entry' seminar_id=seminar.id %}">参加申し込み</a></div>
-{% endif%}
+<p class="detail-button close">
+	このセミナーの受付は終了しました<br>
+	<a href="{% url 'seminar_index'%}">&gt;&gt;他のセミナーを探す</a>
+</p><!-- .detail-button.close -->
+{% endif %}
+
+<h2 class="content-title-h2">概要</h2>
+
+{{ seminar.catch|linebreaks }}
+
+<h2 class="content-title-h2">詳細</h2>
+
+{{ seminar.detail|linebreaks }}
+
+{% if seminar.target %}
+<h3 class="content-title-h3">対象企業</h3>
+
+{{ seminar.target|linebreaks }}
+{% endif %}
+
+<div class="content-table">
+	<table>
+		<tr><th>種別</th><td>{{ seminar.get_type_display }}</td></tr>
+		<tr><th>カテゴリー</th><td>{{ seminar.get_category_display }}</td></tr>
+		<tr><th>開催日</th><td>{{ seminar.exhibition_date }}</td></tr>
+		<tr><th>終了日</th><td>{{ seminar.close_date }}</td></tr>
+		<tr><th>開催時間</th><td>{{ seminar.exhibition_time }}</td></tr>
+		<tr><th>受付開始時間</th><td>{{ seminar.accepting_start }}</td></tr>
+		<tr><th>主催者</th><td>{{ seminar.promoter }}</td></tr>
+		<tr><th>定員</th><td>{{ seminar.capacity }}</td></tr>
+		<tr><th>費用</th><td>{{ seminar.expenses }}</td></tr>
+		<tr><th>会場名</th><td>{{ seminar.place_name }}</td></tr>
+		<tr><th>会場に関するURL</th><td><a href="{{ seminar.place_url }}" target="_blank">{{ seminar.place_url }}</a></td></tr>
+		<tr><th>申し込み終了時間</th><td>{{ seminar.limit_datetime }}</td></tr>
+		<tr><th>受付状態</th><td>
+		{% if seminar.entry_status == 1 and seminar.is_open %}
+		受付中
+		{% else %}
+		受付終了
+		{% endif %}
+		</td></tr>
+		<tr><th>現在の申し込み数</th><td>{{entry_count }} / {{ seminar.limit_number}} </td></tr>
+	</table>
+</div><!-- .content-table -->
+{% if is_entered %}
+<p class="detail-button close">
+	すでにこのセミナーに申込済みです。<br>
+	<a href="{% url 'seminar_index'%}">&gt;&gt;他のセミナーを探す</a>
+</p><!-- .detail-button.close -->
+{% elif seminar.entry_status == 1 and seminar.is_open %}
+<p class="detail-button">
+	<a href="{{ seminar.get_entry_url }}" class="request">&gt;&gt;お申込み</a>
+</p><!-- .detail-button -->
+{% else %}
+<p class="detail-button close">
+	このセミナーの受付は終了しました<br>
+	<a href="{% url 'seminar_index'%}">&gt;&gt;他のセミナーを探す</a>
+</p><!-- .detail-button.close -->
+{% endif %}
+
 
 {% endblock %}

@@ -960,16 +960,49 @@ a:hover img{
 
 
 /* ログインフォーム */
-
-/* ie7以下のみ表示 */
-.side-text-ie{
-	display: none;
-	/display: block;
-	color:#444;
-	font-size: 12px;
-	margin: 5px 0;
+.side-login{
 }
 
+.side-login-description{
+	margin: 5px 0;
+	/margin: 5px 0 0;
+}
+.side-login-passsword{
+	text-align: right;
+	font-size: 10px;
+}
+
+.side-login-form{
+}
+.side-login-form form{
+	margin: 0;
+}
+.side-login-form input[type="text"],
+.side-login-form input.text,
+.side-login-form input[type="password"],
+.side-login-form input.password{
+	display: block;
+	border: 1px solid #ece9e6;
+	height: 25px;
+	line-height: 25px;
+	background: #fff;
+	padding: 0 5px;
+	width: 280px;
+	margin: 5px auto;
+}
+.side-login-form input[type="submit"],
+.side-login-form input.submit{
+	display: block;
+	height: 30px;
+	width: 100px;
+	background: url(../images/side-login-button.png) no-repeat 0 0;
+	margin: 10px 5px 10px auto;
+	text-indent: -9999px;
+	border: none;
+}
+.side-text-ie{
+	display: none;
+}
 
 /* ==========================================================================
 	メインカラム
@@ -1262,6 +1295,7 @@ a:hover img{
 .content-table input.password{
 	border: 1px solid #ece9e6;
 	height: 25px;
+	line-height: 25px;
 	background: #fff;
 	padding: 0 5px;
 	/width: 250px;
@@ -1353,44 +1387,6 @@ a:hover img{
 	padding-left: 15px;
 }
 
-/* .pager */
-.pager{
-	border-top: 1px solid #ece9e6;
-	padding: 10px 0 0;
-	margin: 30px 0;
-}
-.pager-count{
-	font-size: 11px;
-	text-align: right;
-}
-.pager-count strong{
-	font-weight: bold;
-	font-size: 14px;
-}
-.pager-number{
-	text-align: right;
-	font-size: 11px;
-}
-.pager-button{
-	text-align: center;
-	margin: 20px 0;
-}
-.pager-button a{
-	display: inline-block;
-	/display: inline;
-	zoom: 1;
-	background: #333;
-	border: 1px solid #000;
-	color: #fff;
-	text-decoration: none;
-	padding: 7px 30px;
-	font-size: 12px;
-	line-height: 14px;
-	font-weight: bold;
-	margin: 0 5px;
-}
-
-
 /* ==========================================================================
 	詳細ページ
 ========================================================================== */
@@ -1435,9 +1431,393 @@ a:hover img{
 
 .detail-thumbnail{
 	text-align: center;
-	margin: 20px 0;
+	margin: 20px auto;
+	width: 400px;
 }
 .detail-thumbnail img{
 	display: block;
-	margin: 0 auto;
 }
+
+
+/* ==========================================================================
+	リストページ
+========================================================================== */
+
+/* list-640-red */
+.list-title-640-red{
+	background: url(../images/title-bg-640-red.png) no-repeat 0 0;
+	width: 640px;
+	height: 30px;
+	overflow: hidden;
+	font-size: 14px;
+	line-height: 30px;
+	margin: 0;
+	color:#fff;
+	text-shadow: 1px 1px 1px #853f44;
+}
+
+.icon-data-red,
+.icon-seminar-red{
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	width: 22px;
+	height: 20px;
+	vertical-align: middle;
+}
+.icon-data-red{
+	background: url(../images/icon-data-red.png) no-repeat 0 0;
+}
+.icon-seminar-red{
+	background: url(../images/icon-seminar-red.png) no-repeat 0 0;
+}
+
+.list-title-640-red .icon-data-red,
+.list-title-640-red .icon-seminar-red{
+	margin: 0 3px 0 10px;
+}
+
+.list-640-red{
+	border-left: 1px solid #ece9e6;
+	border-right: 1px solid #ece9e6;
+	border-bottom: 1px solid #ece9e6;
+	margin: 0 0 40px;
+	background: #fff;
+	padding: 0 10px;
+}
+.list-640-red article{
+	border-bottom: 1px solid #ece9e6;
+	padding: 15px 5px;
+	zoom: 1;
+}
+.list-640-red article:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.list-640-red article.last,
+.list-640-red article:last-child{
+	border-bottom: none;
+}
+.list-640-red article .thumbnail{
+	float: left;
+	display: block;
+	max-width: 200px;
+}
+.list-640-red article .text{
+	margin: 0 0 0 215px;
+}
+.list-640-red article .article-title{
+	margin: 0 0 10px;
+	font-size: 16px;
+	line-height: 20px;
+}
+.list-640-red article p{
+	font-size: 12px;
+	line-height: 16px;
+}
+.list-640-red article footer ul{
+	padding: 0;
+	margin: 0;
+}
+.list-640-red article footer li{
+	display: inline;
+}
+.list-640-red article .article-more{
+	text-align: right;
+	margin: 10px 0 0;
+}
+
+/* .bottom-list */
+.bottom-list{
+	margin: 0 0 10px;
+	padding: 10px 10px 0;
+	border-top: 1px solid #ece9e6;
+}
+.bottom-list article{
+	border-bottom: 1px solid #ece9e6;
+	padding: 15px 5px;
+	zoom: 1;
+}
+.bottom-list article:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.bottom-list article .thumbnail{
+	float: left;
+	display: block;
+	max-width: 200px;
+}
+.bottom-list article .text{
+	margin: 0 0 0 215px;
+}
+.bottom-list article .article-title{
+	margin: 0 0 10px;
+	font-size: 16px;
+	line-height: 20px;
+}
+.bottom-list article p{
+	font-size: 12px;
+	line-height: 16px;
+}
+.bottom-list article footer ul{
+	padding: 0;
+	margin: 0;
+}
+.bottom-list article footer li{
+	display: inline;
+}
+.bottom-list article .article-more{
+	text-align: right;
+	margin: 10px 0 0;
+}
+
+
+/* http://twitter.github.io/bootstrap/ */
+
+/* .pager */
+.pager{
+	margin: 0 0 20px;
+}
+.pager-count{
+	font-size: 11px;
+	text-align: right;
+}
+.pager-count strong{
+	font-weight: bold;
+	font-size: 14px;
+}
+.pager-number{
+	text-align: right;
+	font-size: 11px;
+}
+.pager-button{
+	text-align: center;
+	margin: 20px 0;
+}
+.pager-button a{
+	display: inline-block;
+	/display: inline;
+	zoom: 1;
+	background: #333;
+	border: 1px solid #000;
+	color: #fff;
+	text-decoration: none;
+	padding: 7px 30px;
+	font-size: 12px;
+	line-height: 14px;
+	font-weight: bold;
+	margin: 0 5px;
+}
+.pager-button a:hover{
+	background: #444;
+}
+
+.pagination {
+  margin: 20px 0;
+}
+
+.pagination ul {
+  display: inline-block;
+  *display: inline;
+  margin-bottom: 0;
+  margin-left: 0;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  *zoom: 1;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+body .pagination ul > li {
+  display: inline;
+  margin:0;
+  padding:0;
+  list-style-type:none;
+}
+
+.pagination ul > li > a,
+.pagination ul > li > span {
+  float: left;
+  padding: 4px 12px;
+  line-height: 20px;
+  text-decoration: none;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-left-width: 0;
+}
+
+.pagination ul > li > a:hover,
+.pagination ul > li > a:focus,
+.pagination ul > .active > a,
+.pagination ul > .active > span {
+  background-color: #f5f5f5;
+}
+
+.pagination ul > .active > a,
+.pagination ul > .active > span {
+  color: #999999;
+  cursor: default;
+}
+
+.pagination ul > .disabled > span,
+.pagination ul > .disabled > a,
+.pagination ul > .disabled > a:hover,
+.pagination ul > .disabled > a:focus {
+  color: #999999;
+  cursor: default;
+  background-color: transparent;
+}
+
+.pagination ul > li:first-child > a,
+.pagination ul > li:first-child > span {
+  border-left-width: 1px;
+  -webkit-border-bottom-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+  -webkit-border-top-left-radius: 4px;
+          border-top-left-radius: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  -moz-border-radius-topleft: 4px;
+}
+
+.pagination ul > li:last-child > a,
+.pagination ul > li:last-child > span {
+  -webkit-border-top-right-radius: 4px;
+          border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+          border-bottom-right-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  -moz-border-radius-bottomright: 4px;
+}
+
+.pagination-centered {
+  text-align: center;
+}
+
+.pagination-right {
+  text-align: right;
+}
+
+.pagination-large ul > li > a,
+.pagination-large ul > li > span {
+  padding: 11px 19px;
+  font-size: 17.5px;
+}
+
+.pagination-large ul > li:first-child > a,
+.pagination-large ul > li:first-child > span {
+  -webkit-border-bottom-left-radius: 6px;
+          border-bottom-left-radius: 6px;
+  -webkit-border-top-left-radius: 6px;
+          border-top-left-radius: 6px;
+  -moz-border-radius-bottomleft: 6px;
+  -moz-border-radius-topleft: 6px;
+}
+
+.pagination-large ul > li:last-child > a,
+.pagination-large ul > li:last-child > span {
+  -webkit-border-top-right-radius: 6px;
+          border-top-right-radius: 6px;
+  -webkit-border-bottom-right-radius: 6px;
+          border-bottom-right-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  -moz-border-radius-bottomright: 6px;
+}
+
+.pagination-mini ul > li:first-child > a,
+.pagination-small ul > li:first-child > a,
+.pagination-mini ul > li:first-child > span,
+.pagination-small ul > li:first-child > span {
+  -webkit-border-bottom-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+          border-top-left-radius: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  -moz-border-radius-topleft: 3px;
+}
+
+.pagination-mini ul > li:last-child > a,
+.pagination-small ul > li:last-child > a,
+.pagination-mini ul > li:last-child > span,
+.pagination-small ul > li:last-child > span {
+  -webkit-border-top-right-radius: 3px;
+          border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+}
+
+.pagination-small ul > li > a,
+.pagination-small ul > li > span {
+  padding: 2px 10px;
+  font-size: 11.9px;
+}
+
+.pagination-mini ul > li > a,
+.pagination-mini ul > li > span {
+  padding: 0 6px;
+  font-size: 10.5px;
+}
+
+.pager {
+  margin: 20px 0;
+  text-align: center;
+  list-style: none;
+  *zoom: 1;
+}
+
+.pager:before,
+.pager:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+.pager:after {
+  clear: both;
+}
+
+.pager li {
+  display: inline;
+}
+
+.pager li > a,
+.pager li > span {
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 15px;
+     -moz-border-radius: 15px;
+          border-radius: 15px;
+}
+
+.pager li > a:hover,
+.pager li > a:focus {
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+
+.pager .next > a,
+.pager .next > span {
+  float: right;
+}
+
+.pager .previous > a,
+.pager .previous > span {
+  float: left;
+}
+
+.pager .disabled > a,
+.pager .disabled > a:hover,
+.pager .disabled > a:focus,
+.pager .disabled > span {
+  color: #999999;
+  cursor: default;
+  background-color: #fff;
+}
+

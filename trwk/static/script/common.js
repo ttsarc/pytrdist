@@ -5,7 +5,7 @@ function full2half(text){
     return text;
 }
 $(function(){
-    $('tr.required label').each(function(){
+    $('tr.required th label').each(function(){
         var text = $(this).text()
         $(this).html( text.replace(':',':<span class="required">(必須)</span>'));
     });

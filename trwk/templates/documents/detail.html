@@ -1,6 +1,9 @@
 {% extends 'base.html'%}
-{% load thumbnail %}
 {% block title %}{{ document.title }}{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb_url '資料' 'document_index'%}
+	{% breadcrumb document.title %}
+{% endblock %}
 
 {% block content %}
 {%if preview == True %}
@@ -12,22 +15,55 @@
         <div>スーパーユーザー権限で閲覧中です</div>
     {% endif%}
 {% endif %}
-<h1>{{ document.title }}</h1>
-<div>{{ document.catch }}</div>
 
-{% if document.thumb_file %}
-    thumb_file
-    {% thumbnail document.thumb_file "200" as img %}
-    <img src="{{ img.url }}" height="{{ img.height}}" width="{{img.width}}">
-    {% endthumbnail %}
+
+<h1 class="content-title">{{ document.title }}</h1>
+
+<div class="detail-thumbnail">
+{% include 'common/thumbnail/large.html' with img_file=document.thumb_file alt=document.title%}
+</div>
+
+
+<p class="detail-button">
+{% ifequal document.download_status 1 %}
+	<a href="{{ document.get_download_url }}" class="download">&gt;&gt;ダウンロード</a>
+{% else%}
+現在ダウンロードできません。
+{% endifequal %}
+</p><!-- .detail-button -->
+
+
+<h2 class="content-title-h2">概要</h2>
+
+	{{ document.catch|linebreaks }}
+
+{% if document.detail %}
+<h3 class="content-title-h2">詳細</h3>
+
+	{{ document.detail|linebreaks }}
 {% endif %}
 
-{% if 0 %}
-    pdf_file
-    {% thumbnail document.pdf_file "200" as img %}
-    <img src="{{ img.url }}" height="{{ img.height}}" width="{{img.width}}">
-    {% endthumbnail %}
-{% endif %}
+{% if document.results %}
+<h3 class="content-title-h3">実績</h3>
 
-<div><a href="{% url 'document_download' document_id=document.id %}">ダウンロード</a></div>
+	{{ document.results|linebreaks }}
+
+{% endif %}
+<div class="content-table">
+<table>
+	<tr><th>サービスカテゴリ</th><td>{{ document.get_category_display }}</td></tr>
+	<tr><th>対象業種</th><td>{{ document.get_target_type_display }}</td></tr>
+	<tr><th>対象会社規模</th><td>{{ document.get_target_size_display }}</td></tr>
+	<tr><th>更新日</th><td>{{ document.update_date }}</td></tr>
+</table>
+</div><!-- .content-table -->
+
+<p class="detail-button">
+{% ifequal document.download_status 1 %}
+	<a href="{{ document.get_download_url }}" class="download">&gt;&gt;ダウンロード</a>
+{% else%}
+現在ダウンロードできません。
+{% endifequal %}
+</p><!-- .detail-button -->
+
 {% endblock %}

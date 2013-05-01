@@ -1,9 +1,14 @@
 {% extends 'base.html'%}
 {% load thumbnail %}
-{% block title %}{{ post.title }}{% endblock %}
+{% block title %}{{ post.title }} | ブログ{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb_url 'ブログ' 'post_index' %}
+	{% breadcrumb post.title %}
+{% endblock %}
 
 {% block content %}
-<h1>{{ post.title }}</h1>
+<h1 class="content-title">{{ post.title }}</h1>
+<time class="content-date" datetime="{{ post.update_date|date:'Y-m-d'}}" pubdate>{{ post.update_date }}</time>
 {% autoescape off %}
 <div>{{ post.content_with_img | linebreaks  }}</div>
 {% endautoescape %}

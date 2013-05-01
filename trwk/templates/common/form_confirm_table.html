@@ -1,0 +1,21 @@
+<table>
+{% for field in form %}
+    <tr>
+        <th>{{ field.label }}</th><td>
+        {% if field.field.choices %}
+            {% for key,val in field.field.choices %}
+                {% if key|slugify == field.value|slugify %}
+                {{ val }}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% if field.value == True %}
+            はい
+            {% else %}
+            {{ field.value }}
+            {% endif %}
+        {% endif%}
+        </td>
+    </tr>
+{% endfor %}
+</table>

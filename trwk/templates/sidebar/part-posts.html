@@ -1,0 +1,11 @@
+<div class="side-item">
+	<h2 class="side-title">お知らせ</h2>
+	{% for post in posts%}
+	<article>
+		<time class="date" datetime="{{post.update_date|date:'Y-m-d'}}" pubdate>{{ post.update_date|date:'Y年m月d日' }}</time>
+		<h1 class="article-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h1>
+	</article>
+	{% empty %}
+		<h1 class="article-title">まだ記事はありません</h1>
+	{% endfor %}
+</div><!-- .side-item -->

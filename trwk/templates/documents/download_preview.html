@@ -1,9 +1,15 @@
 {% extends 'base.html'%}
-{% block title %}{{ document.title }}のプレビュー{% endblock %}
+{% block title %}{{ document.title }}のダウンロード確認{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb_url '資料' 'document_index'%}
+	{% breadcrumb_url document.title 'document_detail' document_id=document.id %}
+	{% breadcrumb 'ダウンロードの確認'%}
+{% endblock %}
 
 {% block content %}
-<h1>送信内容の確認　{{ document.title }}</h1>
 
+<h1 class="content-title">資料「{{document.title}}」のダウンロード確認</h1>
+<div class="content-table request-check">
 <table>
 {% for field in user_form %}
 	<tr>
@@ -55,9 +61,8 @@
 {% endfor %}
 </table>
 
-{% with submit_value='資料をダウンロード'%}
-{% include 'common/form_btn_complete.html' %}
-{% endwith %}
-
+{% include 'common/form_btn_complete.html' with submit_value='資料をダウンロード'%}
 </form>
+</div><!-- .content-table -->
+
 {% endblock %}

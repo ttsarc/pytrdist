@@ -1,0 +1,26 @@
+<table>
+{% for field in user_form %}
+	<tr>
+		<th>{{ field.label }}</th><td>{{ field.value }}</td>
+	</tr>
+{% endfor %}
+{% for field in user_profile_form %}
+    <tr>
+        <th>{{ field.label }}</th><td>{% spaceless %}
+        {% if field.field.choices %}
+            {% for key,val in field.field.choices %}
+                {% if key|slugify == field.value|slugify %}
+                {{ val }}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% if field.value == True %}
+            はい
+            {% else %}
+            {{ field.value }}
+            {% endif %}
+        {% endif%}
+        {% endspaceless%}</td>
+    </tr>
+{% endfor %}
+</table>

@@ -6,6 +6,7 @@ from django.core import signing
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from accounts.models import Company
 from seminars.choices import *
 from accounts.choices import PREFECTURES_CHOICES
@@ -68,6 +69,12 @@ class Seminar(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('seminar_detail', kwargs={'seminar_id':self.pk})
+
+    def get_entry_url(self):
+        return reverse('seminar_entry', kwargs={'seminar_id':self.pk})
 
     class Meta:
         verbose_name = "セミナー"

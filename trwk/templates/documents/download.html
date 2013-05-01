@@ -1,9 +1,15 @@
 {% extends 'base.html'%}
 {% block title %}{{ document.title }}のダウンロード{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb_url '資料' 'document_index'%}
+	{% breadcrumb_url document.title 'document_detail' document_id=document.id %}
+	{% breadcrumb 'ダウンロード'%}
+{% endblock %}
 
 {% block content %}
-<h1>{{ document.title }}</h1>
 
+<h1 class="content-title">資料「{{document.title}}」のダウンロード</h1>
+<div class="content-table">
 <table>
 {% for field in user_form %}
 	<tr>
@@ -13,7 +19,7 @@
 
 {% for field in user_profile_form %}
     <tr>
-        <th>{{ field.label }}</th><td>
+        <th>{{ field.label }}</th><td>{% spaceless %}
         {% if field.field.choices %}
             {% for key,val in field.field.choices %}
                 {% if key|slugify == field.value|slugify %}
@@ -27,17 +33,27 @@
             {{ field.value }}
             {% endif %}
         {% endif%}
-        </td>
+        {% endspaceless%}</td>
     </tr>
 {% endfor %}
 </table>
-<a href="{% url 'mypage_edit_profile'%}?next={{request.path}}">登録情報の変更はこちら</a>
-<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-<table>
-{{ form }}
-</table>
+<div class="member-edit-link"><a href="{% url 'mypage_edit_profile'%}?next={{request.path}}">登録情報の変更はこちら</a></div>
+</div><!-- .content-table -->
 
-{% include 'common/form_btn_confirm.html' %}
+<div class="content-table request-form">
+	<form action="" method="post">{% csrf_token %}
+	<table>
+	<tr class="required"><th>{{ form.stage.label_tag }}:</label></th><td>{{ form.stage.errors }}{{ form.stage }}</td></tr>
+	</table>
+	<p>
+	{% if form.confirmation.errors %}
+	{% for error in form.confirmation.errors %}{{ error }}<br>{% endfor %}
+	{% endif %}
+	{{ form.confirmation }} <a href="#" target="_blank">利用規約</a>に同意します。
+	{% include 'common/form_btn_confirm.html' %}
+	</p>
+	</form>
+</div><!-- .content-table.request-form -->
 
-</form>
+
 {% endblock %}

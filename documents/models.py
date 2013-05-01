@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.core import signing
 from django.utils import timezone
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from accounts.models import Company
 from documents.choices import *
 from trwk.libs.fields import ImageWithThumbsField, ContentTypeRestrictedFileField
@@ -41,7 +42,8 @@ class Document(models.Model):
     thumb_file = ImageField(
         verbose_name = 'サムネイル画像',
         upload_to = get_thumb_uplod_path,
-        blank = True
+        blank = True,
+        default=settings.DEFAULT_THUMBNAIL,
     )
 
     category =        models.CharField('サービスカテゴリ', max_length=16, choices=SERVICE_CHOICES)
@@ -66,6 +68,12 @@ class Document(models.Model):
             {'id' : self.id}
         )
         return sign
+
+    def get_absolute_url(self):
+        return reverse('document_detail', kwargs={'document_id':self.pk})
+
+    def get_download_url(self):
+        return reverse('document_download', kwargs={'document_id':self.pk})
 
     class Meta:
         verbose_name = "資料"

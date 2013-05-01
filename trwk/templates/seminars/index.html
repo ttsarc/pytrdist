@@ -1,36 +1,25 @@
 {% extends 'base.html'%}
-{% load thumbnail %}
-{% block title %}セミナー一覧{% endblock %}
+{% block title %}最新セミナー一覧{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb_url 'セミナー' 'seminar_index'%}
+	{% if seminars.number > 1 %}
+	{% breadcrumb seminars.number %}ページ
+	{% endif %}
+{% endblock %}
+
 {% block content %}
+<h1 class="content-title">セミナー一覧</h1>
 
-<h1>セミナー一覧</h1>
-{% for semi in seminars %}
-<div>
-    <h2><a href="{% url 'seminar_detail' seminar_id=semi.id %}">{{ semi.title }}</a></h2>
-    <div>{{ semi.catch }}</div>
-    <div><a href="{% url 'seminar_entry' seminar_id=semi.id %}">申し込む</a></div>
-    {% if semi.thumb_file %}
-    {% thumbnail semi.thumb_file "200" as img %}
-    <img src="{{ img.url }}" height="{{ img.height}}" width="{{img.width}}">
-    {% endthumbnail %}
-    {% endif %}
-</div>
+{% include 'common/pager_info.html' with items=seminars pagenation_url='seminar_paged'%}
+
+<div class="bottom-list">
+{% for item in seminars %}
+{% include 'seminars/list_item.html'%}
 {% endfor %}
-<div>全{{ count|intcomma }}件</div>
-<div class="pagination">
-    <span class="step-links">
-        {% if seminars.has_previous %}
-            <a href="{% url 'seminar_paged' page=seminars.previous_page_number %}">&laquo前のページ</a>
-        {% endif %}
+</div><!-- .bottom-list -->
 
-        <span class="current">
-            {{ seminars.number }} / {{ seminars.paginator.num_pages }}ページ
-        </span>
+{% include 'common/pager.html' with items=seminars pagenation_url='seminar_paged' %}
 
-        {% if seminars.has_next %}
-            <a href="{% url 'seminar_paged' page=seminars.next_page_number %}">次のページ&raquo</a>
-        {% endif %}
-    </span>
-</div>
+
 
 {% endblock %}
