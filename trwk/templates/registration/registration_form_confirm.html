@@ -1,7 +1,11 @@
 {% extends "base.html" %}
-{% block title %}会員登録 送信内容の確認{% endblock %}
+{% block title %}とれわか会員登録 送信内容の確認{% endblock %}
+{% block breadcrumb_inner %}{{ block.super}}
+	{% breadcrumb 'とれわか会員登録 送信内容の確認' %}
+{% endblock %}
 {% block content %}
-<h1>会員登録 送信内容の確認</h1>
+<h1 class="content-title">とれわか会員登録 送信内容の確認</h1>
+<div class="content-table">
 <form method="post" action="">{% csrf_token %}
 
 {% for field in form %}{{ field.as_hidden }}{% endfor %}
@@ -14,4 +18,5 @@
 {% include 'common/form_btn_complete.html' %}
 {% endwith %}
 </form>
+</div>
 {% endblock %}

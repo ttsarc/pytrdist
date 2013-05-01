@@ -1,8 +1,13 @@
 {% extends "base.html" %}
-{% block title %}会員登録完了{% endblock %}
+{% block title %}とれわか会員登録完了{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb 'とれわか会員登録完了'%}
+{% endblock %}
 {% block content %}
 
-<p>会員登録が完了しました。</p>
+<h1 class="content-title">とれわか会員登録完了</h1>
+<p>とれわか会員登録完了が完了しました。</p>
+<p><a href="{% url 'home'%}">とれわかトップへ</a></p>
 {% if request.session.next %}
 <!--{{ request.session.next }}-->
 <p>ご利用中のページへ転送します。</p>

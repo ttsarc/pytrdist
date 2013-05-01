@@ -1,9 +1,9 @@
 {% extends 'email/base.txt'%}
 {% block content %}
-{{ p.last_name }} {{ p.first_name }}　様
+{{ p.last_name }} {{ p.first_name }} 様
 
 この度はとれわかにご登録ありがとうございました。
-下記の情報にて登録されましたので、
+下記の情報にて登録されました。
 
 ■ご登録メールアドレス：{{ user.email }}
 

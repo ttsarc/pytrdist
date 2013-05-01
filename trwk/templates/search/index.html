@@ -14,8 +14,8 @@
 {% block content %}
 <h1 class="content-title">キーワード検索{% if request.GET.keyword %}「{{request.GET.keyword}}」{% endif%}</h1>
 <form action="" method="get">
-{{ form.keyword }}
-<input type="submit" value="検索">
+<p>{{ form.keyword }}
+<input type="submit" value="検索"></p>
 </form>
 {% include 'common/pager_info.html' with items=results%}
 {% include 'common/pagination.html' with items=results items_total=count %}
@@ -30,12 +30,13 @@
 		{% include 'seminars/list_item.html'%}
 	{% endif%}
 
-{% empty %}
+{% endfor %}
+</div><!-- .bottom-list -->
+
+{% else %}
 	{% if request.GET.keyword %}
 	<p>ご指定のキーワードでは見つかりませんでした</p>
 	{% endif%}
-{% endfor %}
-</div><!-- .bottom-list -->
 {% endif %}
 {% include 'common/pager_info.html' with items=results%}
 {% include 'common/pagination.html' with items=results items_total=count %}

@@ -1,8 +1,13 @@
 {% extends "base.html" %}
-{% block title %}会員情報入力{% endblock %}
+{% block title %}とれわか会員情報入力{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb 'とれわか会員情報入力'%}
+{% endblock %}
 {% block content %}
 
 {% if is_activatable %}
+<h1 class="content-title">とれわか会員情報入力</h1>
+<div class="content-table member-form">
 <p>とれわか会員登録の申し込みありがとうございます。</p>
 <p>下記の情報を入力すると登録が完了いたします。</p>
 <form action="" method="post">{% csrf_token %}
@@ -16,7 +21,7 @@
 {% include 'common/form_btn_confirm.html' %}
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
-
+</div>
 {% else %}
 
 <p>認証に失敗しました</p>

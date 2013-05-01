@@ -1,10 +1,13 @@
-{% extends 'base_mypage.html'%}
+{% extends 'base.html'%}
 {% block title %}{{ company.name}} - 掲載企業詳細{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb_url '掲載企業一覧' 'company_index'%}
+{% endblock %}
 {% block content %}
-<h1>{{ company.name}}  掲載企業詳細</h1>
+<h1 class="content-title">{{ company.name}}  掲載企業詳細</h1>
 
 {% if documents %}
-<h2>{{ company.name}}の資料</h2>
+<h2 class="content-title-h2">{{ company.name}}の資料</h2>
 <ul>
 {% for d in documents %}
     <li><a href="{% url 'document_detail' document_id=d.id%}">{{d.title}}</a></li>
@@ -13,7 +16,7 @@
 {% endif%}
 
 {% if seminars %}
-<h2>{{ company.name}}のセミナー</h2>
+<h2 class="content-title-h2">{{ company.name}}のセミナー</h2>
 <ul>
 {% for s in seminars %}
     <li><a href="{% url 'seminar_detail' seminar_id=s.id%}">{{s.title}}</a></li>

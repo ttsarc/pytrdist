@@ -1,41 +1,29 @@
 {% extends "base.html" %}
 {% block title %}会員情報入力の確認{% endblock %}
+{% block breadcrumb_inner %}
+	{% breadcrumb '会員情報入力の確認'%}
+{% endblock %}
 {% block content %}
 
 {% if is_activatable %}
+<h1 class="content-title">会員情報入力の確認</h1>
 <p>入力内容を確認し、間違いがなかったら送信してください</p>
+<div class="content-table request-check">
 <form action="" method="post" id="preview-form">{% csrf_token %}
 {% for field in form %}{{ field.as_hidden }}{% endfor %}
 <table>
 <tr>
     <th>メールアドレス</th><td>{{ temp_user.email }}</td>
 </tr>
-{% for field in form %}
-    <tr>
-        <th>{{ field.label }}</th><td>
-        {% if field.field.choices %}
-            {% for key,val in field.field.choices %}
-                {% if key|slugify == field.value %}
-                {{ val }}
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            {% if field.value == True %}
-            はい
-            {% else %}
-            {{ field.value }}
-            {% endif %}
-        {% endif%}
-        </td>
-    </tr>
-{% endfor %}
 </table>
+{% include 'common/form_confirm_table.html'%}
+
 {% with submit_value='登録する'%}
 {% include 'common/form_btn_complete.html' %}
 {% endwith %}
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
-
+</div>
 
 {% else %}
 
