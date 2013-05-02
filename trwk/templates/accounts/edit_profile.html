@@ -1,9 +1,7 @@
-{% extends 'base_mypage.html'%}
+{% extends 'base_mypage.html'%}{% load breadcrumb %}
 {% block title %}登録情報の編集{% endblock %}
-{% block breadcrumb_inner %}{{ block.super }}
-	{% block breadcrumbs %}
-		{% breadcrumb '登録情報の編集' 'mypage_edit_profile' %}
-	{% endblock %}
+{% block breadcrumb_mypage %}
+	{% breadcrumb '登録情報の編集' 'mypage_edit_profile' %}
 {% endblock %}
 
 {% block content %}

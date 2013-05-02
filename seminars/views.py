@@ -337,7 +337,7 @@ def entry_log(request, page=1, type='list'):
         paginator = Paginator(leads, settings.LOGS_PER_PAGE)
         leads_pages = paginator.page(page)
         return render_to_response(
-            'seminars/entry_leads_list.html',
+            'seminars/mypage_leads_list.html',
             {
                 'leads' : leads_pages,
                 'form'  : form,
@@ -359,7 +359,7 @@ def my_entry_history(request):
         histories = None
 
     return render_to_response(
-        'seminars/my_entry_history.html',
+        'seminars/mypage_entry_history.html',
         {
             'histories' : histories,
         },

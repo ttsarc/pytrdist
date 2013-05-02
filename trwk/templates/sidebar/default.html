@@ -44,12 +44,12 @@
 
 		</div><!-- .side-item -->
 		{% endcomment %}
-		{% cache 3600 sidebar_flatpage %}
+		{% cache 300 sidebar_flatpage %}
 		{% load flatpages_extra %}
 		{% show_flatpage url='/infomation/'%}
 		{% endcache %}
 
-		{% cache 3600 sidebar_posts %}
+		{% cache 300 sidebar_posts %}
 		{% load blog_extra %}
 		{% show_posts limit=5 %}
 		{% endcache %}

@@ -1,7 +1,10 @@
-{% extends 'base_mypage.html'%}
+{% extends 'base_mypage.html'%}{% load breadcrumb %}
 {% block title %}セミナー申し込み履歴{% endblock %}
+{% block breadcrumb_mypage %}
+	{% breadcrumb 'セミナー申し込み履歴' %}
+{% endblock %}
 {% block content %}
-<h1>セミナー申し込み履歴</h1>
+<h1 class="content-title">セミナー申し込み履歴</h1>
 {% if histories %}
     <ul>
     {% for history in histories %}

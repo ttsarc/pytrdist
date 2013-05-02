@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
+    #'gunicorn',
     'sorl.thumbnail',
     'accounts',
     'documents',
@@ -186,6 +187,7 @@ CACHES = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
@@ -193,7 +195,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    'django.core.context_processors.request',
+    "trwk.context_processor.admin",
 )
 ITEMS_PER_PAGE = 5
 POSTS_PER_PAGE = 5
@@ -259,7 +261,8 @@ THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
 THUMBNAIL_DEBUG = False
 DEFAULT_THUMBNAIL = os.path.join(SITE_ROOT, 'static', 'images', 'thumb-400x300.png')
 
+
 try:
-    from local_settings import *
-except ImportError:
+    from trwk.local_settings import *
+except:
     pass

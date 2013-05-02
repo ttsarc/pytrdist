@@ -1,4 +1,4 @@
-{% extends 'base.html'%}
+{% extends 'base.html'%}{% load breadcrumb %}
 {% load search_extra %}
 {% block title %}{% if request.GET.keyword %}{{request.GET.keyword}} - {% endif%}キーワード検索{% endblock %}
 {% block breadcrumb_inner %}

@@ -1,10 +1,10 @@
-{% extends 'base.html'%}
-{% block title %}ページが見つかりません{% endblock %}
+{% extends 'base.html'%}{% load breadcrumb %}
+{% block title %}サーバーエラー{% endblock %}
 {% block breadcrumb_inner %}{{ block.super}}
-	{% breadcrumb 'ページが見つかりません' %}
+	{% breadcrumb 'サーバーエラー' %}
 {% endblock %}
 
 {% block content %}
-<h1 class="content-title">ページが見つかりません</h1>
-<p>URLが間違っているか、情報が削除された可能性があります。</p>
+<h1 class="content-title">サーバーエラー</h1>
+<p>エラーが発生しました。修正致しますが、お急ぎの場合は<a href="{% url 'contact'%}">お問い合わせ</a>ください。</p>
 {% endblock %}

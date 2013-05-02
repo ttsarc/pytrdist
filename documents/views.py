@@ -321,7 +321,7 @@ def download_log(request, page=1, type='list'):
         paginator = Paginator(leads, settings.LOGS_PER_PAGE)
         leads_pages = paginator.page(page)
         return render_to_response(
-            'documents/download_leads_list.html',
+            'documents/mypage_leads_list.html',
             {
                 'leads' : leads_pages,
                 'form'  : form,
@@ -343,7 +343,7 @@ def my_download_history(request):
         histories = None
 
     return render_to_response(
-        'documents/my_download_history.html',
+        'documents/mypage_download_history.html',
         {
             'histories' : histories,
         },

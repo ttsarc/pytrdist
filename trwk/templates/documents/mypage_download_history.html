@@ -1,7 +1,10 @@
-{% extends 'base_mypage.html'%}
+{% extends 'base_mypage.html'%}{% load breadcrumb %}
 {% block title %}資料ダウンロード履歴{% endblock %}
+{% block breadcrumb_mypage %}
+	{% breadcrumb '資料ダウンロード履歴' %}
+{% endblock %}
 {% block content %}
-<h1>資料ダウンロード履歴</h1>
+<h1 class="content-title">資料ダウンロード履歴</h1>
 {% if histories %}
     <ul>
     {% for history in histories %}

@@ -5,8 +5,5 @@ INSTALLED_APPS += (
 )
 ADMIN = True
 DEBUG = True
-
-TEMPLATE_CONTEXT_PROCESSORS += (
-    "trwk.context_processor.admin",
-)
+TEMPLATE_DEBUG = DEBUG
 

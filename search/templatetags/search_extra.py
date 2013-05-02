@@ -12,7 +12,7 @@ def to_class_name(value):
 
 @register.simple_tag(takes_context=True)
 def search_form(context):
-    if context['request'].GET:
+    if 'request' in context and context['request'].GET:
         form = SearchForm(context['request'].GET, auto_id='extra_id_%s')
     else:
         form = SearchForm(auto_id='extra_id_%s')

@@ -13,6 +13,7 @@ from django.contrib.auth import login
 from django.contrib.sites.models import RequestSite, Site
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
+from django.core.mail import mail_admins
 from registration.backends import get_backend
 from registration.models import RegistrationProfile, ChangeEmailProfile
 from registration.forms import ChangeEmailForm
@@ -36,6 +37,8 @@ def _send_complete_email(user, request):
         context_instance=RequestContext(request)
     )
     user.email_user(subject, content, from_email=settings.SERVER_EMAIL)
+    subject = subject.replace("\n","")
+    mail_admins(subject, content)
 
 def activate_complete(request):
     return render_to_response(
@@ -105,7 +108,7 @@ def activate(request, backend,
     """
     try:
         is_activatable, user = RegistrationProfile.objects.is_activatable(**kwargs)
-        print(user)
+        #print(user)
     except:
         is_activatable, user = False, None
 

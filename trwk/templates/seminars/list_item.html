@@ -8,6 +8,12 @@
 		</p>
 		<footer>
 			<ul>
+				<li>開催日：{{ item.exhibition_date }}</li>
+				{% if item.close_date %}
+				～ {{item.close_date}}
+				{% endif %}
+			</ul>
+			<ul>
 				<li>企業名：{{ item.company }}</li>
 			</ul>
 			<ul>
