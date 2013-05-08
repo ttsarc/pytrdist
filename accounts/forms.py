@@ -2,9 +2,10 @@
 from django.conf import settings
 from django import forms
 from accounts.models import MyUser, MyUserProfile, Company
+from trwk.libs.fields import confirmation_field
 
 class MyUserProfileForm(forms.ModelForm):
-    confirmation = forms.BooleanField(label="下記規約に同意する")
+    confirmation = confirmation_field()
     error_css_class = 'error'
     required_css_class = 'required'
     class Meta:

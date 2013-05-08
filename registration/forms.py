@@ -15,7 +15,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator,MinLengthValidator
 from django.contrib import messages
-
+from trwk.libs.fields import confirmation_field
 # I put this on all required fields, because it's easier to pick up
 # on them with CSS or JavaScript if they have a class of "required"
 # in the HTML. Your mileage may vary. If/when Django ticket #3515
@@ -63,6 +63,8 @@ class RegistrationForm(forms.Form):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),label=_("Password"), validators=[MinLengthValidator(6)])
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),label=_("Password (again)"),validators=[MinLengthValidator(6)] )
     website = forms.CharField(required=False, label="空のままにしてください（スパム対策）")
+    confirmation = confirmation_field()
+
     def clean_website(self):
         if self.cleaned_data['website']:
             raise forms.ValidationError("Invalid form")

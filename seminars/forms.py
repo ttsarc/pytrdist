@@ -5,6 +5,7 @@ from django import forms
 from django.forms.widgets import RadioSelect, CheckboxSelectMultiple, SubWidget
 from seminars.models import Seminar
 from django.utils.encoding import force_text, python_2_unicode_compatible
+from trwk.libs.fields import confirmation_field
 
 class SeminarForm(forms.ModelForm):
     date_format = ['%Y/%m/%d', '%Y-%m-%d',]
@@ -22,7 +23,7 @@ class EntryForm(forms.Form):
     error_css_class = 'error'
     required_css_class = 'required'
     note = forms.CharField(label="備考", max_length=500, widget=forms.Textarea, required=False)
-    confirmation = forms.BooleanField(label="規約に同意する")
+    confirmation = confirmation_field()
 
 
 class LeadSearchForm(forms.Form):

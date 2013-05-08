@@ -2,5 +2,5 @@
 {% thumbnail img_file "200x150" as img %}
 <img src="{{ img.url }}" height="{{ img.height}}" width="{{img.width}}" class="thumbnail medium" alt="{{ alt }}のサムネイル">
 {% empty %}
-<img src="{% static 'images/thumb-200x150.png'%}" width="200" height="150" class="thumbnail medium" alt="{{ alt }}のサムネイル">
+<img src="{% static 'images/noimage-200x150.jpg'%}" width="200" height="150" class="thumbnail medium" alt="{{ alt }}のサムネイル">
 {% endthumbnail %}

@@ -7,8 +7,11 @@
 	<script src="{% static "script/html5.js" %}"></script>
 	<![endif]-->
 	<link rel="stylesheet" href="{% static "css/style.css" %}">
+	{% if not admin %}
+	<link rel="shortcut icon" href="{% static "favicon.ico" %}">
+	{% endif%}
 	{% block head_after_link %}{% endblock %}
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 	{% block head_after_script %}{% endblock%}
 	{% block head_footer %}{% endblock%}
 	<script>
@@ -82,13 +85,7 @@
 </div><!-- #gnavi-content -->
 {% endblock gnavi %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+
 
 {% block wrapper_start %}
 <div id="wrapper" class="layout-a">
@@ -103,7 +100,15 @@
 		{% endblock %}
 	</div><!-- #breadcrumb -->
 	{% endblock %}
+
 	{% block content_before %}<div class="content-text">{% endblock%}
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
 	{% block content %}
 	メインコンテンツエリア
 	{% endblock content%}
@@ -123,10 +128,10 @@
 	<div id="footer-inner">
 		<a href="#header" id="footer-pagetop">ページ上部へ戻る</a>
 		<ul id="footer-link">
-			<li><a href="#">とれわかについて</a></li>
-			<li><a href="#">ご利用規約</a></li>
-			<li><a href="#">プライバシーポリシー</a></li>
-			<li><a href="#">運営会社</a></li>
+			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="about/" %}">とれわかについて</a></li>
+			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="user-policy/" %}">ご利用規約</a></li>
+			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="privacy-policy/" %}">プライバシーポリシー</a></li>
+			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="company/" %}">運営会社</a></li>
 			<li><a href="{% url 'contact'%}">お問い合わせ</a></li>
 			<li class="last"><a href="#">掲載について</a></li>
 		</ul>

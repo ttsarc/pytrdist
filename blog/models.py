@@ -10,7 +10,7 @@ from trwk.libs.file_utils import normalize_filename
 
 class PostCategory(models.Model):
     name = models.CharField('カテゴリ名', max_length=32)
-    slug = models.SlugField('スラッグ')
+    slug = models.SlugField('スラッグ', unique=True)
     sort = models.SmallIntegerField('並び順(大が上)', default=0)
     class Meta:
         verbose_name = "投稿カテゴリー"
@@ -39,10 +39,10 @@ class PostImage(models.Model):
 
 class Post(models.Model):
     title =       models.CharField('タイトル', max_length=255)
-    slug =        models.SlugField('スラッグ', help_text='URLに使われます。URLの維持とSEOのため手入力してください。半角英数とハイフン')
+    slug =        models.SlugField('スラッグ', unique=True, help_text='URLに使われます。URLの維持とSEOのため手入力してください。半角英数とハイフン')
     content =     models.TextField('本文', help_text='画像にアップしたものを  &lt;!-- img {画像ID} --&gt;  で埋め込むことができます。')
     category =    models.ManyToManyField(PostCategory, blank=True, verbose_name='カテゴリー')
-    main_img =    models.ForeignKey(PostImage, blank=True, verbose_name='メイン画像', related_name="post_with_main_img")
+    main_img =    models.ForeignKey(PostImage, blank=True, null=True, verbose_name='メイン画像', related_name="post_with_main_img")
     img =         models.ManyToManyField(PostImage, blank=True, verbose_name='画像')
     author =      models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='著者', null=True, on_delete=models.SET_NULL)
     update_date = models.DateTimeField('更新日', default=timezone.now, blank=True)

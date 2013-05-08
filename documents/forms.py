@@ -6,6 +6,7 @@ from django.forms.widgets import RadioSelect, CheckboxSelectMultiple, SubWidget
 from documents.models import Document
 from documents.choices import STAGE_CHOICE
 from django.utils.encoding import force_text, python_2_unicode_compatible
+from trwk.libs.fields import confirmation_field
 
 class DocumentForm(forms.ModelForm):
     error_css_class = 'error'
@@ -18,7 +19,7 @@ class DownloadForm(forms.Form):
     error_css_class = 'error'
     required_css_class = 'required'
     stage = forms.ChoiceField(label='現在のご状況',choices=STAGE_CHOICE, widget=RadioSelect)
-    confirmation = forms.BooleanField(label="規約に同意する")
+    confirmation = confirmation_field()
 
 class LeadSearchForm(forms.Form):
     date_format = ['%Y/%m/%d', '%Y-%m-%d',]

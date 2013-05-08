@@ -14,30 +14,27 @@
 {% block content %}
 <h1 class="content-title">キーワード検索{% if request.GET.keyword %}「{{request.GET.keyword}}」{% endif%}</h1>
 <form action="" method="get">
-<p>{{ form.keyword }}
-<input type="submit" value="検索"></p>
+	<p>{{ form.keyword }} <input type="submit" value="検索"></p>
 </form>
 {% include 'common/pager_info.html' with items=results%}
 {% include 'common/pagination.html' with items=results items_total=count %}
 
 {% if results %}
-<div class="bottom-list">
-{% for item in results %}
-
-	{%if item|to_class_name == 'Document'%}
-		{% include 'documents/list_item.html'%}
-	{% elif item|to_class_name == 'Seminar'%}
-		{% include 'seminars/list_item.html'%}
-	{% endif%}
-
-{% endfor %}
-</div><!-- .bottom-list -->
-
+	<div class="bottom-list">
+	{% for item in results %}
+		{%if item|to_class_name == 'Document'%}
+			{% include 'documents/list_item.html'%}
+		{% elif item|to_class_name == 'Seminar'%}
+			{% include 'seminars/list_item.html'%}
+		{% endif%}
+	{% endfor %}
+	</div><!-- .bottom-list -->
 {% else %}
 	{% if request.GET.keyword %}
 	<p>ご指定のキーワードでは見つかりませんでした</p>
 	{% endif%}
 {% endif %}
+
 {% include 'common/pager_info.html' with items=results%}
 {% include 'common/pagination.html' with items=results items_total=count %}
 

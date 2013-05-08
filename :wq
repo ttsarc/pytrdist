@@ -200,7 +200,7 @@ class ImageWithThumbsField(ImageField):
         self.sizes = sizes
         super(ImageField, self).__init__(verbose_name,**kwargs)
 
-def confirmation_field():
-    from django import forms as django_forms
+def confirmation(){
     from django.utils.safestring import mark_safe
-    return django_forms.BooleanField(label="利用規約に同意する", help_text=mark_safe('必ず<a href="/pages/user-policy/" target="_blank" class="policy">利用規約</a>をよくお読み、同意の上チェックしてください。') )
+    return forms.BooleanField(label="利用規約に同意する", help_text=mark_safe('必ず<a href="/pages/user-policy/">利用規約</a>をよくお読み、同意の上チェックしてください。') )
+}

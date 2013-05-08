@@ -6,9 +6,11 @@
 
 {% block content %}
 <h1 class="content-title">メールアドレスの変更</h1>
+<div class="content-table">
 <form method="post" action="">{% csrf_token %}
 <p>現在のメールアドレス：{{ user.email }}</p>
   {{ form.as_p }}
-  <input type="submit" value="確認メールを送信" />
+  <input type="submit" value="確認メールを送信" class="image-button red" />
 </form>
+</div>
 {% endblock %}

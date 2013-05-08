@@ -103,6 +103,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'beproud.django.ssl.middleware.SSLProxyMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -111,6 +112,7 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
+    'beproud.django.ssl.middleware.SSLRedirectMiddleware',
 )
 
 ROOT_URLCONF = 'trwk.urls'
@@ -146,6 +148,7 @@ INSTALLED_APPS = (
     'icybackup',
     'bootstrap-pagination',
     'blog',
+    'beproud.django.ssl',
 )
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
@@ -261,6 +264,19 @@ THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
 THUMBNAIL_DEBUG = False
 DEFAULT_THUMBNAIL = os.path.join(SITE_ROOT, 'static', 'images', 'thumb-400x300.png')
 
+
+SSL_URLS = (
+    '^/mypage/',
+    '^/operation/',
+    '^/documents/download/',
+    '^/seminars/entry/',
+    '^/accounts/',
+    '^/contact/',
+)
+SSL_IGNORE_URLS = (
+    '^/static/',
+    '^/media/',
+)
 
 try:
     from trwk.local_settings import *

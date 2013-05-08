@@ -19,7 +19,7 @@
 </form>
 </div>
 
-<a href="{% url 'document_leads_csv'%}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">この条件でCSVダウンロード</a>
+<div class="text-button red"><a href="{% url 'document_leads_csv'%}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">この条件でCSVダウンロード</a></div>
 <div class="content-table">
 <table>
 {% if not leads %}
