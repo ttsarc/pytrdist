@@ -1,0 +1,9 @@
+{% extends 'email/base.txt'%}
+{% block content %}
+掲載企業のお申し込みがありました。
+
+{% for field in form %}
+{{ field.label }}　｜　{% if field.field.choices %}{% for key,val in field.field.choices %}{% if key|slugify == field.value|slugify %}{{ val }}{% endif %}{% endfor %}{% else %}{% if field.value == True %}はい{% else %}{{ field.value }}{% endif %}{% endif%}
+{% endfor %}
+
+{% endblock%}

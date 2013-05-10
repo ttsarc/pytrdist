@@ -9,4 +9,14 @@ $(function(){
         var text = $(this).text()
         $(this).html( text.replace(':',':<span class="required">(必須)</span>'));
     });
+    var nav = $('#gnavi');
+    var path = location.pathname
+    //console.log(path);
+    if( path == '/' || path == '' ){
+        nav.find('.gnavi-01 a').addClass('hover');
+    }else if( path.indexOf('/documents/') === 0 ){
+        nav.find('.gnavi-02 a').addClass('hover');
+    }else if(path.indexOf('/seminars/') === 0){
+        nav.find('.gnavi-03 a').addClass('hover');
+    }
 });

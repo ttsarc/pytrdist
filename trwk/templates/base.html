@@ -56,7 +56,7 @@
 			<li class="gnavi-01"><a href="{% url 'home' %}">ホーム</a></li>
 			<li class="gnavi-02"><a href="{% url 'document_index' %}">資料を探す</a></li>
 			<li class="gnavi-03"><a href="{% url 'seminar_index' %}">セミナーを探す</a></li>
-			<li class="gnavi-04"><a href="#">掲載する</a></li>
+			<li class="gnavi-04"><a href="{% url 'django.contrib.flatpages.views.flatpage' url="publish/" %}">掲載する</a></li>
 		</ul>
 	</nav>
 </div><!-- #header-bg -->
@@ -133,7 +133,7 @@
 			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="privacy-policy/" %}">プライバシーポリシー</a></li>
 			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="company/" %}">運営会社</a></li>
 			<li><a href="{% url 'contact'%}">お問い合わせ</a></li>
-			<li class="last"><a href="#">掲載について</a></li>
+			<li class="last"><a href="{% url 'django.contrib.flatpages.views.flatpage' url="publish/" %}">掲載について</a></li>
 		</ul>
 	</div><!-- #footer-inner -->
 	<small id="footer-copyright">Copyright&reg; 2013 MIROKU JYOHO SERVICE CO., LTD. All rights reserved.</small>

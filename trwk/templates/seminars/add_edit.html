@@ -19,7 +19,7 @@
 {% endblock %}
 
 {%block head_after_link %}
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
 {%endblock%}
 
 {% block content %}
@@ -30,7 +30,7 @@
 {% endif %}
 
 <div class="content-table seminar-form">
-	<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+	<form action="" method="post" enctype="multipart/form-data" class="add_edit_form">{% csrf_token %}
 	<table>
 	{{ form }}
 	</table>
@@ -40,13 +40,29 @@
 	</form>
 </div><!-- .content-table -->
 
+<script>
+$(function(){
+{% if action == 'add' %}
+	$('#id_status option[value=2]').remove();
+{% else %}
+	$('.add_edit_form').submit(function() {
+		if( $(this).find('#id_status').val() == 2 ){
+	    	var c = confirm("このセミナーを削除します。よろしいですか？");
+	    	return c;
+	    }
+	    return true;
+	});
+{% endif %}
+});
+</script>
+
 {% if action == 'edit'%}
 <p class="edit-preview"><a href="{% url 'seminar_preview' seminar_id=seminar.id%}" target="_blank">プレビュー</a></p>
 {% endif%}
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 <!-- http://trentrichardson.com/examples/timepicker/ -->
-<script src="{% static "js/jquery-ui-timepicker-addon.js" %}"></script>
+<script src="{% static "script/jquery-ui-timepicker-addon.js" %}"></script>
 <script>
 $(function(){
     $('#id_limit_datetime').datetimepicker({
@@ -60,7 +76,7 @@ $(function(){
         minuteText:'分'
     });
     $('#id_exhibition_date, #id_close_date').datepicker({
-        dateFormat: 'yy-mm-dd',
+        dateFormat: 'yy/mm/dd',
         firstDay: 1,
         minDate: 0,
     });

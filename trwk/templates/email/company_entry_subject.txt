@@ -1,0 +1,1 @@
+{% extends 'email/base_subject.txt'%}{% block content %}掲載企業のお申込み{% endblock %}

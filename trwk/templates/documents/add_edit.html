@@ -25,7 +25,7 @@
 {% endif %}
 
 <div class="content-table document-form">
-	<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+	<form action="" method="post" enctype="multipart/form-data" class="add_edit_form">{% csrf_token %}
 	<table>
 	{{ form }}
 	</table>
@@ -34,6 +34,22 @@
 	{% endwith %}
 	</form>
 </div><!-- .content-table -->
+
+<script>
+$(function(){
+{% if action == 'add' %}
+	$('#id_status option[value=2]').remove();
+{% else %}
+	$('.add_edit_form').submit(function() {
+	if( $(this).find('#id_status').val() == 2 ){
+		var c = confirm("この資料を削除します。よろしいですか？");
+		return c;
+	}
+	return true;
+});
+{% endif %}
+});
+</script>
 
 {% if action == 'edit'%}
 <p class="edit-preview"><a href="{% url 'document_preview' document_id=document.id%}" target="_blank">プレビュー</a></p>

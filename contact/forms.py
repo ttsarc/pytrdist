@@ -2,6 +2,7 @@
 from django.conf import settings
 from django import forms
 from accounts.validators import TelFaxValidaor
+from trwk.libs.fields import confirmation_field
 
 class ContactForm(forms.Form):
     error_css_class = 'error'
@@ -23,7 +24,7 @@ class ContactForm(forms.Form):
     email = forms.EmailField(label='メールアドレス')
     site_url = forms.URLField(label='ホームページURL', required=False)
     message = forms.CharField(label="お問い合わせ内容", max_length=2000, widget=forms.Textarea)
-    confirmation = forms.BooleanField(label="利用規約に同意する")
+    confirmation = confirmation_field()
     website = forms.CharField(required=False, label="空のままにしてください（スパム対策）")
     def clean_website(self):
         if self.cleaned_data['website']:

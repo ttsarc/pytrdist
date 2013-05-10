@@ -4,8 +4,8 @@ from documents.models import Document,DocumentDownloadLog, DocumentDownloadCount
 from sorl.thumbnail.admin import AdminImageMixin
 
 class DocumentAdmin(admin.ModelAdmin, AdminImageMixin):
-    list_display = ('title', 'company', 'user', 'add_date', 'update_date' )
-
+    list_display = ('title', 'company', 'user', 'add_date', 'update_date', 'status' )
+    list_filter = ('status',)
 admin.site.register(Document, DocumentAdmin)
 
 class DocumentDownloadLogAdmin(admin.ModelAdmin):

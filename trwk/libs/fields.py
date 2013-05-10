@@ -203,4 +203,5 @@ class ImageWithThumbsField(ImageField):
 def confirmation_field():
     from django import forms as django_forms
     from django.utils.safestring import mark_safe
-    return django_forms.BooleanField(label="利用規約に同意する", help_text=mark_safe('必ず<a href="/pages/user-policy/" target="_blank" class="policy">利用規約</a>をよくお読み、同意の上チェックしてください。') )
+    text = '必ず<a href="/pages/user-policy/" target="_blank" class="policy"><strong>利用規約</strong></a>をよくお読みになり、同意の上チェックしてください。'
+    return django_forms.BooleanField(label="利用規約に同意する", help_text=mark_safe(text) )

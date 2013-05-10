@@ -1,6 +1,6 @@
 {% extends 'base_mypage.html'%}{% load breadcrumb %}
 {%block head_after_link %}
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
 {%endblock%}
 {% block title %}リード情報の確認{% endblock%}
 
@@ -34,8 +34,8 @@
 {% endfor %}
 </table>
 </div>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 <script>
 $(function(){
     $('#id_start_date, #id_end_date').datepicker({

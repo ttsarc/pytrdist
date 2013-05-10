@@ -4,8 +4,8 @@ from seminars.models import Seminar,SeminarEntryLog, SeminarEntryUser
 from sorl.thumbnail.admin import AdminImageMixin
 
 class SeminarAdmin(admin.ModelAdmin, AdminImageMixin):
-    list_display = ('title', 'company', 'user', 'add_date', 'update_date' )
-
+    list_display = ('title', 'company', 'user', 'add_date', 'update_date', 'status')
+    list_filter = ('status',)
 admin.site.register(Seminar, SeminarAdmin)
 
 class SeminarEntryLogAdmin(admin.ModelAdmin):

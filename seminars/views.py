@@ -54,7 +54,7 @@ def add(request):
 @login_required
 @csrf_protect
 def edit(request, seminar_id):
-    seminar = get_object_or_404(Seminar, pk=seminar_id)
+    seminar = get_object_or_404(Seminar, pk=seminar_id, status__in=[0,1])
     user = request.user
     company = user.customer_company
     if not is_company_staff(request.user, seminar.company.pk):
@@ -64,8 +64,11 @@ def edit(request, seminar_id):
         form = SeminarForm(request.POST, request.FILES, instance=seminar)
         if form.is_valid():
             seminar = form.save()
-            messages.add_message(request, messages.SUCCESS, 'セミナーを保存しました')
-            return redirect('seminar_edit', seminar_id=seminar.pk )
+            if form.cleaned_data['status'] == 2:
+                messages.add_message(request, messages.SUCCESS, 'セミナーを削除しました')
+            else:
+                messages.add_message(request, messages.SUCCESS, 'セミナーを保存しました')
+            return redirect('seminar_edit_index' )
     else:
         form = SeminarForm(instance=seminar)
 
@@ -85,7 +88,7 @@ def edit_index(request):
     if not is_company_staff(request.user):
         return redirect('mypage_home')
     company = request.user.customer_company
-    seminars = Seminar.objects.all().filter(company__exact=company)
+    seminars = Seminar.objects.all().filter(company__exact=company, status__in=[0,1])
     return render_to_response(
         'seminars/edit_index.html',
         {

@@ -1,6 +1,25 @@
 {% extends 'base_mypage.html'%}{% load breadcrumb %}
 {% block title %}マイページ{% endblock %}
 {% block content %}
-<h1>マイページ</h1>
+<h1 class="content-title">マイページ</h1>
+{% if customer_info %}
+	<h2 class="content-title-h2">掲載企業様へのお知らせ</h1>
+	<ul>
+	{% for post in customer_info %}
+		<li><a href="{{ post.get_absolute_url }}">{{post.update_date|date:'Y/m/d'}} {{post.title}}</a></li>
+	{% endfor %}
+	</ul>
+{% endif %}
+
+{% if member_info %}
+	<h2 class="content-title-h2">とれわか会員様へのお知らせ</h1>
+	<ul>
+	{% for post in member_info %}
+		<li><a href="{{ post.get_absolute_url }}">{{post.update_date|date:'Y/m/d'}} {{post.title}}</a></li>
+	{% endfor %}
+	</ul>
+{% endif %}
+
+
 
 {% endblock %}

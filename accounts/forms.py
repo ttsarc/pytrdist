@@ -26,6 +26,20 @@ class CompanyEditform(forms.ModelForm):
         model = Company
         exclude = ('slug_name','status')
 
+class CompanyEntryform(forms.ModelForm):
+    error_css_class = 'error'
+    required_css_class = 'required'
+    note = forms.CharField(label="備考", max_length=500, widget=forms.Textarea, required=False)
+    confirmation = confirmation_field()
+    website = forms.CharField(required=False, label="空のままにしてください（スパム対策）")
+    def clean_website(self):
+        if self.cleaned_data['website']:
+            raise forms.ValidationError("Invalid form")
+        return ''
+    class Meta:
+        model = Company
+        exclude = ('slug_name', 'status', 'logo_file')
+
 class MyUserShowForm(forms.ModelForm):
     class Meta:
         model = MyUser

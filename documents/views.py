@@ -55,7 +55,7 @@ def add(request):
 @login_required
 @csrf_protect
 def edit(request, document_id):
-    document = get_object_or_404(Document, pk=document_id)
+    document = get_object_or_404(Document, pk=document_id, status__in=[0,1])
     user = request.user
     company = user.customer_company
     if not is_company_staff(request.user, document.company.pk):
@@ -65,8 +65,11 @@ def edit(request, document_id):
         form = DocumentForm(request.POST, request.FILES, instance=document)
         if form.is_valid():
             document = form.save()
-            messages.add_message(request, messages.SUCCESS, '資料を保存しました')
-            return redirect('document_edit', document_id=document.pk )
+            if form.cleaned_data['status'] == 2:
+                messages.add_message(request, messages.SUCCESS, '資料を削除しました')
+            else:
+                messages.add_message(request, messages.SUCCESS, '資料を保存しました')
+            return redirect('document_edit_index' )
     else:
         form = DocumentForm(instance=document)
 
@@ -86,7 +89,7 @@ def edit_index(request):
     if not is_company_staff(request.user):
         return redirect('mypage_home')
     company = request.user.customer_company
-    documents = Document.objects.all().filter(company__exact=company)
+    documents = Document.objects.filter(company__exact=company,status__in=[0,1])
     return render_to_response(
         'documents/edit_index.html',
         {
