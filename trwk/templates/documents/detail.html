@@ -49,7 +49,7 @@
 	{{ document.results|linebreaks }}
 
 {% endif %}
-<div class="content-table">
+<div class="content-table narrow">
 <table>
 	<tr><th>サービスカテゴリ</th><td>{{ document.get_category_display }}</td></tr>
 	<tr><th>対象業種</th><td>{{ document.get_target_type_display }}</td></tr>
@@ -57,6 +57,11 @@
 	<tr><th>更新日</th><td>{{ document.update_date }}</td></tr>
 </table>
 </div><!-- .content-table -->
+
+<h3 class="content-title-h3">企業情報</h3>
+<div class="content-table narrow">
+{% include 'common/company_summary.html' with company=document.company %}
+</div>
 
 <p class="detail-button">
 {% ifequal document.download_status 1 %}

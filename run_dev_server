@@ -1,0 +1,2 @@
+#!/bin/sh
+python2.7 manage.py runserver --settings=trwk.admin_settings localhost:8001

@@ -14,7 +14,7 @@
 				{% endif %}
 			</ul>
 			<ul>
-				<li>企業名：{{ item.company }}</li>
+				<li>企業名：<a href="{{item.company.get_absolute_url}}">{{ item.company }}</a></li>
 			</ul>
 			<ul>
 				<li>カテゴリ：{{ item.get_category_display }}</li>

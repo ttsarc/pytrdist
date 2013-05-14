@@ -5,64 +5,17 @@
 {% block content %}
 		<div id="top-keyvisual"><img src="{% static "images/keyvisual.png"%}" alt="製品・サービス提供社と導入検討者をつなぐポータルサイト" width="640" height="150"></div>
 
+		{% if notable_documents %}
 		<h2 class="list-title-640"><span class="icon-data"></span>注目の資料</h2>
 		<div class="list-640">
-			<article>
-				<a href="#"><img src="{% static 'images/noimage-200x150.jpg'%}" alt="サムネイル" width="200" height="150" class="thumbnail"></a>
-				<div class="text">
-					<h1 class="article-title"><a href="#">タイトルタイトルタイトル（最大40文字）</a></h1>
-					<p>
-						キャッチコピーキャッチコピーキャッチコピー
-						キャッチコピーキャッチコピーキャッチコピー
-					</p>
-					<footer>
-						<ul>
-							<li><a href="#">企業名</a></li>
-							<li><a href="#">カテゴリ</a></li>
-						</ul>
-						<div class="article-more"><a href="#"><img src="{% static 'images/top-more-button.png'%}" alt="詳細を見る" width="180" height="35"></a></div>
-					</footer>
-				</div><!-- .text -->
-			</article>
-
-			<article>
-				<a href="#"><img src="{% static 'images/noimage-200x150.jpg'%}" alt="サムネイル" width="200" height="150" class="thumbnail"></a>
-				<div class="text">
-					<h1 class="article-title"><a href="#">タイトルタイトルタイトル（最大40文字）</a></h1>
-					<p>
-						キャッチコピーキャッチコピーキャッチコピー
-						キャッチコピーキャッチコピーキャッチコピー
-					</p>
-					<footer>
-						<ul>
-							<li><a href="#">企業名</a></li>
-							<li><a href="#">カテゴリ</a></li>
-						</ul>
-						<div class="article-more"><a href="#"><img src="{% static 'images/top-more-button.png'%}" alt="詳細を見る" width="180" height="35"></a></div>
-					</footer>
-				</div><!-- .text -->
-			</article>
-
-			<article>
-				<a href="#"><img src="{% static 'images/noimage-200x150.jpg'%}" alt="サムネイル" width="200" height="150" class="thumbnail"></a>
-				<div class="text">
-					<h1 class="article-title"><a href="#">タイトルタイトルタイトル（最大40文字）</a></h1>
-					<p>
-						キャッチコピーキャッチコピーキャッチコピー
-						キャッチコピーキャッチコピーキャッチコピー
-					</p>
-					<footer>
-						<ul>
-							<li><a href="#">企業名</a></li>
-							<li><a href="#">カテゴリ</a></li>
-						</ul>
-						<div class="article-more"><a href="#"><img src="{% static 'images/top-more-button.png'%}" alt="詳細を見る" width="180" height="35"></a></div>
-					</footer>
-				</div><!-- .text -->
-			</article>
-
+			{% for item in notable_documents %}
+			{% include 'documents/list_item.html'%}
+			{% endfor %}
 		</div><!-- .list-640 -->
+		{% endif %}
+		<div class="list-640-more"><a href="{% url 'document_index' %}">&raquo;他の資料を探す</a></div>
 
+		{% comment %}
 		<div class="list-310-wrapper">
 
 			<div class="list-310 left">
@@ -120,68 +73,20 @@
 			</div><!-- .list-310 -->
 
 		</div><!-- .list-310-wrapper -->
+		{% endcomment %}
 
+		{% if notable_seminars %}
 		<h2 class="list-title-640"><span class="icon-seminar"></span>注目のセミナー</h2>
 		<div class="list-640">
-			<article>
-				<a href="#"><img src="{% static "images/noimage-200x150.jpg" %}" alt="サムネイル" width="200" height="150" class="thumbnail"></a>
-				<div class="text">
-					<h1 class="article-title"><a href="#">タイトルタイトルタイトル（最大40文字）</a></h1>
-					<p>
-						キャッチコピーキャッチコピーキャッチコピー
-						キャッチコピーキャッチコピーキャッチコピー
-					</p>
-					<footer>
-						<ul>
-							<li><a href="#">企業名</a></li>
-							<li><a href="#">カテゴリ</a></li>
-						</ul>
-						<div class="article-more"><a href="#"><img src="{% static 'images/top-more-button.png'%}" alt="詳細を見る" width="180" height="35"></a></div>
-					</footer>
-				</div><!-- .text -->
-			</article>
-
-			<article>
-				<a href="#"><img src="{% static "images/noimage-200x150.jpg" %}" alt="サムネイル" width="200" height="150" class="thumbnail"></a>
-				<div class="text">
-					<h1 class="article-title"><a href="#">タイトルタイトルタイトル（最大40文字）</a></h1>
-					<p>
-						キャッチコピーキャッチコピーキャッチコピー
-						キャッチコピーキャッチコピーキャッチコピー
-					</p>
-					<footer>
-						<ul>
-							<li><a href="#">企業名</a></li>
-							<li><a href="#">カテゴリ</a></li>
-						</ul>
-						<div class="article-more"><a href="#"><img src="{% static 'images/top-more-button.png'%}" alt="詳細を見る" width="180" height="35"></a></div>
-					</footer>
-				</div><!-- .text -->
-			</article>
-
-			<article class="last">
-				<a href="#"><img src="{% static "images/noimage-200x150.jpg" %}" alt="サムネイル" width="200" height="150" class="thumbnail"></a>
-				<div class="text">
-					<h1 class="article-title"><a href="#">タイトルタイトルタイトル（最大40文字）</a></h1>
-					<p>
-						キャッチコピーキャッチコピーキャッチコピー
-						キャッチコピーキャッチコピーキャッチコピー
-					</p>
-					<footer>
-						<ul>
-							<li><a href="#">企業名</a></li>
-							<li><a href="#">カテゴリ</a></li>
-						</ul>
-						<div class="article-more"><a href="#"><img src="{% static 'images/top-more-button.png'%}" alt="詳細を見る" width="180" height="35"></a></div>
-					</footer>
-				</div><!-- .text -->
-			</article>
-
+			{% for item in notable_seminars %}
+			{% include 'seminars/list_item.html'%}
+			{% endfor %}
 		</div><!-- .list-640 -->
+		{% endif %}
 
-		<a href="#" class="top-seminar-more">他のセミナーを探す</a>
+		<div class="list-640-more"><a href="{% url 'seminar_index' %}">&raquo;他のセミナーを探す</a></div>
 
-
+		{% comment %}
 		<div class="list-310-wrapper">
 
 			<div class="list-310 left">
@@ -237,6 +142,6 @@
 				<div class="list-310-more"><a href="#">&#x25B6; もっと見る</a></div>
 
 			</div><!-- .list-310 -->
-
 		</div><!-- .list-310-wrapper -->
+		{% endcomment %}
 {% endblock content%}

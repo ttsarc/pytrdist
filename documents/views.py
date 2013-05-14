@@ -17,6 +17,7 @@ from django.contrib.auth import login
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.utils import timezone
+from django.db.models import Count
 from accounts.forms import MyUserShowForm, MyUserProfileShowForm
 from documents.forms import DocumentForm, DownloadForm, LeadSearchForm
 from documents.models import Document, DocumentDownloadLog, DocumentDownloadCount, DocumentDownloadUser, DocumentDownloadUser
@@ -89,7 +90,7 @@ def edit_index(request):
     if not is_company_staff(request.user):
         return redirect('mypage_home')
     company = request.user.customer_company
-    documents = Document.objects.filter(company__exact=company,status__in=[0,1])
+    documents = Document.objects.filter(company__exact=company,status__in=[0,1]).annotate(download_count=Count('documentdownloaduser'))
     return render_to_response(
         'documents/edit_index.html',
         {

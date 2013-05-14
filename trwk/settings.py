@@ -200,11 +200,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "trwk.context_processor.admin",
 )
-ITEMS_PER_PAGE = 5
-POSTS_PER_PAGE = 5
-DOCUMENTS_PER_PAGE = 5
-SEMINARS_PER_PAGE = 5
-LOGS_PER_PAGE = 10
+ITEMS_PER_PAGE = 10
+POSTS_PER_PAGE = 10
+DOCUMENTS_PER_PAGE = 10
+SEMINARS_PER_PAGE = 10
+LOGS_PER_PAGE = 20
 
 #Postの記事内に埋め込むサムネイルサイズ
 POST_THUMBNAIL_SIZE ='240x240'
@@ -259,8 +259,10 @@ BAD_EMAIL_DOMAIN = [
     #'gmail.com',
     'hotmail.com',
 ]
-
-THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
+#IMagick
+#THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.convert_engine.Engine'
+#PIL
+THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.pil_engine.Engine'
 THUMBNAIL_DEBUG = False
 DEFAULT_THUMBNAIL = os.path.join(SITE_ROOT, 'static', 'images', 'thumb-400x300.png')
 
@@ -277,6 +279,9 @@ SSL_IGNORE_URLS = (
     '^/static/',
     '^/media/',
 )
+#日本語メール文字化け対策
+from django.core.mail.message import EmailMessage
+EmailMessage.encoding = 'iso-2022-jp'
 
 try:
     from trwk.local_settings import *

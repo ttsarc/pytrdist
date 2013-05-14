@@ -52,7 +52,7 @@
 {{ seminar.target|linebreaks }}
 {% endif %}
 
-<div class="content-table">
+<div class="content-table narrow">
 	<table>
 		<tr><th>種別</th><td>{{ seminar.get_type_display }}</td></tr>
 		<tr><th>カテゴリー</th><td>{{ seminar.get_category_display }}</td></tr>
@@ -76,6 +76,12 @@
 		<tr><th>現在の申し込み数</th><td>{{entry_count }} / {{ seminar.limit_number}} </td></tr>
 	</table>
 </div><!-- .content-table -->
+
+<h3 class="content-title-h3">企業情報</h3>
+<div class="content-table narrow">
+{% include 'common/company_summary.html' with company=seminar.company %}
+</div>
+
 {% if is_entered %}
 <p class="detail-button close">
 	すでにこのセミナーに申込済みです。<br>

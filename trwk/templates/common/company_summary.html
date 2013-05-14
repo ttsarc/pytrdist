@@ -1,0 +1,20 @@
+<table>
+	<tr>
+		<th>企業名</th>
+		<td>{{ company.name }}<br />
+		{% include 'common/thumbnail/small.html' with img_file=company.logo_file alt=company.name %}</td>
+	</tr>
+	<tr>
+		<th>業種</th>
+		<td>{{ company.get_business_type_display }}</td>
+	</tr>
+	<tr>
+		<th>電話番号</th>
+		<td>{{ company.tel }}</td>
+	</tr>
+	<tr>
+		<th>ホームページURL</th>
+		<td><a href="{{ company.site_url }}" target="_blank">{{ company.site_url }}</a></td>
+	</tr>
+</table>
+<p><a href="{{ company.get_absolute_url }}">&raquo;{{company.name}}の詳細はこちら</a></p>

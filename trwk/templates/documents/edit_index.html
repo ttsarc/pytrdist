@@ -6,14 +6,26 @@
 {% block content %}
 <h1 class="content-title">資料の編集</h1>
 {% if documents %}
-    <ul>
-    {% for doc in documents %}
-        <li>
-            <a href="{% url 'document_edit' document_id=doc.pk %}">{{doc.title}}</a>
-            <a href="{% url 'document_preview' document_id=doc.pk %}" target="_blank">（確認）</a>
-        </li>
-    {% endfor %}
-    </ul>
+	<div class="data-table">
+	<table>
+		<tr>
+			<th>タイトル</th>
+			<th>更新日</th>
+			<th>ダウンロード数</th>
+			<th>公開状態</th>
+			<th>プレビュー</th>
+		</tr>
+		{% for doc in documents %}
+		<tr>
+			<td><a href="{% url 'document_edit' document_id=doc.pk %}">{{doc.title}}</a></td>
+			<td>{{ doc.update_date }}</td>
+			<td class="num">{{ doc.download_count }}</td>
+			<td>{{ doc.get_status_display }}</td>
+			<td><a href="{% url 'document_preview' document_id=doc.pk %}" target="_blank">表示</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+	</div>
 {% else %}
     <p>まだ作成した資料がありません</p>
 {% endif %}

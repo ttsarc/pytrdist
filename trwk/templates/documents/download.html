@@ -9,6 +9,9 @@
 {% block content %}
 
 <h1 class="content-title">資料「{{document.title}}」のダウンロード</h1>
+<div class="detail-thumbnail">
+{% include 'common/thumbnail/large.html' with img_file=document.thumb_file alt=document.title%}
+</div>
 <div class="content-table">
 
 {% include 'common/profile_confirm_table.html'%}

@@ -1172,6 +1172,31 @@ a:hover img{
 	background: #444;
 }
 
+.list-640-more{
+	padding: 10px 0;
+	zoom: 1;
+}
+.list-640-more:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.list-640-more a{
+	display: block;
+	float: right;
+	color:#fff;
+	font-weight: bold;
+	text-decoration: none;
+	background: #333;
+	border: 1px solid #000;
+	font-size: 12px;
+	line-height: 28px;
+	width: 140px;
+	text-align: center;
+}
+.list-640-more a:hover{
+	background: #444;
+}
 
 .top-seminar-more{
 	display: block;
@@ -1392,7 +1417,8 @@ a:hover img{
 	zoom: 1;
 	margin: 10px 10px 20px;
 }
-.content-table .image-button{
+.content-table .image-button,
+.content-table input.image-button{
 	width: 190px;
 	background: url(../images/detail-download-button.png) no-repeat 0 0;
 	display: inline-block;
@@ -1401,12 +1427,14 @@ a:hover img{
 	margin: 10px 10px 20px;
 }
 
-.content-table .image-button.download{
+.content-table .image-button.download,
+.content-table input.image-button.download{
 	width: 190px;
 	background: url(../images/detail-download-button.png) no-repeat 0 0;
 
 }
-.content-table .image-button.save{
+.content-table .image-button.save,
+.content-table input.image-button.save{
 	width: 150px;
 	background: url(../images/submit-save-button.png) no-repeat 0 0;
 }
@@ -1886,4 +1914,26 @@ body .pagination ul > li {
 .pagination-mini ul > li > span {
   padding: 0 6px;
   font-size: 10.5px;
+}
+
+/* date-table */
+.data-table table{
+	text-align:left;
+	width:100%;
+	font-size:.9em;
+}
+.data-table table a{
+	display:block;
+}
+.data-table table .num{
+	text-align:right;
+}
+.data-table table th{
+	background:#fff;
+	font-weight:bold;
+}
+.data-table table th,
+.data-table table td{
+	border:1px solid #ddd;
+	padding:3px 5px;
 }

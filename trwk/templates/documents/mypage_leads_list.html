@@ -20,20 +20,27 @@
 </div>
 
 <div class="text-button red"><a href="{% url 'document_leads_csv'%}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">この条件でCSVダウンロード</a></div>
-<div class="content-table">
-<table>
+<div class="data-table">
 {% if not leads %}
-該当するログはありません
+	<p>該当するログはありません</p>
+{% else %}
+	<table>
+		<tr>
+			<th>ダウンロード日時</th>
+			<th>タイトル</th>
+			<th>会社名</th>
+			<th>立場</th>
+		</tr>
+	{% for lead in leads %}
+		<tr>
+			<td>{{ lead.download_date }}</td>
+			<td>{{ lead.document_title }}</td>
+			<td>{{ lead.company_name }}</td>
+			<td>{{ lead.stage }}</td>
+		</tr>
+	{% endfor %}
+	</table>
 {% endif %}
-{% for lead in leads %}
-    <tr>
-        <td>{{ lead.download_date }}</td>
-        <td>{{ lead.stage }}</td>
-        <td>{{ lead.company_name }}</td>
-        <td>{{ lead.document_title }}</td>
-    </tr>
-{% endfor %}
-</table>
 </div>
 
 <div class="pager">

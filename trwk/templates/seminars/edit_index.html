@@ -6,14 +6,28 @@
 {% block content %}
 <h1 class="content-title">セミナーの編集</h1>
 {% if seminars %}
-    <ul>
-    {% for semi in seminars %}
-        <li>
-            <a href="{% url 'seminar_edit' seminar_id=semi.pk %}">{{semi.title}}</a>
-            <a href="{% url 'seminar_preview' seminar_id=semi.pk %}" target="_blank">（確認）</a>
-        </li>
-    {% endfor %}
-    </ul>
+	<div class="data-table">
+	<table>
+		<tr>
+			<th>タイトル</th>
+			<th>更新日</th>
+			<th>申し込み数</th>
+			<th>受付状態</th>
+			<th>公開状態</th>
+			<th>プレビュー</th>
+		</tr>
+		{% for semi in seminars %}
+		<tr>
+			<td><a href="{% url 'seminar_edit' seminar_id=semi.pk %}">{{semi.title}}</a></td>
+			<td>{{ semi.update_date }}</td>
+			<td class="num">{{ semi.entry_count }} / {{ semi.limit_number }}</td>
+			<td>{% if semi.is_open %}受付中{% else %}受付終了{% endif %}</td>
+			<td>{{ semi.get_status_display }}</td>
+			<td><a href="{% url 'seminar_preview' seminar_id=semi.pk %}" target="_blank">表示</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+	</div>
 {% else %}
     <p>まだ作成したセミナーがありません</p>
 {% endif %}

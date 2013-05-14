@@ -9,6 +9,9 @@
 {% block content %}
 
 <h1 class="content-title">「{{ seminar.title }}」参加申し込み</h1>
+<div class="detail-thumbnail">
+{% include 'common/thumbnail/large.html' with img_file=seminar.thumb_file alt=seminar.title%}
+</div>
 <div class="content-table">
 
 {% include 'common/profile_confirm_table.html'%}

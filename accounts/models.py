@@ -14,6 +14,7 @@ from accounts.validators import TelFaxValidaor, PostNumberValidaor
 from trwk.libs.fields import ImageWithThumbsField
 from trwk.libs.file_utils import normalize_filename
 from sorl.thumbnail import ImageField
+from django.core.urlresolvers import reverse
 
 class CompanyManager(models.Manager):
     pass
@@ -55,6 +56,10 @@ class Company(models.Model):
     update_date =      models.DateTimeField('更新日', auto_now=True)
 
     objects = CompanyManager()
+
+    def get_absolute_url(self):
+        return reverse('company_detail', kwargs={'company_id':self.pk})
+
 
     class Meta:
         verbose_name = "掲載企業"
@@ -154,6 +159,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         """
         subject = subject.replace("\n","")
         send_mail(subject, message, from_email, [self.email])
+        #send_mail_jp(subject, message, from_email, [self.email,])
 
     def get_profile(self):
         """

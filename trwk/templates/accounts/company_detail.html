@@ -2,12 +2,88 @@
 {% block title %}{{ company.name}} - 掲載企業詳細{% endblock %}
 {% block breadcrumb_inner %}
 	{% breadcrumb_url '掲載企業一覧' 'company_index'%}
+	{% breadcrumb company.name %}
 {% endblock %}
 {% block content %}
-<h1 class="content-title">{{ company.name}}  掲載企業詳細</h1>
+<h1 class="content-title">{{ company.name}}</h1>
+
+<h2 class="content-title-h3">企業情報</h2>
+<div class="detail-thumbnail">
+{% include 'common/thumbnail/large.html' with img_file=company.logo_file alt=company.name %}
+</div>
+<div class="content-table narrow">
+	<table>
+		<tr>
+			<th>企業名</th>
+			<td>{{ company.name }}</td>
+		</tr>
+		<tr>
+			<th>企業名（フリガナ）</th>
+			<td>{{ company.kana }}</td>
+		</tr>
+		<tr>
+			<th>業種</th>
+			<td>{{ company.get_business_type_display }}</td>
+		</tr>
+		<tr>
+			<th>電話番号</th>
+			<td>{{ company.tel }}</td>
+		</tr>
+		<tr>
+			<th>FAX</th>
+			<td>{{ company.fax }}</td>
+		</tr>
+		<tr>
+			<th>郵便番号</th>
+			<td>{{ company.post_number }}</td>
+		</tr>
+		<tr>
+			<th>住所</th>
+			<td>{{ company.address }}</td>
+		</tr>
+		<tr>
+			<th>ホームページURL</th>
+			<td><a href="{{ company.site_url }}" target="_blank">{{ company.site_url }}</a></td>
+		</tr>
+		<tr>
+			<th>代表メールアドレス</th>
+			<td>{{ company.email }}</td>
+		</tr>
+		<tr>
+			<th>代表者名</th>
+			<td>{{ company.representative }}</td>
+		</tr>
+		<tr>
+			<th>設立</th>
+			<td>{{ company.foundation_date }}</td>
+		</tr>
+		<tr>
+			<th>決算月</th>
+			<td>{{ company.account_closing }}</td>
+		</tr>
+		<tr>
+			<th>資本金</th>
+			<td>{{ company.capital }}</td>
+		</tr>
+		<tr>
+			<th>従業員数</th>
+			<td>{{ company.employee_number }}</td>
+		</tr>
+		<tr>
+			<th>年商</th>
+			<td>{{ company.yearly_sales }}</td>
+		</tr>
+		{% if company.listing %}
+		<tr>
+			<th>上場</th>
+			<td>{{ company.listing }}</td>
+		</tr>
+		{% endif %}
+	</table>
+</div>
 
 {% if documents %}
-<h2 class="content-title-h2">{{ company.name}}の資料</h2>
+<h3 class="content-title-h3">{{ company.name}}の資料</h3>
 <ul>
 {% for d in documents %}
     <li><a href="{% url 'document_detail' document_id=d.id%}">{{d.title}}</a></li>
@@ -16,7 +92,7 @@
 {% endif%}
 
 {% if seminars %}
-<h2 class="content-title-h2">{{ company.name}}のセミナー</h2>
+<h3 class="content-title-h3">{{ company.name}}のセミナー</h3>
 <ul>
 {% for s in seminars %}
     <li><a href="{% url 'seminar_detail' seminar_id=s.id%}">{{s.title}}</a></li>

@@ -87,6 +87,7 @@ def mypage_edit_company(request):
         'accounts/edit_company.html',
         {
             'form' : form,
+            'company': company,
         },
         context_instance=RequestContext(request)
     )
@@ -127,8 +128,8 @@ def company_entry(request):
 def company_detail(request, company_id):
     company = get_object_or_404(Company, pk=company_id, status=1)
 
-    documents = Document.objects.filter(company=company_id).order_by('-update_date')[0:10]
-    seminars = Seminar.objects.filter(company=company.id).order_by('-update_date')[0:10]
+    documents = Document.objects.filter(company=company_id, status=1).order_by('-update_date')[0:10]
+    seminars = Seminar.objects.filter(company=company.id, status=1).order_by('-update_date')[0:10]
     return render_to_response(
         'accounts/company_detail.html',
         {

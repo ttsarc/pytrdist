@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.utils import timezone
+from django.db.models import Count
 from accounts.forms import MyUserShowForm, MyUserProfileShowForm
 from seminars.forms import SeminarForm, EntryForm, LeadSearchForm
 from seminars.models import Seminar, SeminarEntryLog, SeminarEntryUser
@@ -88,7 +89,7 @@ def edit_index(request):
     if not is_company_staff(request.user):
         return redirect('mypage_home')
     company = request.user.customer_company
-    seminars = Seminar.objects.all().filter(company__exact=company, status__in=[0,1])
+    seminars = Seminar.objects.all().filter(company__exact=company, status__in=[0,1]).annotate(entry_count=Count('seminarentryuser'))
     return render_to_response(
         'seminars/edit_index.html',
         {

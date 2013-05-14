@@ -13,3 +13,4 @@ def email_company_staff(company_id, subject, content, email_from=None):
     for staff in staffs:
         staff.email_user(subject, content, email_from)
     mail_admins(subject=' admin ' + subject, message = content, fail_silently=True)
+

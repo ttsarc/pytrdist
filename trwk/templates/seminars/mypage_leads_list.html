@@ -19,30 +19,40 @@
 </form>
 </div>
 <div class="text-button red"><a href="{% url 'seminar_leads_csv'%}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">この条件でCSVダウンロード</a></div>
-<div class="content-table">
-<table>
+<div class="data-table">
 {% if not leads %}
-該当するログはありません
+<p>該当するログはありません</p>
+{% else %}
+	<table>
+	<tr>
+		<th>申込日</th>
+		<th>タイトル</th>
+		<th>種別</th>
+		<th>会社名</th>
+		<th>立場</th>
+	</tr>
+	{% for lead in leads %}
+	<tr>
+		<td>{{ lead.entry_date }}</td>
+		<td>{{ lead.seminar_title }}</td>
+		<td>{{ lead.seminar_type }}</td>
+		<td>{{ lead.company_name }}</td>
+		<td>{{ lead.discretion }}</td>
+	</tr>
+	{% endfor %}
+	</table>
 {% endif %}
-{% for lead in leads %}
-    <tr>
-        <td>{{ lead.entry_date }}</td>
-        <td>{{ lead.company_name }}</td>
-        <td>{{ lead.seminar_title }}</td>
-    </tr>
-{% endfor %}
-</table>
 </div>
 
 <div class="pager">
 	<div class="pager-count"><strong>{{ leads.number }}</strong>ページ / <strong>{{ leads.paginator.num_pages }}</strong>ページ中</div>
 	<div class="pager-button">
 		{% if leads.has_previous %}
-		<a href="{% url 'document_leads_paging' page=leads.previous_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">&laquo前のページ</a>
+		<a href="{% url 'seminar_leads_paging' page=leads.previous_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">&laquo前のページ</a>
 		{% endif %}
 
 		{% if leads.has_next %}
-		<a href="{% url 'document_leads_paging' page=leads.next_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">次のページ&raquo</a>
+		<a href="{% url 'seminar_leads_paging' page=leads.next_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">次のページ&raquo</a>
 		{% endif %}
 	</div><!-- .pager-button -->
 </div><!-- .pager -->
