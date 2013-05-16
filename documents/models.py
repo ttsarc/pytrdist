@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, time
+import os, time, copy
 from django.db import models
 from django.core.mail import send_mail
 from django.core import signing
@@ -78,7 +78,7 @@ class Document(models.Model):
     class Meta:
         verbose_name = "資料"
         verbose_name_plural = "資料"
-        ordering = ['-update_date']
+        ordering = ['-add_date']
 
 
 class DocumentDownloadUserManager(models.Manager):
@@ -180,6 +180,11 @@ class DocumentDownloadLog(models.Model):
             21 : ('立場',           'discretion'),
             22 : ('状況',           'stage'),
         }
+    csv_fields_operation = dict(csv_fields.items() + {
+            23 : ('ユーザーID',   'user_id'),
+            24 : ('IP',           'ip'),
+            25 : ('UA',           'ua'),
+    }.items())
 
     def __unicode__(self):
         return self.email

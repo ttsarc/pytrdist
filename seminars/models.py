@@ -79,7 +79,7 @@ class Seminar(models.Model):
     class Meta:
         verbose_name = "セミナー"
         verbose_name_plural = "セミナー"
-        ordering = ['-update_date']
+        ordering = ['-add_date']
 
 
 class SeminarEntryUserManager(models.Manager):
@@ -172,6 +172,11 @@ class SeminarEntryLog(models.Model):
                 22 : ('立場',             'discretion'),
                 23 : ('備考',             'note'),
     }
+    csv_fields_operation = dict(csv_fields.items() + {
+                23 : ('ユーザーID',   'user_id'),
+                24 : ('IP',           'ip'),
+                25 : ('UA',           'ua'),
+    }.items())
 
     def __unicode__(self):
         return self.email

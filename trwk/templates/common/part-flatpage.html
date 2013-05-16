@@ -1,0 +1,8 @@
+{% if page %}
+<div class="part-flatpage">
+	<h2 class="part-flatpage-title">{{ page.title }}</h2>
+	<article>{{ page.content|linebreaks }}</article>
+</div><!-- .side-item -->
+{% else %}
+urlの指定が間違っています
+{% endif %}

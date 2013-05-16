@@ -124,6 +124,7 @@ def index(request, page=1):
 
 def detail(request, document_id):
     document = get_object_or_404(Document, pk=document_id, status=1)
+    set_recent_checked(request, 'Document', document_id)
     return render_to_response(
         'documents/detail.html',
         {

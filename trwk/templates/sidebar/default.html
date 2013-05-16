@@ -44,9 +44,13 @@
 
 		</div><!-- .side-item -->
 		{% endcomment %}
+
+		{% load recent_checked_extra %}
+		{% show_recent_checked request%}
+
 		{% cache 300 sidebar_flatpage %}
 		{% load flatpages_extra %}
-		{% show_flatpage url='/infomation/'%}
+		{% show_flatpage_sidebar url='/infomation/'%}
 		{% endcache %}
 
 		{% cache 300 sidebar_posts %}

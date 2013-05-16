@@ -1,0 +1,14 @@
+{% if results %}
+{% load thumbnail %}
+<div class="side-item">
+	<h2 class="side-title">最近チェックしたもの</h2>
+{% for result in results %}
+	<article>
+		<a href="{{ result.item.get_absolute_url }}" class="block">
+			<span class="side-thumbnail">{% include 'common/thumbnail/small.html' with img_file=result.item.thumb_file alt=result.item.title%}</span>
+			<h1 class="article-title">{{ result.item.title }}</h1>
+		</a>
+	</article>
+{% endfor%}
+</div><!-- .side-item -->
+{% endif%}

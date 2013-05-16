@@ -837,12 +837,21 @@ a:hover img{
 	display: block;
 	clear: both;
 }
+.side-thumbnail{
+	display: block;
+	float: left;
+	margin: 0 5px 0 0;
+	width: 100px;
+	text-align:center;
+}
+/*
 .side-item .thumbnail{
 	display: block;
 	float: left;
 	margin: 0 5px 0 0;
 	max-width: 100px;
 }
+*/
 .side-item .article-title{
 	margin: 0;
 	font-size: 12px;

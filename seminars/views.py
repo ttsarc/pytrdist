@@ -131,6 +131,7 @@ def detail(request, seminar_id):
     is_entered = False
     if request.user.is_authenticated() and SeminarEntryUser.objects.is_entered(seminar, request.user):
         is_entered = True
+    set_recent_checked(request, 'Seminar', seminar_id)
     return render_to_response(
         'seminars/detail.html',
         {

@@ -55,7 +55,7 @@ def download_leads(request, log_type, company_id):
         messages.add_message(request, messages.ERROR, 'log_typeが正しくありません')
         return None
     company = Company.objects.get(pk=company_id)
-    csv_fields = log_obj.csv_fields
+    csv_fields = log_obj.csv_fields_operation
     leads = log_obj.objects
     if company.slug_name :
         filename = company.slug_name

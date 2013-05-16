@@ -10,6 +10,7 @@
 	<table>
 		<tr>
 			<th>タイトル</th>
+			<th>作成日</th>
 			<th>更新日</th>
 			<th>ダウンロード数</th>
 			<th>公開状態</th>
@@ -18,6 +19,7 @@
 		{% for doc in documents %}
 		<tr>
 			<td><a href="{% url 'document_edit' document_id=doc.pk %}">{{doc.title}}</a></td>
+			<td>{{ doc.add_date }}</td>
 			<td>{{ doc.update_date }}</td>
 			<td class="num">{{ doc.download_count }}</td>
 			<td>{{ doc.get_status_display }}</td>

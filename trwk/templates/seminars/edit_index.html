@@ -10,6 +10,7 @@
 	<table>
 		<tr>
 			<th>タイトル</th>
+			<th>作成日</th>
 			<th>更新日</th>
 			<th>申し込み数</th>
 			<th>受付状態</th>
@@ -19,6 +20,7 @@
 		{% for semi in seminars %}
 		<tr>
 			<td><a href="{% url 'seminar_edit' seminar_id=semi.pk %}">{{semi.title}}</a></td>
+			<td>{{ semi.add_date }}</td>
 			<td>{{ semi.update_date }}</td>
 			<td class="num">{{ semi.entry_count }} / {{ semi.limit_number }}</td>
 			<td>{% if semi.is_open %}受付中{% else %}受付終了{% endif %}</td>
