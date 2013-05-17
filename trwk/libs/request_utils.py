@@ -43,7 +43,7 @@ def set_recent_checked(request, model, pk):
         checked_items = request.session['checked_items']
         for k,v in checked_items.items():
             if v['model'] == model and v['pk'] == int(pk):
-                print(checked_items[k])
+                #print(checked_items[k])
                 del checked_items[k]
         sorted_checked_items = {}
         for k, v in sorted(checked_items.items(), reverse=True)[0:4]:

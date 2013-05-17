@@ -7,4 +7,6 @@ trwk/local_settings.py
 *.back
 *.zip
 *.gz
+*.swo
 trwk/media
+trwk/static/google*.html

@@ -124,14 +124,15 @@ def index(request, page=1):
 
 def detail(request, document_id):
     document = get_object_or_404(Document, pk=document_id, status=1)
-    set_recent_checked(request, 'Document', document_id)
-    return render_to_response(
+    response = render_to_response(
         'documents/detail.html',
         {
             'document' : document,
         },
         context_instance=RequestContext(request)
     )
+    set_recent_checked(request, 'Document', document_id)
+    return response
 
 @login_required
 def preview(request, document_id):
