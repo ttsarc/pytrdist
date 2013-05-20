@@ -5,49 +5,52 @@ from django.template import RequestContext
 from django.contrib import messages
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import EmailMessage
 from contact.forms import ContactForm
-from trwk.libs.request_utils import *
+from trwk.libs.request_utils import get_request_addr_or_ip, get_request_ua
+
 
 def _notify_sender(form_data, request):
     content = render_to_string(
         'email/contact_general.txt',
-        {'data' : form_data},
+        {'data': form_data},
         context_instance=RequestContext(request)
     )
     subject = render_to_string(
         'email/contact_general_subject.txt',
-        {'data' : form_data},
+        {'data': form_data},
         context_instance=RequestContext(request)
     )
-    subject = subject.replace("\n","")
+    subject = subject.replace("\n", "")
     mail = EmailMessage(
-            subject=subject,
-            body=content,
-            from_email=settings.SERVER_EMAIL,
-            to=[form_data['email']],
-           )
+        subject=subject,
+        body=content,
+        from_email=settings.SERVER_EMAIL,
+        to=[form_data['email']],
+    )
     mail.send()
-    request_data ={
-        'ip' : get_request_addr_or_ip(request),
-        'ua' : get_request_ua(request),
+    request_data = {
+        'ip': get_request_addr_or_ip(request),
+        'ua': get_request_ua(request),
     }
     admin_content = render_to_string(
         'email/contact_general.txt',
         {
-            'data' : form_data,
+            'data': form_data,
             'request_data': request_data,
         },
         context_instance=RequestContext(request)
     )
     subject = 'admin' + subject
     admin_mail = EmailMessage(
-            subject = subject,
-            body = admin_content,
-            from_email = settings.SERVER_EMAIL,
-            to=[settings.CONTACT_EMAIL],
-           )
+        subject=subject,
+        body=admin_content,
+        from_email=settings.SERVER_EMAIL,
+        to=[settings.CONTACT_EMAIL],
+    )
     admin_mail.send()
+
+
 @csrf_protect
 def general(request):
     template_name = 'contact/general.html'
@@ -55,8 +58,11 @@ def general(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             if request.POST.get('complete') == '1':
-                _notify_sender( form.cleaned_data , request )
-                messages.add_message(request, messages.SUCCESS, 'お問い合わせを承りました。確認のメールを送信しました。')
+                _notify_sender(form.cleaned_data, request)
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    'お問い合わせを承りました。確認のメールを送信しました。')
                 return redirect('home')
             elif not request.POST.get('complete'):
                 template_name = 'contact/general_confirm.html'
@@ -69,10 +75,10 @@ def general(request):
                 'email': u.email,
                 'first_name': p.first_name,
                 'last_name': p.last_name,
-                'department' : p.department,
-                'company_name' : p.company_name,
-                'tel' : p.tel,
-                'fax' : p.fax,
+                'department': p.department,
+                'company_name': p.company_name,
+                'tel': p.tel,
+                'fax': p.fax,
                 'site_url': p.site_url,
             })
         else:
@@ -80,7 +86,7 @@ def general(request):
     return render_to_response(
         template_name,
         {
-            'form' : form,
+            'form': form,
         },
         context_instance=RequestContext(request)
     )

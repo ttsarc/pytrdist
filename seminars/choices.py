@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-TYPE_CHOICES = (
+TYPE_CHOICE = (
    (0, '無料'),
    (1, '有料'),
    (2, '展示会'),
 )
-CATEGORY_CHOICES = (
+CATEGORY_CHOICE = (
     ('経営',(
         ('manager01', '経営戦略'),
         ('manager02', '中小企業経営'),
@@ -59,12 +59,12 @@ CATEGORY_CHOICES = (
     ),
 )
 
-ENTRY_STATUS_CHOICES = (
+ENTRY_STATUS_CHOICE = (
     (1, '受付中'),
     (0, '受付終了'),
 )
 
-STATUS_CHOICES = (
+STATUS_CHOICE = (
     (0, '下書き'),
     (1, '公開'),
     (2, '削除'),

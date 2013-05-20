@@ -1,44 +1,78 @@
 # -*- coding: utf-8 -*-
 import os
+import warnings
 from django.db import models
 from django.core.mail import send_mail
 from django.core.validators import validate_slug
-from django.core.validators import RegexValidator,MinLengthValidator, validate_slug
+from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
     PermissionsMixin, BaseUserManager, AbstractBaseUser
 )
-from accounts.choices import *
+from accounts.choices import (
+    POSITION_CLASS_CHOICE,
+    BUSINESS_TYPE_CHOICE,
+    JOB_CONTENT_CHOICE,
+    FIRM_SIZE_CHOICE,
+    YEARLY_SALES_CHOICE,
+    DISCRETION_CHOICE,
+    PREFECTURES_CHOICE,
+    STATUS_CHOICE,
+)
 from accounts.validators import TelFaxValidaor, PostNumberValidaor
-from trwk.libs.fields import ImageWithThumbsField
 from trwk.libs.file_utils import normalize_filename
 from sorl.thumbnail import ImageField
 from django.core.urlresolvers import reverse
 
+
 class CompanyManager(models.Manager):
     pass
 
+
 class Company(models.Model):
-    name =             models.CharField('掲載企業名', max_length=100)
-    kana =             models.CharField('掲載企業名（フリガナ）', max_length=100)
-    slug_name =        models.SlugField('スラッグ', blank=True, help_text='CSVのファイル名などに使われます。半角英数字')
-    business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES, blank=True, null=True)
-    tel =              models.CharField('電話番号', max_length=16,validators=[TelFaxValidaor], help_text='例：03-3343-5746')
-    fax =              models.CharField('FAX', max_length=16, validators=[TelFaxValidaor], help_text='例：03-5326-0360')
-    post_number =      models.CharField('郵便番号', max_length=8, validators=[PostNumberValidaor], help_text="例：1630648")
-    prefecture =       models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES)
-    address=           models.CharField('住所', max_length=200)
-    site_url =         models.URLField('ホームページURL')
-    email =            models.EmailField('代表メールアドレス')
-    representative =   models.CharField('代表者名', max_length=100, blank=True)
-    foundation_date =  models.CharField('設立', max_length=30)
-    account_closing =  models.CharField('決算月', max_length=30, blank=True)
-    employee_number =  models.CharField('従業員数', max_length=30)
-    capital =          models.CharField('資本金', max_length=30)
-    yearly_sales =     models.CharField('年商', max_length=30, blank=True)
-    listing =          models.CharField('上場有無', max_length=30, blank=True)
-    status =           models.SmallIntegerField('公開状態', choices=STATUS_CHOICES, default=1, help_text='非公開にすると掲載企業一覧で表示されなくなります')
+    name = models.CharField('掲載企業名', max_length=100)
+    kana = models.CharField('掲載企業名（フリガナ）', max_length=100)
+    slug_name = models.SlugField(
+        'スラッグ',
+        blank=True,
+        help_text='CSVのファイル名などに使われます。半角英数字')
+    business_type = models.SmallIntegerField(
+        '業種',
+        choices=BUSINESS_TYPE_CHOICE,
+        blank=True, null=True)
+    tel = models.CharField(
+        '電話番号',
+        max_length=16,
+        validators=[TelFaxValidaor],
+        help_text='例：03-3343-5746')
+    fax = models.CharField(
+        'FAX',
+        max_length=16,
+        validators=[TelFaxValidaor],
+        help_text='例：03-5326-0360')
+    post_number = models.CharField(
+        '郵便番号',
+        max_length=8,
+        validators=[PostNumberValidaor, ],
+        help_text="例：1630648")
+    prefecture = models.SmallIntegerField(
+        '都道府県',
+        choices=PREFECTURES_CHOICE)
+    address = models.CharField('住所', max_length=200)
+    site_url = models.URLField('ホームページURL')
+    email = models.EmailField('代表メールアドレス')
+    representative = models.CharField('代表者名', max_length=100, blank=True)
+    foundation_date = models.CharField('設立', max_length=30)
+    account_closing = models.CharField('決算月', max_length=30, blank=True)
+    employee_number = models.CharField('従業員数', max_length=30)
+    capital = models.CharField('資本金', max_length=30)
+    yearly_sales = models.CharField('年商', max_length=30, blank=True)
+    listing = models.CharField('上場有無', max_length=30, blank=True)
+    status = models.SmallIntegerField(
+        '公開状態',
+        choices=STATUS_CHOICE, default=1,
+        help_text='非公開にすると掲載企業一覧で表示されなくなります')
 
     def get_logo_uplod_path(self, filename):
         filename = normalize_filename(filename)
@@ -47,19 +81,18 @@ class Company(models.Model):
         return os.path.join(user_path, filename)
 
     logo_file = ImageField(
-        verbose_name = '企業ロゴ',
-        upload_to = get_logo_uplod_path,
-        blank = True
+        verbose_name='企業ロゴ',
+        upload_to=get_logo_uplod_path,
+        blank=True,
     )
 
-    add_date =         models.DateTimeField('登録日', auto_now_add=True)
-    update_date =      models.DateTimeField('更新日', auto_now=True)
+    add_date = models.DateTimeField('登録日', auto_now_add=True)
+    update_date = models.DateTimeField('更新日', auto_now=True)
 
     objects = CompanyManager()
 
     def get_absolute_url(self):
-        return reverse('company_detail', kwargs={'company_id':self.pk})
-
+        return reverse('company_detail', kwargs={'company_id': self.pk})
 
     class Meta:
         verbose_name = "掲載企業"
@@ -67,6 +100,7 @@ class Company(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None, username=None):
@@ -90,15 +124,23 @@ class MyUserManager(BaseUserManager):
         Creates and saves a superuser with the given email, date of
         birth and password.
         """
-        user = self.create_user(email,
+        user = self.create_user(
+            email,
             password=password,
-            username = username,
+            username=username,
         )
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
         return user
+
+
+class SiteProfileNotAvailable(Exception):
+    """Copy from django.contrib.auth.models
+    """
+    pass
+
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
@@ -107,13 +149,29 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         unique=True,
         db_index=True,
     )
-    username =         models.CharField('ユーザー名', max_length=30, blank=True, help_text="システム内で使われます。半角英数字",validators=[validate_slug])
-    is_active =        models.BooleanField('有効', default=True)
-    is_admin =         models.BooleanField('管理者', default=False)
-    is_staff =         models.BooleanField('スタッフ', default=False)
-    customer_company = models.ForeignKey(Company, verbose_name='掲載企業', blank=True, null=True, on_delete=models.SET_NULL, help_text="ここで企業が選択されていると、その企業の担当者となります。ミスのないように注意してください。")
-    date_joined =      models.DateTimeField('登録日', default=timezone.now, editable=False)
-    update_date =      models.DateTimeField('更新日', auto_now=True, editable=False)
+    username = models.CharField(
+        'ユーザー名',
+        max_length=30, blank=True,
+        help_text="システム内で使われます。半角英数字",
+        validators=[validate_slug])
+    is_active = models.BooleanField('有効', default=True)
+    is_admin = models.BooleanField('管理者', default=False)
+    is_staff = models.BooleanField('スタッフ', default=False)
+    customer_company = models.ForeignKey(
+        Company,
+        verbose_name='掲載企業',
+        blank=True, null=True,
+        on_delete=models.SET_NULL,
+        help_text="ここで企業が選択されていると、その企業の担当者となります。\
+        ミスのないように注意してください。")
+    date_joined = models.DateTimeField(
+        '登録日',
+        default=timezone.now,
+        editable=False)
+    update_date = models.DateTimeField(
+        '更新日',
+        auto_now=True,
+        editable=False)
 
     objects = MyUserManager()
 
@@ -142,7 +200,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
 
     def get_absolute_url(self):
-        return "/users/%s/" % urlquote(self.username)
+        return "/users/%s/" % str(self.pk)
 
     def myuserprofile(self):
         return self.myuserprofile
@@ -157,16 +215,17 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         """
         Sends an email to this User.
         """
-        subject = subject.replace("\n","")
+        subject = subject.replace("\n", "")
         send_mail(subject, message, from_email, [self.email])
-        #send_mail_jp(subject, message, from_email, [self.email,])
 
     def get_profile(self):
         """
         Returns site-specific profile for this user. Raises
-    SiteProfileNotAvailable if this site does not allow profiles.
+        SiteProfileNotAvailable if this site does not allow profiles.
         """
-        warnings.warn("The use of AUTH_PROFILE_MODULE to define user profiles has been deprecated.",
+        warnings.warn(
+            "The use of AUTH_PROFILE_MODULE to define user profiles \
+            has been deprecated.",
             PendingDeprecationWarning)
         if not hasattr(self, '_profile_cache'):
             from django.conf import settings
@@ -187,43 +246,72 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
                         'Unable to load the profile model, check '
                         'AUTH_PROFILE_MODULE in your project settings')
                 self._profile_cache = model._default_manager.using(
-                                   self._state.db).get(user__id__exact=self.id)
+                    self._state.db).get(user__id__exact=self.id)
                 self._profile_cache.user = self
             except (ImportError, ImproperlyConfigured):
                 raise SiteProfileNotAvailable
         return self._profile_cache
 
+
 class MyUserProfileManager(models.Manager):
     pass
 
-class MyUserProfile(models.Model):
-    myuser =           models.OneToOneField(MyUser, verbose_name="ユーザー")
-    last_name =        models.CharField('姓', max_length=30)
-    first_name =       models.CharField('名', max_length=30)
-    last_name_kana =   models.CharField('姓（ふりがな）', max_length=100)
-    first_name_kana =  models.CharField('名（ふりがな）', max_length=100)
-    company_name =     models.CharField('会社名', max_length=100)
-    tel =              models.CharField('電話番号', max_length=16,validators=[TelFaxValidaor], help_text='例：03-3343-5746')
-    fax =              models.CharField('FAX', max_length=16, blank=True, validators=[TelFaxValidaor], help_text='例：03-5326-0360')
-    post_number =      models.CharField('郵便番号', max_length=8, validators=[PostNumberValidaor], help_text="例：1630648")
-    prefecture =       models.SmallIntegerField('都道府県', choices=PREFECTURES_CHOICES)
-    address =          models.CharField('住所', max_length=255)
-    site_url =         models.URLField( 'ホームページURL', blank=True)
-    department =       models.CharField('部署名', max_length=100)
-    position =         models.CharField('役職名', max_length=100, blank=True)
-    position_class =   models.SmallIntegerField('役職区分', choices=POSITION_CLASS_CHOICES)
-    business_type  =   models.SmallIntegerField('業種', choices=BUSINESS_TYPE_CHOICES)
-    job_content =      models.SmallIntegerField('職務内容', choices=JOB_CONTENT_CHOICES)
-    firm_size =        models.SmallIntegerField('従業員数', choices=FIRM_SIZE_CHOICES)
-    yearly_sales =     models.SmallIntegerField('年商', choices=YEARLY_SALES_CHOICES)
-    discretion  =      models.SmallIntegerField('あなたの立場', choices=DISCRETION_CHOICES)
-    update_date =      models.DateTimeField('更新日', auto_now=True)
 
-    def __unicode__(self):
-        return self.myuser.email
+class MyUserProfile(models.Model):
+    myuser = models.OneToOneField(MyUser, verbose_name="ユーザー")
+    last_name = models.CharField('姓', max_length=30)
+    first_name = models.CharField('名', max_length=30)
+    last_name_kana = models.CharField('姓（ふりがな）', max_length=100)
+    first_name_kana = models.CharField('名（ふりがな）', max_length=100)
+    company_name = models.CharField('会社名', max_length=100)
+    tel = models.CharField(
+        '電話番号',
+        max_length=16,
+        validators=[TelFaxValidaor, ],
+        help_text='例：03-3343-5746')
+    fax = models.CharField(
+        'FAX',
+        max_length=16,
+        blank=True,
+        validators=[TelFaxValidaor, ],
+        help_text='例：03-5326-0360')
+    post_number = models.CharField(
+        '郵便番号',
+        max_length=8,
+        validators=[PostNumberValidaor, ],
+        help_text="例：1630648")
+    prefecture = models.SmallIntegerField(
+        '都道府県',
+        choices=PREFECTURES_CHOICE)
+    address = models.CharField('住所', max_length=255)
+    site_url = models.URLField('ホームページURL', blank=True)
+    department = models.CharField('部署名', max_length=100)
+    position = models.CharField('役職名', max_length=100, blank=True)
+    position_class = models.SmallIntegerField(
+        '役職区分',
+        choices=POSITION_CLASS_CHOICE)
+    business_type = models.SmallIntegerField(
+        '業種',
+        choices=BUSINESS_TYPE_CHOICE)
+    job_content = models.SmallIntegerField(
+        '職務内容',
+        choices=JOB_CONTENT_CHOICE)
+    firm_size = models.SmallIntegerField(
+        '従業員数',
+        choices=FIRM_SIZE_CHOICE)
+    yearly_sales = models.SmallIntegerField(
+        '年商',
+        choices=YEARLY_SALES_CHOICE)
+    discretion = models.SmallIntegerField(
+        'あなたの立場',
+        choices=DISCRETION_CHOICE)
+    update_date = models.DateTimeField('更新日', auto_now=True)
 
     objects = MyUserProfileManager()
+
     class Meta:
         verbose_name = "プロフィール"
         verbose_name_plural = "プロフィール"
 
+    def __unicode__(self):
+        return self.myuser.email

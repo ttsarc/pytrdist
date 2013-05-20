@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-POSITION_CLASS_CHOICES  = (
+POSITION_CLASS_CHOICE  = (
     (0, '経営者・役員クラス'),
     (1, '事業部長・工場長クラス'),
     (2, '部長・課長クラス'),
@@ -8,7 +8,7 @@ POSITION_CLASS_CHOICES  = (
     (5, 'その他'),
 )
 
-BUSINESS_TYPE_CHOICES = (
+BUSINESS_TYPE_CHOICE = (
     ( 0, '小売・卸売・商社'),
     ( 1, '飲食・宿泊'),
     ( 2, 'サービス  ＩＴ・広告・マスコミ'),
@@ -29,7 +29,7 @@ BUSINESS_TYPE_CHOICES = (
     (17, 'その他'),
 )
 
-JOB_CONTENT_CHOICES =(
+JOB_CONTENT_CHOICE =(
     ( 0, '経営者・役員'),
     ( 1, '経営企画'),
     ( 2, '営業・販売'),
@@ -57,7 +57,7 @@ JOB_CONTENT_CHOICES =(
     (25, 'その他'),
 )
 
-FIRM_SIZE_CHOICES = (
+FIRM_SIZE_CHOICE = (
     ( 0, '1～9名'),
     ( 1, '10～49名'),
     ( 2, '50～99名'),
@@ -70,7 +70,7 @@ FIRM_SIZE_CHOICES = (
     (10, '10000名以上'),
 )
 
-YEARLY_SALES_CHOICES = (
+YEARLY_SALES_CHOICE = (
     ( 0, '1億未満'),
     ( 1, '5億未満'),
     ( 2, '10億未満'),
@@ -83,14 +83,14 @@ YEARLY_SALES_CHOICES = (
     (10, '1000億以上'),
 )
 
-DISCRETION_CHOICES = (
+DISCRETION_CHOICE = (
     ( 0, '自社での実施・導入の検討時に決定する立場'),
     ( 1, '自社での実施・導入の検討時にサービス導入提案をする立場'),
     ( 2, '自社での実施・導入の検討時に情報収集をする立場'),
     ( 3, 'クライアントの実施・導入に当たって提案をする立場'),
 )
 
-PREFECTURES_CHOICES =(
+PREFECTURES_CHOICE =(
     (1,'北海道'),
     (2,'青森県'),
     (3,'岩手県'),
@@ -141,7 +141,7 @@ PREFECTURES_CHOICES =(
     (48,'海外'),
 )
 
-STATUS_CHOICES = (
+STATUS_CHOICE = (
     (0, '非公開'),
     (1, '公開'),
 )

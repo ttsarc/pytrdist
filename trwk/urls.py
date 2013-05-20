@@ -1,9 +1,10 @@
 from django.conf.urls import patterns, include, url
-from django.views.generic import TemplateView
 from django.conf import settings
 from trwk.views import trwk_home
 
-urlpatterns = patterns('',
+
+urlpatterns = patterns(
+    '',
     url(r'^$',          trwk_home, name='home'),
     url(r'^accounts/',  include('registration.backends.default.urls')),
     url(r'^accounts/',  include('accounts.urls')),
@@ -18,21 +19,26 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG:
-    urlpatterns += patterns('',
+    urlpatterns += patterns(
+        '',
         (r'^media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.MEDIA_ROOT}),
     )
-    urlpatterns += patterns('',
+    urlpatterns += patterns(
+        '',
         (r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_ROOT}),
     )
+
 if settings.ADMIN:
     from django.contrib import admin
     admin.autodiscover()
-    urlpatterns += patterns('',
-        url(r'^admin/',     include(admin.site.urls)),
-        url(r'^operations/',include('operations.urls')),
+    urlpatterns += patterns(
+        '',
+        url(r'^admin/',      include(admin.site.urls)),
+        url(r'^operations/', include('operations.urls')),
     )
+
 
 from django.template import add_to_builtins
 add_to_builtins('django.contrib.humanize.templatetags.humanize')

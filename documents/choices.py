@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-SERVICE_CHOICES = (
+SERVICE_CHOICE = (
     ('経営者向け', (
         ('manager01', '経営コンサルティング'),
         ('manager02', '資金調達'),
@@ -113,7 +113,7 @@ STATUS_CHOICE = (
     (2, '削除'),
 )
 
-DOWNLOAD_STATUS_CHOICES = (
+DOWNLOAD_STATUS_CHOICE = (
     (1, '可'),
     (0, '不可'),
 )
