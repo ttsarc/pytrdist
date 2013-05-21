@@ -20,13 +20,13 @@
 		</div><!-- .side-keywords -->
 		{% endcomment %}
 
-		{% load recent_checked_extra %}
-		{% show_recent_checked request%}
-
 		{% cache 300 sidebar_flatpage %}
 		{% load flatpages_extra %}
 		{% show_flatpage_sidebar url='/infomation/'%}
 		{% endcache %}
+
+		{% load recent_checked_extra %}
+		{% show_recent_checked request%}
 
 		{% cache 300 sidebar_posts %}
 		{% load blog_extra %}

@@ -2,10 +2,11 @@
 #http://djangosnippets.org/snippets/1289/
 from django import template
 register = template.Library()
-from django.template import loader, Node, Variable
-from django.utils.encoding import smart_str, smart_unicode
+from django.template import Node, Variable
+from django.utils.encoding import smart_unicode
 from django.template.defaulttags import url
 from django.template import VariableDoesNotExist
+
 
 @register.tag
 def breadcrumb(parser, token):
@@ -19,7 +20,8 @@ def breadcrumb(parser, token):
 
     Parameters:
     -First parameter is the title of the crumb,
-    -Second (optional) parameter is the url variable to link to, produced by url tag, i.e.:
+    -Second (optional) parameter is the url variable to link to,
+     produced by url tag, i.e.:
         {% url person_detail object.id as person_url %}
         then:
         {% breadcrumb person.name person_url %}
@@ -40,7 +42,7 @@ def breadcrumb_url(parser, token):
     """
 
     bits = token.split_contents()
-    if len(bits)==2:
+    if len(bits) == 2:
         return breadcrumb(parser, token)
 
     # Extract our extra title parameter
@@ -51,17 +53,18 @@ def breadcrumb_url(parser, token):
 
     return UrlBreadcrumbNode(title, url_node)
 
+
 class BreadcrumbNode(Node):
     def __init__(self, vars):
         """
         First var is title, second var is url context variable
         """
-        self.vars = map(Variable,vars)
+        self.vars = map(Variable, vars)
 
     def render(self, context):
         title = self.vars[0].var
 
-        if title.find("'")==-1 and title.find('"')==-1:
+        if title.find("'") == -1 and title.find('"') == -1:
             try:
                 val = self.vars[0]
                 title = val.resolve(context)
@@ -69,12 +72,12 @@ class BreadcrumbNode(Node):
                 title = ''
 
         else:
-            title=title.strip("'").strip('"')
-            title=smart_unicode(title)
+            title = title.strip("'").strip('"')
+            title = smart_unicode(title)
 
         url = None
 
-        if len(self.vars)>1:
+        if len(self.vars) > 1:
             val = self.vars[1]
             try:
                 url = val.resolve(context)
@@ -84,6 +87,7 @@ class BreadcrumbNode(Node):
 
         return create_crumb(title, url)
 
+
 class UrlBreadcrumbNode(Node):
     def __init__(self, title, url_node):
         self.title = Variable(title)
@@ -92,18 +96,19 @@ class UrlBreadcrumbNode(Node):
     def render(self, context):
         title = self.title.var
 
-        if title.find("'")==-1 and title.find('"')==-1:
+        if title.find("'") == -1 and title.find('"') == -1:
             try:
                 val = self.title
                 title = val.resolve(context)
             except:
                 title = ''
         else:
-            title=title.strip("'").strip('"')
-            title=smart_unicode(title)
+            title = title.strip("'").strip('"')
+            title = smart_unicode(title)
 
         url = self.url_node.render(context)
         return create_crumb(title, url)
+
 
 def create_crumb(title, url=None):
     """
@@ -114,9 +119,23 @@ def create_crumb(title, url=None):
     #       """</span>"""
     crumb = " &gt "
     if url:
-        crumb = "%s<a href='%s'>%s</a>" % (crumb, url, title)
+        crumb = (
+            """%s&nbsp;"""
+            """<div itemscope """
+            """itemtype="http://data-vocabulary.org/Breadcrumb" """
+            """class="breadcrumb-item">"""
+            """<a href="%s" itemprop="url">"""
+            """<span itemprop="title">%s</span>"""
+            """</a></div>"""
+        ) % (crumb, url, title)
     else:
-        crumb = "%s&nbsp;&nbsp;%s" % (crumb, title)
+        crumb = (
+            """%s&nbsp;"""
+            """<div itemscope """
+            """itemtype="http://data-vocabulary.org/Breadcrumb" """
+            """class="breadcrumb-item">"""
+            """<span itemprop="title">%s</span>"""
+            """</div>"""
+        ) % (crumb, title)
 
     return crumb
-

@@ -1241,6 +1241,9 @@ a:hover img{
 #breadcrumb a:hover{
 	text-decoration: underline;
 }
+.breadcrumb-item{
+	display:inline;
+}
 
 /* .content-xxx */
 .content-title{

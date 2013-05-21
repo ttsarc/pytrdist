@@ -3,7 +3,7 @@
 view of Documents
 
 """
-import datetime
+from datetime import datetime, timedelta
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.http import Http404, HttpResponse
 from django.core import signing
@@ -333,7 +333,7 @@ def download_log(request, page=1, type='list'):
         form = LeadSearchForm(request.GET)
         if form.is_valid():
             if form.cleaned_data['start_date']:
-                start = datetime.datetime.strptime(
+                start = datetime.strptime(
                     str(form.cleaned_data['start_date']),
                     '%Y-%m-%d').replace(tzinfo=timezone.utc)
                 leads = leads.filter(download_date__gte=start)
@@ -341,10 +341,10 @@ def download_log(request, page=1, type='list'):
                     form.cleaned_data['start_date']) + '^'
             if form.cleaned_data['end_date']:
                 #時刻まで条件に入っているっぽく、前日までしかとれないので+1日
-                end = datetime.datetime.strptime(
+                end = datetime.strptime(
                     str(form.cleaned_data['end_date']),
                     '%Y-%m-%d'
-                ).replace(tzinfo=timezone.utc) + datetime.timedelta(days=1)
+                ).replace(tzinfo=timezone.utc) + timedelta(days=1)
                 leads = leads.filter(download_date__lte=end)
                 if not form.cleaned_data['start_date']:
                     filename += '-^'
@@ -352,7 +352,7 @@ def download_log(request, page=1, type='list'):
     else:
         form = LeadSearchForm()
         filename += '-all(' + timezone.make_naive(
-            datetime.datetime.utcnow().replace(tzinfo=timezone.utc),
+            datetime.utcnow().replace(tzinfo=timezone.utc),
             timezone.get_default_timezone()
         ).strftime('%Y%m%d-%H%M%S') + ')'
     try:

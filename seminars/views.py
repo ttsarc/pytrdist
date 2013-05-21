@@ -3,7 +3,7 @@
 View of Seminars
 
 """
-import datetime
+from datetime import datetime, timedelta
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.http import Http404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -109,7 +109,7 @@ def index(request, page=1):
     seminars = Seminar.objects.filter(
         status=1,
         entry_status=1,
-        limit_datetime__gt=datetime.datetime.utcnow().replace(
+        limit_datetime__gt=datetime.utcnow().replace(
             tzinfo=timezone.utc
         )
     )
@@ -182,7 +182,7 @@ def _add_entry_log(seminar, form, user, company, request):
         # Seminar
         seminar_id=seminar.id,
         seminar_title=seminar.title,
-        seminar_type=dict(TYPE_CHOICES)[seminar.type],
+        seminar_type=dict(TYPE_CHOICE)[seminar.type],
         # Company
         company=company,
         # MyUser
@@ -348,7 +348,7 @@ def entry_log(request, page=1, type='list'):
         form = LeadSearchForm(request.GET)
         if form.is_valid():
             if form.cleaned_data['start_date']:
-                start = datetime.datetime.strptime(
+                start = datetime.strptime(
                     str(form.cleaned_data['start_date']),
                     '%Y-%m-%d').replace(tzinfo=timezone.utc)
                 leads = leads.filter(entry_date__gte=start)
@@ -357,11 +357,11 @@ def entry_log(request, page=1, type='list'):
                 ) + '^'
             if form.cleaned_data['end_date']:
                 #時刻まで条件に入っているっぽく、前日までしかとれないので+1日
-                end = datetime.datetime.strptime(
+                end = datetime.strptime(
                     str(form.cleaned_data['end_date']),
                     '%Y-%m-%d').replace(
                         tzinfo=timezone.utc
-                    ) + datetime.timedelta(
+                    ) + timedelta(
                         days=1
                     )
                 leads = leads.filter(entry_date__lte=end)
@@ -371,7 +371,7 @@ def entry_log(request, page=1, type='list'):
     else:
         form = LeadSearchForm()
         filename += '-all(' + timezone.make_naive(
-            datetime.datetime.utcnow().replace(tzinfo=timezone.utc),
+            datetime.utcnow().replace(tzinfo=timezone.utc),
             timezone.get_default_timezone()
         ).strftime('%Y%m%d-%H%M%S') + ')'
     try:

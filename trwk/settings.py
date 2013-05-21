@@ -6,7 +6,7 @@ ADMIN = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-     ('example', 'trwk@example.com'),
+    ('example', 'trwk@example.com'),
 )
 
 SERVER_EMAIL = 'noreply@example.com'
@@ -16,13 +16,18 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'trwk',                      # Or path to database file if using sqlite3.
+        # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'trwk',
         # The following settings are not used with sqlite3:
         'USER': 'trwk_user',
         'PASSWORD': 'password',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        # Empty for localhost through domain sockets
+        # or '127.0.0.1' for localhost through TCP.
+        'HOST': '',
+        'PORT': '',
+        # Set to empty string for default.
     }
 }
 
@@ -59,7 +64,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT =  os.path.join(SITE_ROOT, 'media')
+MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -70,7 +75,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT =  os.path.join(SITE_ROOT, 'static_root')
+STATIC_ROOT = os.path.join(SITE_ROOT, 'static_root')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -99,7 +104,7 @@ SECRET_KEY = 'h&zl5f-lx1%n%gju*8d%w+to*!jev_pqg6$zd5o1=6*iam2&@9'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -121,7 +126,8 @@ ROOT_URLCONF = 'trwk.urls'
 WSGI_APPLICATION = 'trwk.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here,
+    # like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(SITE_ROOT, 'templates'),
@@ -143,7 +149,7 @@ INSTALLED_APPS = (
     'registration',
     'mypage',
     'contact',
-    'sites',
+    'trwk',
     'search',
     'icybackup',
     'bootstrap-pagination',
@@ -207,7 +213,7 @@ SEMINARS_PER_PAGE = 10
 LOGS_PER_PAGE = 20
 
 #Postの記事内に埋め込むサムネイルサイズ
-POST_THUMBNAIL_SIZE ='240x240'
+POST_THUMBNAIL_SIZE = '240x240'
 
 AUTH_USER_MODEL = 'accounts.MyUser'
 AUTH_PROFILE_MODULE = 'accounts.MyUserProfile'
@@ -264,8 +270,11 @@ BAD_EMAIL_DOMAIN = [
 #PIL
 THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.pil_engine.Engine'
 THUMBNAIL_DEBUG = False
-DEFAULT_THUMBNAIL = os.path.join(SITE_ROOT, 'static', 'images', 'thumb-400x300.png')
-
+DEFAULT_THUMBNAIL = os.path.join(
+    SITE_ROOT,
+    'static',
+    'images',
+    'thumb-400x300.png')
 
 SSL_URLS = (
     '^/mypage/',
@@ -275,10 +284,12 @@ SSL_URLS = (
     '^/accounts/',
     '^/contact/',
 )
+
 SSL_IGNORE_URLS = (
     '^/static/',
     '^/media/',
 )
+
 #日本語メール文字化け対策
 from django.core.mail.message import EmailMessage
 EmailMessage.encoding = 'iso-2022-jp'
