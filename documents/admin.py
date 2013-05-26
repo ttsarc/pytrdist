@@ -1,9 +1,19 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from documents.models import (
+    DocumentCategory,
     Document, DocumentDownloadLog,
     DocumentDownloadCount, DocumentDownloadUser)
 from sorl.thumbnail.admin import AdminImageMixin
+
+
+class DocumentCategoryAdmin(admin.ModelAdmin):
+    list_display = (
+        'with_parent_name',
+        'parent',
+        'sort',
+    )
+admin.site.register(DocumentCategory, DocumentCategoryAdmin)
 
 
 class DocumentAdmin(admin.ModelAdmin, AdminImageMixin):

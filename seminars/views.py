@@ -22,7 +22,7 @@ from seminars.choices import TYPE_CHOICE
 from trwk.libs.request_utils import (
     get_request_addr_or_ip,
     get_request_ua,
-    set_recent_checked, )
+    set_recent_checked,)
 from trwk.api.company_utility import is_company_staff, email_company_staff
 from trwk.libs.csv_utils import export_csv
 

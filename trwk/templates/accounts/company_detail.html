@@ -1,10 +1,11 @@
-{% extends 'base.html'%}{% load breadcrumb %}
+{% extends 'base.html'%}{% load breadcrumb %}{% load cache %}
 {% block title %}{{ company.name}} - 掲載企業詳細{% endblock %}
 {% block breadcrumb_inner %}
 	{% breadcrumb_url '掲載企業一覧' 'company_index'%}
 	{% breadcrumb company.name %}
 {% endblock %}
 {% block content %}
+{% cache 300 company_detail company.pk %}
 <h1 class="content-title">{{ company.name}}</h1>
 
 <h2 class="content-title-h3">企業情報</h2>
@@ -82,22 +83,27 @@
 	</table>
 </div>
 
+<div class="list-310-wrapper">
 {% if documents %}
-<h3 class="content-title-h3">{{ company.name}}の資料</h3>
-<ul>
-{% for d in documents %}
-    <li><a href="{% url 'document_detail' document_id=d.id%}">{{d.title}}</a></li>
-{% endfor%}
-</ul>
-{% endif%}
+<div class="list-310 left">
+	<h2 class="list-title-310"><span class="icon-data"></span>{{ company.name}}の資料</h2>
+	{% for item in documents %}
+	{% include 'documents/list_item_half.html'%}
+	{% endfor %}
+</div><!-- .list-310 -->
+{% endif %}
 
 {% if seminars %}
-<h3 class="content-title-h3">{{ company.name}}のセミナー</h3>
-<ul>
-{% for s in seminars %}
-    <li><a href="{% url 'seminar_detail' seminar_id=s.id%}">{{s.title}}</a></li>
-{% endfor%}
-</ul>
-{% endif%}
+<div class="list-310">
+	<h2 class="list-title-310"><span class="icon-seminar"></span>{{ company.name}}のセミナー</h2>
+	{% for item in seminars %}
+	{% include 'seminars/list_item_half.html'%}
+	{% endfor %}
+</div><!-- .list-310 -->
+{% endif %}
+
+</div><!-- .list-310-wrapper -->
+
+{% endcache %}
 {% endblock %}
 

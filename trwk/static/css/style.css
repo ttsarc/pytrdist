@@ -1388,8 +1388,7 @@ a:hover img{
 }
 .content-table input[type="submit"],
 .content-table input.submit,
-.content-table input.image-button.send{
-	display: block;
+body .content-table input.image-button.send{
 	height: 35px;
 	width: 150px;
 	background: url(../images/form-submit-button.png) no-repeat 0 0;
@@ -1453,8 +1452,6 @@ a:hover img{
 input#back-submit{
 	width: 130px;
 	background: url(../images/submit-revise-button.png) no-repeat 0 0;
-	display: inline-block;
-	/display: inline;
 	zoom: 1;
 	margin: 10px 10px 20px;
 }
@@ -1933,19 +1930,21 @@ body .pagination ul > li {
 	text-align:left;
 	width:100%;
 	font-size:.9em;
-}
-.data-table table a{
-	display:block;
+	background:#fff;
 }
 .data-table table .num{
 	text-align:right;
 }
 .data-table table th{
-	background:#fff;
+	background:#333;
+	color:#fff;
 	font-weight:bold;
 }
 .data-table table th,
 .data-table table td{
 	border:1px solid #ddd;
 	padding:3px 5px;
+}
+.form-btn-set{
+	text-align:center;
 }

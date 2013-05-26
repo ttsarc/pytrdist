@@ -11,7 +11,7 @@
 				<li>企業名：<a href="{{item.company.get_absolute_url}}">{{ item.company }}</a></li>
 			</ul>
 			<ul>
-				<li>カテゴリ：{{ item.get_category_display }}</li>
+				<li>カテゴリ：{% include 'common/part-category-list.html' with category=item.category%}</li>
 			</ul>
 			<div class="article-more"><a href="{{ item.get_absolute_url }}"><img src="{% static 'images/list-more-white.png'%}" alt="詳細を見る" width="150" height="35"></a>　<a href="{{ item.get_download_url }}"><img src="{% static 'images/list-download-red.png'%}" alt="ダウンロード" width="150" height="35"></a></div>
 		</footer>

@@ -55,7 +55,7 @@
 <div class="content-table narrow">
 	<table>
 		<tr><th>種別</th><td>{{ seminar.get_type_display }}</td></tr>
-		<tr><th>カテゴリー</th><td>{{ seminar.get_category_display }}</td></tr>
+		<tr><th>カテゴリー</th><td>{% include 'common/part-category-list.html' with category=seminar.category%}</td></tr>
 		<tr><th>開催日</th><td>{{ seminar.exhibition_date }}</td></tr>
 		<tr><th>終了日</th><td>{{ seminar.close_date }}</td></tr>
 		<tr><th>開催時間</th><td>{{ seminar.exhibition_time }}</td></tr>
@@ -73,7 +73,7 @@
 		受付終了
 		{% endif %}
 		</td></tr>
-		<tr><th>現在の申し込み数</th><td>{{entry_count }} / {{ seminar.limit_number}} </td></tr>
+		<tr><th>現在の申し込み数</th><td>{{ entry_count }} / {{ seminar.limit_number}} </td></tr>
 	</table>
 </div><!-- .content-table -->
 

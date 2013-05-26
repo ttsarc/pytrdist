@@ -51,7 +51,13 @@
 {% endif %}
 <div class="content-table narrow">
 <table>
-	<tr><th>サービスカテゴリ</th><td>{{ document.get_category_display }}</td></tr>
+	<tr>
+		<th>サービスカテゴリ</th>
+		<td>
+		{% include 'common/part-category-list.html' with category=document.category%}
+		</td>
+
+	</tr>
 	<tr><th>対象業種</th><td>{{ document.get_target_type_display }}</td></tr>
 	<tr><th>対象会社規模</th><td>{{ document.get_target_size_display }}</td></tr>
 	<tr><th>更新日</th><td>{{ document.update_date }}</td></tr>

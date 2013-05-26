@@ -1,0 +1,7 @@
+{% load thumbnail %}{% load static %}
+<article>
+	<a href="{{ item.get_absolute_url }}">{% include 'common/thumbnail/small.html' with img_file=item.thumb_file alt=item.title%}</a>
+	<div class="text">
+		<h1 class="article-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h1>
+	</div><!-- .text -->
+</article>

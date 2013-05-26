@@ -1,147 +1,57 @@
-{% extends 'base.html'%}{% load static %}{% load breadcrumb %}
+{% extends 'base.html'%}{% load static %}{% load breadcrumb %}{% load cache %}
 {% block title %}とれわか{% endblock %}{% block title_footer %}{% endblock %}
 {% block breadcrumb_wrapper %}{% endblock %}
 
 {% block content %}
-		<div id="top-keyvisual"><img src="{% static "images/keyvisual20130516.jpg"%}" alt="製品・サービス提供社と導入検討者をつなぐポータルサイト" width="640" height="250"></div>
+<div id="top-keyvisual"><img src="{% static "images/keyvisual20130516.jpg"%}" alt="製品・サービス提供社と導入検討者をつなぐポータルサイト" width="640" height="250"></div>
 
-		{% if notable_documents %}
-		<h2 class="list-title-640"><span class="icon-data"></span>注目の資料</h2>
-		<div class="list-640">
-			{% for item in notable_documents %}
-			{% include 'documents/list_item.html'%}
+{% cache 300 home_flatpage %}
+	{% load flatpages_extra %}
+	{% show_flatpage url='/home/' show_title='' div_class='home' %}
+{% endcache %}
+
+{% cache 60 home_items %}
+	{% if notable_documents %}
+	<h2 class="list-title-640"><span class="icon-data"></span>注目の資料</h2>
+	<div class="list-640">
+		{% for item in notable_documents %}
+		{% include 'documents/list_item.html'%}
+		{% endfor %}
+	</div><!-- .list-640 -->
+	{% endif %}
+	{% comment %}<div class="list-640-more"><a href="{% url 'document_index' %}">&raquo;他の資料を探す</a></div>{% endcomment %}
+
+	{% if notable_seminars %}
+	<h2 class="list-title-640"><span class="icon-seminar"></span>注目のセミナー</h2>
+	<div class="list-640">
+		{% for item in notable_seminars %}
+		{% include 'seminars/list_item.html'%}
+		{% endfor %}
+	</div><!-- .list-640 -->
+	{% endif %}
+
+	{% comment %}<div class="list-640-more"><a href="{% url 'seminar_index' %}">&raquo;他のセミナーを探す</a></div>{% endcomment %}
+
+	<div class="list-310-wrapper">
+		{% if recent_documents %}
+		<div class="list-310 left">
+			<h2 class="list-title-310"><span class="icon-data"></span>新着の資料</h2>
+			{% for item in recent_documents %}
+			{% include 'documents/list_item_half.html'%}
 			{% endfor %}
-		</div><!-- .list-640 -->
+			<div class="list-310-more"><a href="{% url 'document_index'%}">&#x25B6; もっと見る</a></div>
+		</div><!-- .list-310 -->
 		{% endif %}
-		<div class="list-640-more"><a href="{% url 'document_index' %}">&raquo;他の資料を探す</a></div>
-
-		{% comment %}
-		<div class="list-310-wrapper">
-
-			<div class="list-310 left">
-				<h2 class="list-title-310"><span class="icon-data"></span>人気の資料</h2>
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<div class="list-310-more"><a href="#">&#x25B6; もっと見る</a></div>
-
-			</div><!-- .list-310.left -->
-
-			<div class="list-310">
-				<h2 class="list-title-310"><span class="icon-data"></span>新着の資料</h2>
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<div class="list-310-more"><a href="#">&#x25B6; もっと見る</a></div>
-
-			</div><!-- .list-310 -->
-
-		</div><!-- .list-310-wrapper -->
-		{% endcomment %}
-
-		{% if notable_seminars %}
-		<h2 class="list-title-640"><span class="icon-seminar"></span>注目のセミナー</h2>
-		<div class="list-640">
-			{% for item in notable_seminars %}
-			{% include 'seminars/list_item.html'%}
+		{% if recent_seminars %}
+		<div class="list-310">
+			<h2 class="list-title-310"><span class="icon-seminar"></span>新着のセミナー</h2>
+			{% for item in recent_seminars %}
+			{% include 'seminars/list_item_half.html'%}
 			{% endfor %}
-		</div><!-- .list-640 -->
+			<div class="list-310-more"><a href="{% url 'seminar_index'%}">&#x25B6; もっと見る</a></div>
+		</div><!-- .list-310 -->
 		{% endif %}
+	</div><!-- .list-310-wrapper -->
+{% endcache %}
 
-		<div class="list-640-more"><a href="{% url 'seminar_index' %}">&raquo;他のセミナーを探す</a></div>
-
-		{% comment %}
-		<div class="list-310-wrapper">
-
-			<div class="list-310 left">
-				<h2 class="list-title-310"><span class="icon-seminar"></span>人気のセミナー</h2>
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<div class="list-310-more"><a href="#">&#x25B6; もっと見る</a></div>
-
-			</div><!-- .list-310.left -->
-
-			<div class="list-310">
-				<h2 class="list-title-310"><span class="icon-seminar"></span>新着のセミナー</h2>
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<article>
-					<a href="#"><img src="{% static "images/noimage-100x75.jpg" %}" alt="サムネイル" width="100" height="75" class="thumbnail"></a>
-					<div class="text">
-						<h1 class="article-title"><a href="#">タイトルタイトルタイトルタイトルタイトルタイトル</a></h1>
-					</div><!-- .text -->
-				</article>
-
-				<div class="list-310-more"><a href="#">&#x25B6; もっと見る</a></div>
-
-			</div><!-- .list-310 -->
-		</div><!-- .list-310-wrapper -->
-		{% endcomment %}
 {% endblock content%}

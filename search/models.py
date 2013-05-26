@@ -17,7 +17,6 @@ class Search(models.Model):
         blank=True)
     status = models.SmallIntegerField(
         '公開状態',
-        choices=((0, 0), (1, 1)),
         default=1)
 
     def __unicode__(self):

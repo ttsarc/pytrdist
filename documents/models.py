@@ -7,7 +7,6 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from accounts.models import Company
 from documents.choices import (
-    SERVICE_CHOICE,
     TARGET_TYPE_CHOICE,
     TARGET_SIZE_CHOICE,
     STATUS_CHOICE,
@@ -16,6 +15,42 @@ from documents.choices import (
 from trwk.libs.fields import ContentTypeRestrictedFileField
 from trwk.libs.file_utils import normalize_filename
 from sorl.thumbnail import ImageField
+
+
+class DocumentCategoryManager(models.Manager):
+    pass
+
+
+class DocumentCategory(models.Model):
+    name = models.CharField('カテゴリ名', max_length=80)
+    description = models.TextField(
+        '説明',
+        blank=True)
+    parent = models.ForeignKey(
+        'self',
+        verbose_name='親カテゴリ',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        limit_choices_to={'parent':None}
+    )
+    sort = models.SmallIntegerField('並び順（大が上）', default=0)
+    objects = DocumentCategoryManager()
+
+    def with_parent_name(self):
+        if self.parent:
+            return ' -> '.join([self.parent.name, self.name])
+        return self.name
+
+    def __unicode__(self):
+        if self.parent:
+            return ' -> '.join([self.parent.name, self.name])
+        return self.name
+
+    class Meta:
+        verbose_name = "資料カテゴリ"
+        verbose_name_plural = "資料カテゴリ"
+        ordering = ['-sort']
 
 
 class DocumentManager(models.Manager):
@@ -60,12 +95,11 @@ class Document(models.Model):
         verbose_name='サムネイル画像',
         upload_to=get_thumb_uplod_path,
         blank=True,
-        default=settings.DEFAULT_THUMBNAIL,
     )
-
-    category = models.CharField(
-        'サービスカテゴリ',
-        max_length=16, choices=SERVICE_CHOICE)
+    category = models.ManyToManyField(
+        DocumentCategory,
+        verbose_name='資料カテゴリー',
+    )
     target_type = models.CharField(
         '対象業種',
         max_length=16,

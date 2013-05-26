@@ -2,7 +2,7 @@
 import datetime
 from django import forms
 from django.forms.widgets import RadioSelect
-from documents.models import Document
+from documents.models import Document,DocumentCategory
 from documents.choices import STAGE_CHOICE
 from trwk.libs.fields import confirmation_field
 
@@ -10,6 +10,10 @@ from trwk.libs.fields import confirmation_field
 class DocumentForm(forms.ModelForm):
     error_css_class = 'error'
     required_css_class = 'required'
+    #cagtegory = forms.ModelMultipleChoiceField(
+    #    widget=forms.CheckboxSelectMultiple(),
+    #    queryset=DocumentCategory.objects.all(),
+    #    required=True)
 
     class Meta:
         model = Document

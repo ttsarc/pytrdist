@@ -66,7 +66,7 @@ def create_search_query(keyword):
 
 def update_document_search_data(document):
     d = document
-    text_sorces = (
+    text_sorces = [
         d.title,
         str(d.company),
         d.catch,
@@ -74,7 +74,13 @@ def update_document_search_data(document):
         d.results,
         #PDFの内容も入れる。重いので停
         #convert_pdf(settings.MEDIA_ROOT + '/' + doc.pdf_file.name),
-    )
+    ]
+    categories = d.category.all()
+    if categories:
+        cat_names = []
+        for cat in categories:
+            cat_names.append(cat.name)
+        text_sorces.append(' '.join(cat_names))
     text = ' '.join(text_sorces)
     search, created = Search.objects.get_or_create(
         model='Document',
@@ -88,7 +94,7 @@ def update_document_search_data(document):
 
 def update_seminar_search_data(seminar):
     s = seminar
-    text_sorces = (
+    text_sorces = [
         s.title,
         str(s.company),
         s.catch,
@@ -97,8 +103,13 @@ def update_seminar_search_data(seminar):
         s.promoter,
         s.place_name,
         s.address,
-        s.get_category_display(),
-    )
+    ]
+    categories = s.category.all()
+    if categories:
+        cat_names = []
+        for cat in categories:
+            cat_names.append(cat.name)
+        text_sorces.append(' '.join(cat_names))
     text = ' '.join(text_sorces)
     search, created = Search.objects.get_or_create(
         model='Seminar',

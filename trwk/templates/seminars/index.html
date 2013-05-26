@@ -15,6 +15,8 @@
 <div class="bottom-list">
 {% for item in seminars %}
 {% include 'seminars/list_item.html'%}
+{% empty %}
+<p>セミナーがありません</p>
 {% endfor %}
 </div><!-- .bottom-list -->
 

@@ -18,9 +18,8 @@
 </table>
 {% include 'common/form_confirm_table.html'%}
 
-{% with submit_value='登録する'%}
-{% include 'common/form_btn_complete.html' %}
-{% endwith %}
+{% include 'common/form_btn_complete.html' with submit_value='登録する'%}
+
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 </div>

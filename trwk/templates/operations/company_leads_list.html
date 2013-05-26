@@ -1,0 +1,73 @@
+{% extends 'base_mypage.html'%}{% load breadcrumb %}
+{%block head_after_link %}
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
+{%endblock%}
+{% block title %}{{company.name}}のリード{% endblock%}
+
+{% block breadcrumb_mypage %}
+	{% breadcrumb '管理メニュー' %}
+	{% breadcrumb_url  'リード情報の取得' 'operation_company_leads' %}
+	{% breadcrumb company.name %}のリード
+{% endblock %}
+
+{% block content %}
+<h1 class="content-title">{{company.name}}のリード</h1>
+<div>
+<form method='get' action=''>
+<input type="hidden" value="1" name="search">
+{{form.start_date}} ～ {{form.end_date}}
+{{form.start_date.errors}}
+{{form.end_date.errors}}
+<input type="submit" value="検索">
+</form>
+</div>
+<div class="data-table">
+<table>
+{% if not leads %}
+	<p>該当するログはありません</p>
+{% else %}
+	<table>
+		<tr>
+			<th>ダウンロード日時</th>
+			<th>タイトル</th>
+			<th>会社名</th>
+			<th>立場</th>
+		</tr>
+	{% for lead in leads %}
+		<tr>
+			<td>{{ lead.download_date }}</td>
+			<td>{{ lead.document_title }}</td>
+			<td>{{ lead.company_name }}</td>
+			<td>{{ lead.stage }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% endif %}
+</table>
+</div>
+
+<div class="pager">
+	<div class="pager-count"><strong>{{ leads.number }}</strong>ページ / <strong>{{ leads.paginator.num_pages }}</strong>ページ中</div>
+	<div class="pager-button">
+		{% if leads.has_previous %}
+		<a href="{% url 'operation_show_leads_paging' page=leads.previous_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">&laquo前のページ</a>
+		{% endif %}
+
+		{% if leads.has_next %}
+		<a href="{% url 'operation_show_leads_paging' page=leads.next_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">次のページ&raquo</a>
+		{% endif %}
+	</div><!-- .pager-button -->
+</div><!-- .pager -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<script>
+$(function(){
+    $('#id_start_date, #id_end_date').datepicker({
+        firstDay: 1,
+        minDate: new Date(2013, 4-1, 1),
+        maxDate: 0
+    });
+});
+</script>
+{% endblock %}

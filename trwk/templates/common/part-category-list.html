@@ -1,0 +1,5 @@
+{% spaceless %}
+{% for cat in category.all %}
+{% if not forloop.first %} ・ {% endif %}{{cat.name}}
+{% endfor%}
+{% endspaceless%}

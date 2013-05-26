@@ -8,8 +8,10 @@
 <div class="content-table">
 <form method="post" action=".">{% csrf_token %}
   <table>{{ form }}</table>
+  <div class="form-btn-set">
   <input type="submit" value="ログイン" />
   <input type="hidden" name="next" value="{{ next }}" />
+  </div>
 </form>
 </div>
 <ul>

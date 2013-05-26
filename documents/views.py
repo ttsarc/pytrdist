@@ -26,10 +26,9 @@ from documents.models import (
 from trwk.libs.request_utils import (
     get_request_addr_or_ip,
     get_request_ua,
-    set_recent_checked, )
+    set_recent_checked,)
 from trwk.libs.csv_utils import export_csv
 from trwk.api.company_utility import is_company_staff, email_company_staff
-
 
 @login_required
 @csrf_protect
@@ -144,6 +143,7 @@ def detail(request, document_id):
         context_instance=RequestContext(request)
     )
     set_recent_checked(request, 'Document', document_id)
+
     return response
 
 

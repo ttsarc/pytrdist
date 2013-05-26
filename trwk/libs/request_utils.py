@@ -21,14 +21,16 @@ def get_request_ua(request):
 
 
 def get_next_url(request):
-    if 'next' in request.session and request.session['next']:
+    if 'next' in request.session:
         return request.session['next']
     else:
         return False
 
 
-def set_next_url(request):
-    if (
+def set_next_url(request, url=None):
+    if url:
+        request.session['next'] = url
+    elif (
         'next' in request.GET and
         request.GET['next'][0] == '/' and
         request.GET['next'][1] != '/'

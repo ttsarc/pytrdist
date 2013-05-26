@@ -19,13 +19,15 @@ from registration.models import RegistrationProfile, ChangeEmailProfile
 from registration.forms import ChangeEmailForm
 from accounts.forms import MyUserProfileForm
 from accounts.models import MyUser
-from trwk.libs.request_utils import set_next_url
+from trwk.libs.request_utils import set_next_url, get_next_url
+
+
 def _send_complete_email(user, request):
     data = {
-                'user': user,
-                'p' : user.myuserprofile,
-                'request':request,
-            }
+        'user': user,
+        'p' : user.myuserprofile,
+        'request': request,
+    }
     content = render_to_string(
         'email/registration_complete.txt',
         data,
@@ -40,11 +42,16 @@ def _send_complete_email(user, request):
     subject = subject.replace("\n","")
     mail_admins(subject, content)
 
+
 def activate_complete(request):
+    next = get_next_url(request)
+    if next:
+        return redirect(next)
     return render_to_response(
         'registration/activation_complete.html',
         context_instance=RequestContext(request)
     )
+
 
 def activate(request, backend,
              template_name='registration/activate.html',
@@ -85,7 +92,7 @@ def activate(request, backend,
         acivation. This is optional; if not specified, this will be
         obtained by calling the backend's
         ``post_activation_redirect()`` method.
-    
+
     ``template_name``
         A custom template to use. This is optional; if not specified,
         this will default to ``registration/activate.html``.
@@ -94,17 +101,17 @@ def activate(request, backend,
         Any keyword arguments captured from the URL, such as an
         activation key, which will be passed to the backend's
         ``activate()`` method.
-    
+
     **Context:**
-    
+
     The context will be populated from the keyword arguments captured
     in the URL, and any extra variables supplied in the
     ``extra_context`` argument (see above).
-    
+
     **Template:**
-    
+
     registration/activate.html or ``template_name`` keyword argument.
-    
+
     """
     try:
         is_activatable, user = RegistrationProfile.objects.is_activatable(**kwargs)
@@ -118,7 +125,7 @@ def activate(request, backend,
     for key, value in extra_context.items():
         context[key] = callable(value) and value() or value
 
-    if is_activatable == False:
+    if is_activatable is False:
         messages.add_message(request, messages.ERROR, 'すでにプロフィールを登録済みです')
         return redirect('home')
 
@@ -161,6 +168,7 @@ def activate(request, backend,
                               kwargs,
                               context_instance=context)
 
+
 def register(request, backend, success_url=None, form_class=None,
              disallowed_url='registration_disallowed',
              template_name='registration/registration_form.html',
@@ -194,11 +202,11 @@ def register(request, backend, success_url=None, form_class=None,
        the ``HttpRequest`` and the new ``User``, to determine the URL
        to redirect the user to. To override this, see the list of
        optional arguments for this view (below).
-    
+
     **Required arguments**
-    
+
     None.
-    
+
     **Optional arguments**
 
     ``backend``
@@ -210,11 +218,11 @@ def register(request, backend, success_url=None, form_class=None,
         passed to ``django.shortcuts.redirect``. If not supplied, this
         will be whatever URL corresponds to the named URL pattern
         ``registration_disallowed``.
-    
+
     ``form_class``
         The form class to use for registration. If not supplied, this
         will be retrieved from the registration backend.
-    
+
     ``extra_context``
         A dictionary of variables to add to the template context. Any
         callable object in this dictionary will be called to produce
@@ -225,24 +233,24 @@ def register(request, backend, success_url=None, form_class=None,
         value which can legally be passed to
         ``django.shortcuts.redirect``. If not supplied, this will be
         retrieved from the registration backend.
-    
+
     ``template_name``
         A custom template to use. If not supplied, this will default
         to ``registration/registration_form.html``.
-    
+
     **Context:**
-    
+
     ``form``
         The registration form.
-    
+
     Any extra variables supplied in the ``extra_context`` argument
     (see above).
-    
+
     **Template:**
-    
+
     registration/registration_form.html or ``template_name`` keyword
     argument.
-    
+
     """
     backend = get_backend(backend)
     if not backend.registration_allowed(request):
@@ -286,6 +294,7 @@ def register(request, backend, success_url=None, form_class=None,
                               {'form': form},
                               context_instance=context)
 
+
 @csrf_protect
 @login_required
 def change_email(request, backend, success_url=None, form_class=None,
@@ -319,6 +328,7 @@ def change_email(request, backend, success_url=None, form_class=None,
     return render_to_response(template_name,
                               {'form': form},
                               context_instance=context)
+
 
 @login_required
 def change_email_done(request, activation_key,

@@ -12,7 +12,9 @@
 		<table>
 			{{ form }}
 		</table>
-		<p><input type="submit" value="保存する" class="image-button save"></p>
+		<div class="form-btn-set">
+			<input type="submit" value="保存する" class="image-button save">
+		</div>
 	</form>
 </div><!-- .content-table.member-form -->
 {% if request.session.next %}<p><a href="{{ request.session.next }}">&laquo;ご利用中のページへ戻る</a></p>{% endif %}

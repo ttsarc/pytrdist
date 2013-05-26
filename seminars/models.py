@@ -18,6 +18,42 @@ from trwk.libs.file_utils import normalize_filename
 from sorl.thumbnail import ImageField
 
 
+class SeminarCategoryManager(models.Manager):
+    pass
+
+
+class SeminarCategory(models.Model):
+    name = models.CharField('カテゴリ名', max_length=80)
+    description = models.TextField(
+        '説明',
+        blank=True)
+    parent = models.ForeignKey(
+        'self',
+        verbose_name='親カテゴリ',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        limit_choices_to={'parent':None},
+    )
+    sort = models.SmallIntegerField('並び順（大が上）', default=0)
+    objects = SeminarCategoryManager()
+
+    def with_parent_name(self):
+        if self.parent:
+            return ' -> '.join([self.parent.name, self.name])
+        return self.name
+
+    def __unicode__(self):
+        if self.parent:
+            return ' -> '.join([self.parent.name, self.name])
+        return self.name
+
+    class Meta:
+        verbose_name = "セミナーカテゴリ"
+        verbose_name_plural = "セミナーカテゴリ"
+        ordering = ['-sort']
+
+
 class SeminarManager(models.Manager):
     pass
 
@@ -46,8 +82,12 @@ class Seminar(models.Model):
     )
     type = models.SmallIntegerField(
         '種別', choices=TYPE_CHOICE)
-    category = models.CharField(
-        'カテゴリー', max_length=16, choices=CATEGORY_CHOICE)
+
+    category = models.ManyToManyField(
+        SeminarCategory,
+        verbose_name='カテゴリー',
+    )
+
     catch = models.TextField(
         '概要（キャッチコピー）', max_length=150,
         help_text='例：今、最も旬なマーケティングツールはこれだ！')

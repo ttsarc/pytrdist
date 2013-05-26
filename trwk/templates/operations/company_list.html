@@ -2,15 +2,15 @@
 {%block head_after_link %}
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" />
 {%endblock%}
-{% block title %}リード情報の確認{% endblock%}
+{% block title %}リード情報の取得{% endblock%}
 
 {% block breadcrumb_mypage %}
 	{% breadcrumb '管理メニュー' %}
-	{% breadcrumb 'リード情報の確認' %}
+	{% breadcrumb 'リード情報の取得' %}
 {% endblock %}
 
 {% block content %}
-<h1 class="content-title">リード情報の確認</h1>
+<h1 class="content-title">リード情報の取得</h1>
 <div>
 <form method='get' action=''>
 <input type="hidden" value="1" name="search">
@@ -20,16 +20,27 @@
 <input type="submit" value="検索">
 </form>
 </div>
-<div class="content-table">
+<div class="data-table">
 <table>
 {% if not companies %}
 該当するログはありません
 {% endif %}
+	<tr>
+		<th>会社名</th>
+		<th>資料</th>
+		<th>セミナー</th>
+	</tr>
 {% for com in companies %}
     <tr>
         <td>{{ com }}</td>
-        <td><a href="{% url 'operation_download_leads' log_type='document' company_id=com.pk %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">資料</a></td>
-        <td><a href="{% url 'operation_download_leads' log_type='seminar' company_id=com.pk %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">セミナー</a></td>
+        <td>
+        	<a href="{% url 'operation_download_leads' log_type='document' company_id=com.pk %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">CSV</a> /
+        	<a href="{% url 'operation_show_leads' log_type='document' company_id=com.pk %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">表示</a>
+        </td>
+        <td>
+        	<a href="{% url 'operation_download_leads' log_type='seminar' company_id=com.pk %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">CSV</a> /
+        	<a href="{% url 'operation_show_leads' log_type='seminar' company_id=com.pk %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">表示</a>
+        </td>
     </tr>
 {% endfor %}
 </table>

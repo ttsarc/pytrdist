@@ -2,16 +2,18 @@
 # Create your views here.
 import datetime
 from django.contrib import messages
-from documents.forms import LeadSearchForm
-from accounts.models import Company
+from django.conf import settings
 from django.utils.timezone import make_naive, get_default_timezone
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
+from django.core.paginator import Paginator
+from django.template import RequestContext
 from documents.models import DocumentDownloadLog
+from documents.forms import LeadSearchForm
 from seminars.models import SeminarEntryLog
 from trwk.libs.csv_utils import export_csv
-from django.template import RequestContext
+from accounts.models import Company
 
 
 @login_required
@@ -26,7 +28,7 @@ def company_leads(request):
         form = LeadSearchForm()
 
     return render_to_response(
-        'operations/company_lead_list.html',
+        'operations/company_list.html',
         {
             'companies': companies,
             'form': form,
@@ -36,7 +38,7 @@ def company_leads(request):
 
 
 @login_required
-def download_leads(request, log_type, company_id):
+def download_leads(request, log_type, company_id, type=None, page=1):
     if not request.user.is_superuser:
         messages.add_message(request, messages.ERROR, '管理者ではありません')
         return None
@@ -92,4 +94,17 @@ def download_leads(request, log_type, company_id):
         company=company,
     ).order_by(date_field)
     filename += '.csv'
-    return export_csv(leads, csv_fields, filename)
+    if type == 'csv':
+        return export_csv(leads, csv_fields, filename)
+    else:
+        paginator = Paginator(leads, settings.LOGS_PER_PAGE)
+        leads_pages = paginator.page(page)
+        return render_to_response(
+            'operations/company_leads_list.html',
+            {
+                'company': company,
+                'leads': leads_pages,
+                'form': form,
+            },
+            context_instance=RequestContext(request)
+        )
