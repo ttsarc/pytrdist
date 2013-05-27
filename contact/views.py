@@ -38,6 +38,7 @@ def _notify_sender(form_data, request):
         {
             'data': form_data,
             'request_data': request_data,
+            'user': request.user,
         },
         context_instance=RequestContext(request)
     )

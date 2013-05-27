@@ -25,6 +25,12 @@ FAX: {{data.fax}}
 {% if request_data %}
 host: {{request_data.ip}}
 UserAgent: {{request_data.ua}}
+
+{% if user.is_authenticated %}
+ログインしているユーザー: {{ user.email }}
+{% else %}
+ログインしていないユーザー
+{% endif %}
 {% endif %}
 
 {% endblock%}

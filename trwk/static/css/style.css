@@ -1277,10 +1277,17 @@ a:hover img{
 	font-size: 12px;
 	line-height: 20px;
 }
+
 .content-text ul li{
 	display: block;
 	background: url(../images/list-arrow.png) no-repeat 0 10px;
 	padding: 5px 0 5px 17px;
+}
+.content-text .content-table ul li{
+	display: inherit;
+	background: inherit;
+	padding:inherit;
+	float:none;
 }
 .content-title-h2{
 	font-size: 16px;

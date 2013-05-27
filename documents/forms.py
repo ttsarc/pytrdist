@@ -2,7 +2,7 @@
 import datetime
 from django import forms
 from django.forms.widgets import RadioSelect
-from documents.models import Document,DocumentCategory
+from documents.models import Document, DocumentCategory
 from documents.choices import STAGE_CHOICE
 from trwk.libs.fields import confirmation_field
 
@@ -10,10 +10,24 @@ from trwk.libs.fields import confirmation_field
 class DocumentForm(forms.ModelForm):
     error_css_class = 'error'
     required_css_class = 'required'
-    #cagtegory = forms.ModelMultipleChoiceField(
-    #    widget=forms.CheckboxSelectMultiple(),
-    #    queryset=DocumentCategory.objects.all(),
-    #    required=True)
+    Cat = DocumentCategory
+    category_choice = [
+        #optgroupで使われるテキスト
+        [top.name, [
+            #optionで使われるvalue、ラベル
+            [sub.pk, sub.name]
+            #下で取得した親カテゴリごとの子カテゴリを取得
+            for sub in Cat.objects.filter(parent=top.pk).order_by('pk')
+        ]]
+        #親カテゴリを取得
+        for top in Cat.objects.filter(parent=None).order_by('pk')
+    ]
+    category = forms.MultipleChoiceField(
+        choices=category_choice,
+        required=True,
+        label='カテゴリ',
+        #最大数はadd_edit.htmlのjs側で変更
+        help_text='最大3つまで選択出来ます')
 
     class Meta:
         model = Document

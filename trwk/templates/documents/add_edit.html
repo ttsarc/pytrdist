@@ -1,10 +1,14 @@
-{% extends 'base_mypage.html'%}{% load breadcrumb %}
+{% extends 'base_mypage.html'%}{% load breadcrumb %}{% load static %}
 {% block title %}
 {% if action == 'add' %}
 	資料の新規追加
 {% else %}
 	{{document.title}}の編集
 {% endif %}
+{% endblock %}
+
+{% block head_after_link %}
+<link rel="stylesheet" href="{% static "script/chosen/chosen.css" %}">
 {% endblock %}
 
 {% block breadcrumb_mypage %}
@@ -35,6 +39,7 @@
 	</form>
 </div><!-- .content-table -->
 
+<script src="{% static "script/chosen/chosen.jquery.min.js" %}"></script>
 <script>
 $(function(){
 {% if action == 'add' %}
@@ -48,8 +53,17 @@ $(function(){
 	return true;
 });
 {% endif %}
+
+$('#id_category').chosen(
+	{
+		'max_selected_options': 3,
+		'placeholder_text_multiple':'クリックで選択'
+	}
+);
+
 });
 </script>
+
 
 {% if action == 'edit'%}
 <p class="edit-preview"><a href="{% url 'document_preview' document_id=document.id%}" target="_blank">プレビュー</a></p>
