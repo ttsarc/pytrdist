@@ -165,11 +165,12 @@ def preview(request, seminar_id):
         seminar = get_object_or_404(Seminar, pk=seminar_id)
     else:
         seminar = get_object_or_404(Seminar, pk=seminar_id, company=company)
-
+    entry_count = SeminarEntryUser.objects.count_entry(seminar)
     return render_to_response(
         'seminars/detail.html',
         {
             'seminar': seminar,
+            'entry_count': entry_count,
             'preview': True,
         },
         context_instance=RequestContext(request)

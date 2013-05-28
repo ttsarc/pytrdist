@@ -1,7 +1,18 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from trwk.views import trwk_home
+from trwk.sitemap import (
+    PostSitemap, DocumentSitemap, SeminarSitemap, CompanySitemap
+)
+from django.contrib.sitemaps.views import sitemap
+from django.views.decorators.cache import cache_page
 
+sitemaps = {
+    'post': PostSitemap,
+    'document': DocumentSitemap,
+    'seminar': SeminarSitemap,
+    'company': CompanySitemap,
+}
 
 urlpatterns = patterns(
     '',
@@ -16,6 +27,9 @@ urlpatterns = patterns(
     url(r'^search/',    include('search.urls')),
     url(r'^blog/',      include('blog.urls')),
     url(r'^pages/',     include('django.contrib.flatpages.urls')),
+    (r'^sitemap\.xml$',
+        cache_page(21600)(sitemap),
+        {'sitemaps': sitemaps}),
 )
 
 if settings.DEBUG:

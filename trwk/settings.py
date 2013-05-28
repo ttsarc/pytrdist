@@ -141,7 +141,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
-    #'gunicorn',
+    'django.contrib.sitemaps',
     'sorl.thumbnail',
     'accounts',
     'documents',

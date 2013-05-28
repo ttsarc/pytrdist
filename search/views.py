@@ -36,7 +36,7 @@ def search(request, page=1):
                     raise Http404
                 else:
                     results = []
-                    print('seach query:' + str(search_results.query))
+                    #print('seach query:' + str(search_results.query))
                     doc_results = Document.objects.filter(
                         pk__in=[
                             item.model_pk

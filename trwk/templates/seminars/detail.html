@@ -7,14 +7,19 @@
 
 {% block content %}
 {%if preview == True %}
-    <div>プレビュー中です</div>
-    {%if seminar.status != 1 %}
-        <div>現在このページは公開されていません。掲載企業の担当者様のみご確認頂けます。</div>
+	<ul class="messages">
+    <li class="success">プレビュー中です</li>
+    {%if seminar.status == 1 %}
+        <li class="success">現在このページは公開中です</li>
+    {% else %}
+    	<li class="success">現在このページは公開されていません。掲載企業の担当者様のみご確認頂けます。</li>
     {% endif %}
     {% if request.user.is_superuser %}
-        <div>スーパーユーザー権限で閲覧中です</div>
+        <li class="success">スーパーユーザー権限で閲覧中です</li>
     {% endif%}
+    </ul>
 {% endif %}
+
 
 
 <h1 class="content-title">{{ seminar.title }}</h1>

@@ -1968,3 +1968,14 @@ body .pagination ul > li {
 .form-btn-set{
 	text-align:center;
 }
+.header-social-button{
+	float:right;
+	clear:right;
+	margin-top:20px;
+}
+.header-social-button div{
+	display:inline;
+}
+.header-social-button .facebook iframe{
+	vertical-align: text-bottom;
+}

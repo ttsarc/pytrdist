@@ -7,13 +7,17 @@
 
 {% block content %}
 {%if preview == True %}
-    <div>プレビュー中です</div>
-    {%if document.status != 1 %}
-        <div>現在この資料は公開されていません。掲載企業の担当者様のみご確認頂けます。</div>
+	<ul class="messages">
+    <li class="success">プレビュー中です</li>
+    {%if document.status == 1 %}
+        <li class="success">現在この資料は公開中です</li>
+    {% else %}
+    	<li class="success">現在この資料は公開されていません。掲載企業の担当者様のみご確認頂けます。</li>
     {% endif %}
     {% if request.user.is_superuser %}
-        <div>スーパーユーザー権限で閲覧中です</div>
+        <li class="success">スーパーユーザー権限で閲覧中です</li>
     {% endif%}
+    </ul>
 {% endif %}
 
 
@@ -53,10 +57,7 @@
 <table>
 	<tr>
 		<th>サービスカテゴリ</th>
-		<td>
-		{% include 'common/part-category-list.html' with category=document.category%}
-		</td>
-
+		<td>{% include 'common/part-category-list.html' with category=document.category%}</td>
 	</tr>
 	<tr><th>対象業種</th><td>{{ document.get_target_type_display }}</td></tr>
 	<tr><th>対象会社規模</th><td>{{ document.get_target_size_display }}</td></tr>
