@@ -1483,6 +1483,19 @@ input#back-submit{
 	font-size: 14px;
 	font-weight: bold;
 }
+
+.search-button{
+	width:55px;
+	height:30px;
+	line-height:30px;
+	background: #d6212e; /* Old browsers */
+	border: 1px solid #9d3e45;
+	color:#fff;
+	font-weight:bold;
+	font-size:14px;
+	letter-spacing:3px;
+	vertical-align: middle;
+}
 body .text-button{
 	margin:10px;
 }

@@ -1,10 +1,11 @@
 {% load static %}{% load cache %}<div id="side">
 		<div class="side-searchbox">
-			<form method="get" action="{% url 'search_index'%}">
+			<form method="get" action="{% url 'search_index'%}" id="side-search-form">
 				<h2 class="side-searchbox-title">キーワード検索</h2>
 				{% load search_extra %}{% search_form %}
-				<!--<input type="text" name="" value="" placeholder="検索ワードを入力してください">-->
-				<input type="image" src="{% static "images/side-searchbox-submit.png"%}" width="55" height="30"  name="" alt="検索">
+				<!--<input type="text" name="" value="" placeholder="検索ワードを入力してください">
+				<input type="image" src="{% static "images/side-searchbox-submit.png"%}" width="55" height="30"  name="" alt="検索">-->
+				<input type="submit" value="検索" class="search-button">
 				{% comment %}
 				<div class="side-searchbox-radio">
 					<label for="side-searchbox-data"><input type="radio" name="type" value="document" id="side-searchbox-data">資料</label>

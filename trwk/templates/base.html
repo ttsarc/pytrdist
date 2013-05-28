@@ -27,13 +27,12 @@
 	<div id="header">
 		<h1 id="header-logo"><a href="{% url 'home' %}">{% site_name %}</a></h1>
 		<ul id="header-count">
-			{% cache 7200 header_statistics %}
+			{% cache 3600 header_statistics %}
 			<li>掲載情報数：<strong>{% data_count %}</strong> <span>件</span></li>
 			<li>総請求数：<strong>{% log_count %}</strong> <span>件</span></li>
 			{% endcache %}
 		</ul><!-- #header-count -->
-
-		{% cache 600 header_navi request.user.pk %}
+		{% cache 600 header_navi request.user.pk request.META.SERVER_NAME %}
 		<ul id="header-navi">{% spaceless %}
 		{% if user.is_authenticated %}
 			<li class="left"><a href="{% url 'mypage_home' %}">マイページ</a></li>
@@ -57,10 +56,10 @@
 			<li class="gnavi-01"><a href="{% url 'home' %}">ホーム</a></li>
 			<li class="gnavi-02"><a href="{% url 'document_index' %}">資料を探す</a></li>
 			<li class="gnavi-03"><a href="{% url 'seminar_index' %}">セミナーを探す</a></li>
-			<li class="gnavi-04">{% if user.customer_company %}
+			<li class="gnavi-04">{% if user.is_customer %}
 			<a href="{% url 'mypage_home' %}">掲載する</a>
 			{% else %}
-			<a href="{% url 'django.contrib.flatpages.views.flatpage' url="publish/" %}">掲載する</a>
+			<a href="https://form.mjs.co.jp/form/pub/web/trwk-keisai" target="_blank" rel="nofollow">掲載する</a>
 			{% endif%}</li>
 		</ul>
 	</nav>
@@ -136,7 +135,7 @@
 			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="privacy-policy/" %}">プライバシーポリシー</a></li>
 			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="company/" %}">運営会社</a></li>
 			<li><a href="{% url 'contact'%}">お問い合わせ</a></li>
-			<li class="last"><a href="{% url 'django.contrib.flatpages.views.flatpage' url="publish/" %}">掲載について</a></li>
+			<li class="last"><a href="https://form.mjs.co.jp/form/pub/web/trwk-keisai" target="_blank" rel="nofollow">掲載に関するお問い合わせ</a></li>
 		</ul>
 	</div><!-- #footer-inner -->
 	<small id="footer-copyright">Copyright&reg; 2013 MIROKU JYOHO SERVICE CO., LTD. All rights reserved.</small>
