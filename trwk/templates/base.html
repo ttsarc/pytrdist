@@ -27,8 +27,8 @@
 	<div id="header">
 		<h1 id="header-logo"><a href="{% url 'home' %}">{% site_name %}</a></h1>
 		<ul id="header-count">
-			{% cache 3600 header_statistics %}
-			<li>掲載情報数：<strong>{% data_count %}</strong> <span>件</span></li>
+			{% cache 1800 header_statistics %}
+			<!--<li>掲載情報数：<strong>{% data_count %}</strong> <span>件</span></li>-->
 			<li>総請求数：<strong>{% log_count %}</strong> <span>件</span></li>
 			{% endcache %}
 		</ul><!-- #header-count -->

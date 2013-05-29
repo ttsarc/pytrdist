@@ -8,5 +8,5 @@ trwk/local_settings.py
 *.zip
 *.gz
 *.swo
-trwk/media
+trwk/media/*
 trwk/static/google*.html

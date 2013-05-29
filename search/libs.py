@@ -34,7 +34,7 @@ def mecab_separate(text, separate_char=' ', ignores=None, mecab_option=None):
             '.', ',', '/', '■', '…', '=' '、', '。',
             '「', '」', '【', '】', '(', '）', '！',
             '？', '!', '?', '『', '』', '・', '　',
-            '※', '*',
+            '※', '*', '、', '_', '＿'
         )
     items = []
     node = m.parseToNode(text)
@@ -60,7 +60,7 @@ def create_search_query(keyword):
     keywords = keyword.split(' ')
     query = ' +'.join(keywords)
     query = '+' + query
-    print('query: ' + str(query))
+    #print('query: ' + str(query))
     return query
 
 

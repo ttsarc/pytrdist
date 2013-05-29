@@ -8,6 +8,9 @@
 		</p>
 		<footer>
 			<ul>
+				<li>種別：{{ item.get_type_display }} {% if item.type == 1 %}({{ seminar.expenses }}){% endif %}</li>
+			</ul>
+			<ul>
 				<li>開催日：{{ item.exhibition_date }}</li>
 				{% if item.close_date %}
 				～ {{item.close_date}}

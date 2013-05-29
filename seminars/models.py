@@ -100,7 +100,7 @@ class Seminar(models.Model):
     exhibition_date = models.DateField(
         '開催日', help_text='例：2013-05-01')
     close_date = models.DateField(
-        '終了日', blank=True,
+        '終了日', blank=True, null=True,
         help_text='例：2013-05-10 一定の期間開催する場合はご記入ください。')
     exhibition_time = models.CharField(
         '開催時間', max_length=50,
