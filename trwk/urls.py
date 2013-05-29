@@ -6,12 +6,14 @@ from trwk.sitemap import (
 )
 from django.contrib.sitemaps.views import sitemap
 from django.views.decorators.cache import cache_page
+from django.contrib.sitemaps import FlatPageSitemap
 
 sitemaps = {
     'post': PostSitemap,
     'document': DocumentSitemap,
     'seminar': SeminarSitemap,
     'company': CompanySitemap,
+    'flatpage': FlatPageSitemap,
 }
 
 urlpatterns = patterns(
