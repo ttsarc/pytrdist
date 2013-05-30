@@ -30,7 +30,7 @@ from trwk.libs.csv_utils import export_csv
 @login_required
 @csrf_protect
 def add(request):
-    if not is_company_staff(request.user):
+    if not is_company_staff(request):
         return redirect('mypage_home')
     user = request.user
     company = user.customer_company
@@ -60,7 +60,7 @@ def add(request):
 @csrf_protect
 def edit(request, seminar_id):
     seminar = get_object_or_404(Seminar, pk=seminar_id, status__in=[0, 1])
-    if not is_company_staff(request.user, seminar.company.pk):
+    if not is_company_staff(request, seminar.company.pk):
         return redirect('mypage_home')
 
     if request.method == 'POST':
@@ -89,7 +89,7 @@ def edit(request, seminar_id):
 @login_required
 @csrf_protect
 def edit_index(request):
-    if not is_company_staff(request.user):
+    if not is_company_staff(request):
         return redirect('mypage_home')
     company = request.user.customer_company
     seminars = Seminar.objects.all().filter(
@@ -158,7 +158,7 @@ def detail(request, seminar_id):
 
 @login_required
 def preview(request, seminar_id):
-    if not is_company_staff(request.user):
+    if not is_company_staff(request):
         return redirect('mypage_home')
     company = request.user.customer_company
     if request.user.is_superuser:
@@ -339,7 +339,7 @@ def entry_complete(request, seminar_id):
 
 @login_required
 def entry_log(request, page=1, type='list'):
-    if not is_company_staff(request.user):
+    if not is_company_staff(request):
         return redirect('mypage_home')
     user = request.user
     company = user.customer_company

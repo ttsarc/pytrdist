@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from seminars.models import Seminar, SeminarCategory, SeminarEntryLog, SeminarEntryUser
+from seminars.models import (
+    Seminar, SeminarCategory, SeminarEntryLog, SeminarEntryUser
+)
 from sorl.thumbnail.admin import AdminImageMixin
+
 
 class SeminarCategoryAdmin(admin.ModelAdmin, AdminImageMixin):
     list_display = (
@@ -10,6 +13,7 @@ class SeminarCategoryAdmin(admin.ModelAdmin, AdminImageMixin):
         'parent',
     )
 admin.site.register(SeminarCategory, SeminarCategoryAdmin)
+
 
 class SeminarAdmin(admin.ModelAdmin, AdminImageMixin):
     list_display = (

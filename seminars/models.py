@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from accounts.models import Company
 from seminars.choices import (
     TYPE_CHOICE,
-    CATEGORY_CHOICE,
     ENTRY_STATUS_CHOICE,
     STATUS_CHOICE,
 )
@@ -33,7 +32,7 @@ class SeminarCategory(models.Model):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={'parent':None},
+        limit_choices_to={'parent': None},
     )
     sort = models.SmallIntegerField('並び順（大が上）', default=0)
     objects = SeminarCategoryManager()

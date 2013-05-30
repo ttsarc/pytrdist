@@ -32,7 +32,7 @@ class DocumentCategory(models.Model):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={'parent':None}
+        limit_choices_to={'parent': None}
     )
     sort = models.SmallIntegerField('並び順（大が上）', default=0)
     objects = DocumentCategoryManager()

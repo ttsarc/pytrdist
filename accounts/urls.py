@@ -1,9 +1,5 @@
 # -*- encoding: utf-8 -*-
-
-try:
-    from django.conf.urls import patterns, url
-except ImportError:
-    from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 
