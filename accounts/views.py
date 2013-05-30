@@ -45,7 +45,12 @@ def mypage_home(request):
 @csrf_protect
 def mypage_edit_profile(request):
     user_pk = request.user.pk
-    current_profile = MyUserProfile.objects.get(myuser=user_pk)
+    try:
+        current_profile = MyUserProfile.objects.get(myuser=user_pk)
+    except MyUserProfile.DoesNotExist:
+        messages.add_message(request, messages.ERROR, 'プロファイルが正しく設定出来ていません。お手数ですが運営者にお問い合わせください。')
+        return redirect('mypage_home')
+
     set_next_url(request)
     if request.method == 'POST':
         form = MyUserProfileEditForm(request.POST, instance=current_profile)

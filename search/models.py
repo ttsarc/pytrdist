@@ -5,7 +5,10 @@ from django.utils import timezone
 
 class Search(models.Model):
     """
+    create
     ALTER TABLE search_search ADD FULLTEXT seach_text(text);
+
+    delete
     ALTER TABLE search_search DROP INDEX  seach_text;
     """
     model = models.CharField('モデル', max_length=16)
