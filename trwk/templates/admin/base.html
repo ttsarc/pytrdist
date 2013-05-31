@@ -21,7 +21,7 @@
     <!-- Header -->
     <div id="header">
         <div id="branding">
-        <h1 id="site-name">とれわか管理サイト</h1>
+        <h1 id="site-name">{% site_name %}管理画面</h1>
         </div>
         {% if user.is_active and user.is_staff %}
         <div id="user-tools">

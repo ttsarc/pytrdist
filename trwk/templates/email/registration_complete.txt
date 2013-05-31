@@ -2,7 +2,7 @@
 {% block content %}
 {{ p.last_name }} {{ p.first_name }} 様
 
-この度はとれわかにご登録ありがとうございました。
+この度は{% site_name %}にご登録ありがとうございました。
 下記の情報にて登録されました。
 
 ■ご登録メールアドレス：{{ user.email }}
@@ -12,6 +12,6 @@
 登録内容の変更、確認は下記のマイページで行えます。
 ■マイページ: http://{{ request.META.HTTP_HOST }}{% url 'mypage_home' %}
 
-今後ともとれわかをよろしくお願い致します。
+今後とも{% site_name %}をよろしくお願い致します。
 
 {% endblock%}

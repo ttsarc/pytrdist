@@ -1,1 +1,1 @@
-{% block header %}【とれわか】{% endblock%}{% block content %}{% endblock%}{% block footer %}{% endblock%}
+{% block header %}【{% site_name %}】{% endblock%}{% block content %}{% endblock%}{% block footer %}{% endblock%}

@@ -1,7 +1,7 @@
-{% block header %}このメールはとれわか（ http://tr-wk.jp/ ）のシステムより自動送信しております。{% endblock%}
+{% block header %}このメールは{% site_name %}（ http://{% site_domain %}/ ）のシステムより自動送信しております。{% endblock%}
 {% block content %}{% endblock%}
 {% block footer %}＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 株式会社ミロク情報サービス　ネット事業部
-「とれわか」運営事務局
+「{% site_name %}」運営事務局
 mail：trwk-info@mjs.co.jp　TEL：03-5326-0360
 ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝{% endblock%}
