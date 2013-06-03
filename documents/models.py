@@ -151,6 +151,24 @@ class Document(models.Model):
     def get_download_url(self):
         return reverse('document_download', kwargs={'document_id': self.pk})
 
+    def get_search_text(self):
+        d = self
+        text_sorces = [
+            d.title,
+            str(d.company),
+            d.catch,
+            d.detail,
+            d.results,
+        ]
+        categories = d.category.all()
+        if categories:
+            cat_names = []
+            for cat in categories:
+                cat_names.append(cat.name)
+            text_sorces.append(' '.join(cat_names))
+        text = ' '.join(text_sorces)
+        return text
+
     class Meta:
         verbose_name = "資料"
         verbose_name_plural = "資料"
@@ -261,16 +279,17 @@ class DocumentDownloadLog(models.Model):
         10: ('郵便番号',        'post_number'),
         11: ('都道府県',        'prefecture'),
         12: ('住所',            'address'),
-        13: ('ホームページURL', 'site_url'),
-        14: ('部署名',          'department'),
-        15: ('役職名',          'position'),
-        16: ('役職区分',        'position_class'),
-        17: ('業種',            'business_type'),
-        18: ('職務内容',        'job_content'),
-        19: ('従業員規模',      'firm_size'),
-        20: ('年商',            'yearly_sales'),
-        21: ('立場',            'discretion'),
-        22: ('状況',            'stage'),
+        13: ('メールアドレス',  'email'),
+        14: ('ホームページURL', 'site_url'),
+        15: ('部署名',          'department'),
+        16: ('役職名',          'position'),
+        17: ('役職区分',        'position_class'),
+        18: ('業種',            'business_type'),
+        19: ('職務内容',        'job_content'),
+        20: ('従業員規模',      'firm_size'),
+        21: ('年商',            'yearly_sales'),
+        22: ('立場',            'discretion'),
+        23: ('状況',            'stage'),
     }
     csv_fields_operation = dict(csv_fields.items() + {
         23: ('ユーザーID',   'user_id'),

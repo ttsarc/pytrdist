@@ -169,6 +169,27 @@ class Seminar(models.Model):
     def get_entry_url(self):
         return reverse('seminar_entry', kwargs={'seminar_id': self.pk})
 
+    def get_search_text(self):
+        s = self
+        text_sorces = [
+            s.title,
+            str(s.company),
+            s.catch,
+            s.detail,
+            s.target,
+            s.promoter,
+            s.place_name,
+            s.address,
+        ]
+        categories = s.category.all()
+        if categories:
+            cat_names = []
+            for cat in categories:
+                cat_names.append(cat.name)
+            text_sorces.append(' '.join(cat_names))
+        text = ' '.join(text_sorces)
+        return text
+
     class Meta:
         verbose_name = "セミナー"
         verbose_name_plural = "セミナー"
@@ -269,16 +290,17 @@ class SeminarEntryLog(models.Model):
         11: ('郵便番号',         'post_number'),
         12: ('都道府県',         'prefecture'),
         13: ('住所',             'address'),
-        14: ('ホームページURL',  'site_url'),
-        15: ('部署名',           'department'),
-        16: ('役職名',           'position'),
-        17: ('役職区分',         'position_class'),
-        18: ('業種',             'business_type'),
-        19: ('職務内容',         'job_content'),
-        20: ('従業員規模',       'firm_size'),
-        21: ('年商',             'yearly_sales'),
-        22: ('立場',             'discretion'),
-        23: ('備考',             'note'),
+        14: ('メールアドレス',  'email'),
+        15: ('ホームページURL',  'site_url'),
+        16: ('部署名',           'department'),
+        17: ('役職名',           'position'),
+        18: ('役職区分',         'position_class'),
+        19: ('業種',             'business_type'),
+        20: ('職務内容',         'job_content'),
+        21: ('従業員規模',       'firm_size'),
+        22: ('年商',             'yearly_sales'),
+        23: ('立場',             'discretion'),
+        24: ('備考',             'note'),
     }
     csv_fields_operation = dict(csv_fields.items() + {
         23: ('ユーザーID',   'user_id'),

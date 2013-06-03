@@ -64,58 +64,83 @@ def create_search_query(keyword):
     return query
 
 
-def update_document_search_data(document):
-    d = document
-    text_sorces = [
-        d.title,
-        str(d.company),
-        d.catch,
-        d.detail,
-        d.results,
-        #PDFの内容も入れる。重いので停
-        #convert_pdf(settings.MEDIA_ROOT + '/' + doc.pdf_file.name),
-    ]
-    categories = d.category.all()
-    if categories:
-        cat_names = []
-        for cat in categories:
-            cat_names.append(cat.name)
-        text_sorces.append(' '.join(cat_names))
-    text = ' '.join(text_sorces)
+def update_item_search_data(item):
+    target_text = item.get_search_text()
     search, created = Search.objects.get_or_create(
-        model='Document',
-        model_pk=d.pk,
+        model=item.__class__.__name__,
+        model_pk=item.pk,
     )
-    search.text = mecab_separate(text)
-    search.update_date = d.update_date
-    search.status = d.status
+    print(item.__class__.__name__, item.pk)
+    target_text = item.get_search_text()
+    search.text = mecab_separate(target_text)
+    search.update_date = item.update_date
+    search.status = item.status
     search.save()
 
 
-def update_seminar_search_data(seminar):
-    s = seminar
-    text_sorces = [
-        s.title,
-        str(s.company),
-        s.catch,
-        s.detail,
-        s.target,
-        s.promoter,
-        s.place_name,
-        s.address,
+def update_all_seach_data():
+    target_models = [
+        'documents.models.Document',
+        'seminars.models.Seminar',
     ]
-    categories = s.category.all()
-    if categories:
-        cat_names = []
-        for cat in categories:
-            cat_names.append(cat.name)
-        text_sorces.append(' '.join(cat_names))
-    text = ' '.join(text_sorces)
-    search, created = Search.objects.get_or_create(
-        model='Seminar',
-        model_pk=s.pk
-    )
-    search.text = mecab_separate(text)
-    search.update_date = s.update_date
-    search.status = s.status
-    search.save()
+    for target_str in target_models:
+        target = target_str.split('.')
+        (package, module, class_name)  = (target[0], '.'.join(target[:-1]), target[-1])
+        target_class = getattr(__import__(module, fromlist=[package]), class_name)
+        target_items = target_class.objects.all()
+        for item in target_items:
+           update_item_search_data(item)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
