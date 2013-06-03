@@ -2,7 +2,7 @@
 {% block content %}
 {{ log.last_name }} {{ log.first_name }}　様
 
-とれわか( http://{{ request.META.HTTP_HOST }} )
+{% site_name %}( http://{{ request.META.HTTP_HOST }} )
 にてセミナーに申し込み頂き、ありがとうございました。
 
 ■セミナー名：

@@ -1,14 +1,13 @@
-# -*- encoding: utf-8 -*-
-from django.conf import settings
-from django.contrib.sites.models import Site
+# -*- encoding: utf-8 -*-<F7>
 from django import template
 register = template.Library()
-
 from search.forms import SearchForm
+
 
 @register.filter
 def to_class_name(value):
     return value.__class__.__name__
+
 
 @register.simple_tag(takes_context=True)
 def search_form(context):

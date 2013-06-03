@@ -2,7 +2,7 @@
 {% block content %}
 {{ log.company }}　ご担当者様
 
-「とれわか」資料ダウンロードにて貴社の資料が
+「{% site_name %}」資料ダウンロードにて貴社の資料が
 ダウンロードされました。
 
 ■会社名：{{ log.company_name }}

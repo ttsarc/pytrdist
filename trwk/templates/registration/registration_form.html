@@ -1,12 +1,12 @@
 {% extends "base.html" %}{% load breadcrumb %}
-{% block title %}とれわか会員登録{% endblock %}
+{% block title %}会員登録{% endblock %}
 
 {% block breadcrumb_inner %}{{ block.super}}
-	{% breadcrumb 'とれわか会員登録' %}
+	{% breadcrumb '会員登録' %}
 {% endblock %}
 
 {% block content %}
-<h1 class="content-title">とれわか会員登録</h1>
+<h1 class="content-title">会員登録</h1>
 <p>下記のフォームにメールアドレスとパスワードを入力してください。確認のメールが送信されます。</p>
 <div class="content-table member-form">
 <form method="post" action="">{% csrf_token %}

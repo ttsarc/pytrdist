@@ -132,7 +132,7 @@
 	<div id="footer-inner">
 		<a href="#header" id="footer-pagetop">ページ上部へ戻る</a>
 		<ul id="footer-link">
-			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="about/" %}">とれわかについて</a></li>
+			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="about/" %}">{% site_name %}について</a></li>
 			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="user-policy/" %}">ご利用規約</a></li>
 			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="privacy-policy/" %}">プライバシーポリシー</a></li>
 			<li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="company/" %}">運営会社</a></li>

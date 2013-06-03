@@ -2,7 +2,7 @@
 {% block content %}
 {{ log.company }}　ご担当者様
 
-「とれわか」セミナー申し込みにて貴社のセミナーに
+「{% site_name %}」セミナー申し込みにて貴社のセミナーに
 申し込みがありました
 
 ■会社名：{{ log.company_name }}

@@ -1,6 +1,6 @@
 {% extends 'email/base.txt'%}
 {% block content %}
-とれわかのご利用ありがとうございます。
+{% site_name %}のご利用ありがとうございます。
 
 下記のリンクから本登録をお願い致します。
 
