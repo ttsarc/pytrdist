@@ -7,9 +7,7 @@ from django.http import Http404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import RequestContext
 from django.conf import settings
-from documents.models import Document
-from seminars.models import Seminar
-from search.libs import create_search_query
+from search.libs import create_search_query, get_search_target_models
 
 
 def search(request, page=1):
@@ -36,25 +34,18 @@ def search(request, page=1):
                     raise Http404
                 else:
                     results = []
-                    #print('seach query:' + str(search_results.query))
-                    doc_results = Document.objects.filter(
-                        pk__in=[
-                            item.model_pk
-                            for item in paged_results
-                            if item.model == 'Document'
-                        ]
-                    )
-                    for item in doc_results:
-                        results.append(item)
-                    semi_results = Seminar.objects.filter(
-                        pk__in=[
-                            item.model_pk
-                            for item in paged_results
-                            if item.model == 'Seminar'
-                        ]
-                    )
-                    for item in semi_results:
-                        results.append(item)
+                    target_models = get_search_target_models()
+                    for target in target_models:
+                        model_name = target().__class__.__name__
+                        target_results = target.objects.filter(
+                            pk__in=[
+                                item.model_pk
+                                for item in paged_results
+                                if item.model == model_name
+                            ]
+                        )
+                        for item in target_results:
+                            results.append(item)
                     results.sort(key=lambda x: x.update_date, reverse=True)
                     paged_results.object_list = results
     else:

@@ -45,6 +45,7 @@ def add(request):
             document.user = user
             document.company = company
             document.save()
+            form.save_m2m()
             messages.add_message(request, messages.SUCCESS, '資料を保存しました')
             return redirect('document_edit', document_id=document.pk)
     else:
@@ -371,6 +372,7 @@ def download_log(request, page=1, type='list'):
             {
                 'leads': leads_pages,
                 'form': form,
+                'count': paginator.count,
             },
             context_instance=RequestContext(request)
         )

@@ -1,7 +1,9 @@
 # -*- encoding: utf-8 -*-
 import MeCab
 import re
+from django.conf import settings
 from search.models import Search
+
 
 #from pdfminer.pdfinterp import PDFResourceManager, process_pdf
 #from pdfminer.converter import TextConverter
@@ -70,7 +72,7 @@ def update_item_search_data(item):
         model=item.__class__.__name__,
         model_pk=item.pk,
     )
-    print(item.__class__.__name__, item.pk)
+    print("update model:%-10s  pk:%d" % (item.__class__.__name__, item.pk))
     target_text = item.get_search_text()
     search.text = mecab_separate(target_text)
     search.update_date = item.update_date
@@ -78,69 +80,25 @@ def update_item_search_data(item):
     search.save()
 
 
-def update_all_seach_data():
-    target_models = [
-        'documents.models.Document',
-        'seminars.models.Seminar',
-    ]
-    for target_str in target_models:
+def get_search_target_models():
+    model_list = settings.SEARCH_TARGET_MODELS
+    target_models = []
+    for target_str in model_list:
         target = target_str.split('.')
-        (package, module, class_name)  = (target[0], '.'.join(target[:-1]), target[-1])
-        target_class = getattr(__import__(module, fromlist=[package]), class_name)
-        target_items = target_class.objects.all()
+        (package, module, class_name) = (
+            target[0],
+            '.'.join(target[:-1]),
+            target[-1])
+        target_class = getattr(
+            __import__(module, fromlist=[package]),
+            class_name)
+        target_models.append(target_class)
+    return target_models
+
+
+def update_all_seach_data():
+    target_models = get_search_target_models()
+    for target in target_models:
+        target_items = target.objects.all()
         for item in target_items:
-           update_item_search_data(item)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            update_item_search_data(item)
