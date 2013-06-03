@@ -1377,11 +1377,15 @@ a:hover img{
 }
 .content-table textarea{
 	border: 1px solid #ece9e6;
-	height: 60px;
-	width: 400px;
+	height: 10em;
+	width: 100%;
 	background: #fff;
 	padding: 0 5px;
 	margin: 3px 0;
+	width:100%;
+}
+.content-table textarea#id_detail{
+	height:20em;
 }
 .content-table input[type="radio"],
 .content-table input.radio{
