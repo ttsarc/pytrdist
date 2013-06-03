@@ -41,6 +41,7 @@ def add(request):
             seminar.user = user
             seminar.company = company
             seminar.save()
+            form.save_m2m()
             messages.add_message(request, messages.SUCCESS, 'セミナーを保存しました')
             return redirect('seminar_edit', seminar_id=seminar.pk)
     else:
@@ -390,6 +391,7 @@ def entry_log(request, page=1, type='list'):
             {
                 'leads': leads_pages,
                 'form': form,
+                'count': paginator.count,
             },
             context_instance=RequestContext(request)
         )

@@ -1020,6 +1020,10 @@ a:hover img{
 	display: none;
 }
 
+.leads-form{
+	margin:0 0 20px;
+}
+
 /* ==========================================================================
 	メインカラム
 ========================================================================== */
@@ -1377,7 +1381,7 @@ a:hover img{
 }
 .content-table textarea{
 	border: 1px solid #ece9e6;
-	height: 10em;
+	height: 8em;
 	width: 100%;
 	background: #fff;
 	padding: 0 5px;
@@ -1579,6 +1583,7 @@ body .text-button.black a{
 	background: #fff;
 	padding: 10px 20px;
 	font-weight: bold;
+	margin:0 0 20px;
 }
 .messages .error{
 	color:#ae2e38;
@@ -1782,7 +1787,7 @@ body .text-button.black a{
 
 /* .pager */
 .pager{
-	margin: 0 0 20px;
+	margin: 10px 0 10px;
 }
 .pager-count{
 	font-size: 11px;

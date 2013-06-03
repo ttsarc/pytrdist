@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from documents.models import Document
 from seminars.models import Seminar
 from search.models import Search
-from search.libs import update_document_search_data, update_seminar_search_data,update_all_seach_data
+from search.libs import update_all_seach_data
 from django.db import connection
 
 

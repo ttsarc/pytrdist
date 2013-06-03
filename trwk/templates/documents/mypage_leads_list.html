@@ -9,7 +9,7 @@
 {%endblock%}
 {% block content %}
 <h1 class="content-title">資料リード情報の確認</h1>
-<div>
+<div class="leads-form">
 <form method='get' action='{% url 'document_leads_index'%}'>
 <input type="hidden" value="1" name="search">
 {{form.start_date}} ～ {{form.end_date}}
@@ -20,6 +20,8 @@
 </div>
 
 <div class="text-button red"><a href="{% url 'document_leads_csv'%}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">この条件でCSVダウンロード</a></div>
+
+{% include 'common/pager_info.html' with items=leads%}
 <div class="data-table">
 {% if not leads %}
 	<p>該当するログはありません</p>
@@ -43,18 +45,10 @@
 {% endif %}
 </div>
 
-<div class="pager">
-	<div class="pager-count"><strong>{{ leads.number }}</strong>ページ / <strong>{{ leads.paginator.num_pages }}</strong>ページ中</div>
-	<div class="pager-button">
-		{% if leads.has_previous %}
-		<a href="{% url 'document_leads_paging' page=leads.previous_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">&laquo前のページ</a>
-		{% endif %}
+{% include 'common/pager_info.html' with items=leads%}
+{% include 'common/pagination.html' with items=leads items_total=count %}
 
-		{% if leads.has_next %}
-		<a href="{% url 'document_leads_paging' page=leads.next_page_number %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">次のページ&raquo</a>
-		{% endif %}
-	</div><!-- .pager-button -->
-</div><!-- .pager -->
+
 
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>

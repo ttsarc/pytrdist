@@ -206,6 +206,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "trwk.context_processor.admin",
 )
+
+SEARCH_TARGET_MODELS = (
+    'documents.models.Document',
+    'seminars.models.Seminar',
+)
+
 ITEMS_PER_PAGE = 10
 POSTS_PER_PAGE = 10
 DOCUMENTS_PER_PAGE = 10
